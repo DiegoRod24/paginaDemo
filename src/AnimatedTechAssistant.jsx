@@ -469,41 +469,57 @@ function TechAssistantModel({ state, active, pointer }) {
     const energy = active ? 1.55 : 1;
     const smooth = Math.min(1, delta * 8);
     const wave = Math.sin(t * 2.5 * energy);
-    const quick = Math.sin(t * 6.2 * energy);
-    const left = { x: 0, y: 0, z: -.05, elbow: .02 };
-    const right = { x: 0, y: 0, z: .05, elbow: -.02 };
+    const sweep = Math.sin(t * 1.65 * energy);
+    const quick = Math.sin(t * 7.4 * energy);
+    const left = { x: 0, y: 0, z: -.05, elbow: .02, elbowX: 0 };
+    const right = { x: 0, y: 0, z: .05, elbow: -.02, elbowX: 0 };
 
     if (state === "showroom") {
-      left.z = -.25 + wave * .12;
-      right.z = 1.18 + wave * .2;
-      right.elbow = -.45 + Math.sin(t * 2) * .15;
+      left.z = -.38 - wave * .24;
+      left.elbow = .28 + wave * .16;
+      right.z = 1.2 + sweep * .42;
+      right.x = -.22 + wave * .12;
+      right.elbow = -.58 + wave * .28;
+      right.elbowX = -.3 + sweep * .18;
     } else if (state === "services") {
-      left.z = .62;
-      right.z = -.62;
-      left.x = -.42 + quick * .12;
-      right.x = -.42 - quick * .12;
-      left.elbow = .88 + quick * .2;
-      right.elbow = -.88 - quick * .2;
+      left.z = .72 + quick * .09;
+      right.z = -.72 - quick * .09;
+      left.x = -.62 + quick * .26;
+      right.x = -.62 - quick * .26;
+      left.elbow = 1.08 + quick * .36;
+      right.elbow = -1.08 - quick * .36;
+      left.elbowX = -.72 - quick * .18;
+      right.elbowX = -.72 + quick * .18;
     } else if (state === "process") {
-      left.z = -.15 + wave * .08;
-      right.z = 1.38 + Math.sin(t * 2.1) * .16;
-      right.elbow = -.2;
-    } else if (state === "projects") {
-      left.z = -1.12 + Math.sin(t * 1.8) * .25;
-      left.elbow = .42;
-      right.z = .2 + wave * .1;
-    } else if (state === "automation") {
-      left.z = .9 + wave * .12;
-      right.z = -.9 - wave * .12;
-      left.x = -.3;
+      left.z = -.28 + wave * .22;
+      right.z = 1.38 + sweep * .42;
       right.x = -.3;
-      left.elbow = .72;
-      right.elbow = -.72;
+      right.elbow = -.42 + wave * .28;
+      right.elbowX = -.28 + sweep * .18;
+    } else if (state === "projects") {
+      left.z = -1.18 + sweep * .52;
+      left.x = -.18 + wave * .12;
+      left.elbow = .58 + wave * .34;
+      left.elbowX = -.28;
+      right.z = .28 + wave * .22;
+    } else if (state === "automation") {
+      left.z = 1.02 + wave * .28;
+      right.z = -1.02 - wave * .28;
+      left.x = -.58 + sweep * .12;
+      right.x = -.58 - sweep * .12;
+      left.elbow = .92 + wave * .24;
+      right.elbow = -.92 - wave * .24;
+      left.elbowX = -.35 + sweep * .22;
+      right.elbowX = -.35 - sweep * .22;
     } else if (state === "contact") {
-      left.z = -2.15 + Math.sin(t * 1.5) * .08;
-      left.elbow = -.42;
-      right.z = 2.35 + Math.sin(t * 4.4) * .18;
-      right.elbow = -.38 + Math.sin(t * 4.4) * .18;
+      left.z = -2.22 + wave * .14;
+      left.x = -.18;
+      left.elbow = -.55 + wave * .12;
+      left.elbowX = -.32;
+      right.z = 2.28 + Math.sin(t * 5.2 * energy) * .62;
+      right.x = -.18 + Math.cos(t * 5.2 * energy) * .18;
+      right.elbow = -.52 + Math.sin(t * 5.2 * energy) * .42;
+      right.elbowX = -.2;
     }
 
     const applyLimb = (shoulder, elbow, target) => {
@@ -512,18 +528,21 @@ function TechAssistantModel({ state, active, pointer }) {
       shoulder.current.rotation.y = THREE.MathUtils.lerp(shoulder.current.rotation.y, target.y, smooth);
       shoulder.current.rotation.z = THREE.MathUtils.lerp(shoulder.current.rotation.z, target.z, smooth);
       elbow.current.rotation.z = THREE.MathUtils.lerp(elbow.current.rotation.z, target.elbow, smooth);
+      elbow.current.rotation.x = THREE.MathUtils.lerp(elbow.current.rotation.x, target.elbowX, smooth);
     };
     applyLimb(leftShoulderRef, leftElbowRef, left);
     applyLimb(rightShoulderRef, rightElbowRef, right);
 
-    rootRef.current.position.y = Math.sin(t * 1.7) * .055;
-    rootRef.current.position.x = Math.sin(t * .82) * .018;
-    rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, pointer.current.x * .22, smooth);
+    rootRef.current.position.y = Math.sin(t * 1.7) * .08 + (active ? Math.sin(t * 5) * .025 : 0);
+    rootRef.current.position.x = Math.sin(t * .82) * .028;
+    const stateTurn = state === "showroom" || state === "process" || state === "projects" ? -.08 : state === "automation" ? .06 : 0;
+    rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, stateTurn + pointer.current.x * .2, smooth);
     rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, -pointer.current.y * .08, smooth);
-    const workingLean = state === "services" ? Math.sin(t * 2.8) * .025 : state === "process" ? -.035 : 0;
+    const workingLean = state === "services" ? Math.sin(t * 3.4) * .055 : state === "process" ? -.055 + wave * .02 : state === "contact" ? wave * .035 : 0;
     rootRef.current.rotation.z = THREE.MathUtils.lerp(rootRef.current.rotation.z, workingLean, smooth);
-    headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, pointer.current.x * .28, smooth);
-    headRef.current.rotation.x = THREE.MathUtils.lerp(headRef.current.rotation.x, -pointer.current.y * .16 + Math.sin(t * 1.3) * .025, smooth);
+    const stateLook = state === "showroom" || state === "process" || state === "projects" ? -.16 : state === "contact" ? .1 : 0;
+    headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, stateLook + pointer.current.x * .24, smooth);
+    headRef.current.rotation.x = THREE.MathUtils.lerp(headRef.current.rotation.x, -pointer.current.y * .14 + Math.sin(t * 1.3) * .045, smooth);
 
     const blinkCycle = t % 4.4;
     const blink = blinkCycle > 4.12 ? .12 : 1;
@@ -533,7 +552,7 @@ function TechAssistantModel({ state, active, pointer }) {
     coreRef.current.scale.setScalar(coreScale);
   });
 
-  return <group ref={rootRef} position={[.35, -.08, 0]} scale={.93}>
+  return <group ref={rootRef} position={[.38, -.04, 0]} scale={1.06}>
     <EnergyPedestal active={active} />
     <Body coreRef={coreRef} />
     <Face headRef={headRef} leftEyeRef={leftEyeRef} rightEyeRef={rightEyeRef} />

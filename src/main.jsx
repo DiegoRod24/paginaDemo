@@ -654,9 +654,9 @@ const COMPANION_SECTIONS = {
   tech: [
     { id: "inicio", state: "home", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
-    { id: "cuellos-botella", state: "process", side: "left" },
+    { id: "cuellos-botella", state: "process", side: "right" },
     { id: "casos-reales", state: "projects", side: "right" },
-    { id: "servicios", state: "services", side: "left" },
+    { id: "servicios", state: "services", side: "right" },
     { id: "automatizacion", state: "automation", side: "right" },
     { id: "contacto", state: "contact", side: "left" },
   ],
@@ -953,7 +953,7 @@ function FloatingCompanion({ mode, t }) {
     setHidden(false);
     setBubbleVisible(true);
 
-    const timer = window.setTimeout(() => setBubbleVisible(false), 5200);
+    const timer = window.setTimeout(() => setBubbleVisible(false), 2600);
     return () => window.clearTimeout(timer);
   }, [current.state, mode]);
 
@@ -1029,7 +1029,7 @@ function FloatingCompanion({ mode, t }) {
 
   return (
     <motion.aside
-      key={`${mode}-${current.state}`}
+      key={mode}
       className={`companion-system companion-${mode} companion-${current.side} companion-${current.state} ${action ? "is-performing" : ""}`}
       initial={{ opacity: 0, x: current.side === "left" ? -90 : 90, y: 16 }}
       animate={{ opacity: 1, x: 0, y: 0 }}
@@ -1046,15 +1046,18 @@ function FloatingCompanion({ mode, t }) {
       aria-label={`${content.title}. ${t.companion.actionPrompt}`}
     >
       <div className="companion-character-stage">
-        {isTechHome ? (
-          <div className="hero-ufo-wrap">
+        {mode === "tech" ? <>
+          <div className={`hero-ufo-wrap tech-home-visual ${isTechHome ? "is-visible" : "is-hidden"}`}>
             <img src="/assets/characters/marcianito-nave.png" alt={t.companion.alienAlt} className="hero-ufo" draggable="false" />
             <i className="hero-ufo-beam" />
             <i className="hero-ufo-trail" />
             <i className="hero-ufo-spark s1" />
             <i className="hero-ufo-spark s2" />
           </div>
-        ) : (
+          <div className={`tech-assistant-slot ${isTechHome ? "is-hidden" : "is-visible"}`}>
+            <AssistantMascot mode="tech" state={current.state} active={action} content={content} prompt={t.companion.actionPrompt} />
+          </div>
+        </> : (
           <AssistantMascot mode={mode} state={current.state} active={action} content={content} prompt={t.companion.actionPrompt} />
         )}
       </div>
@@ -1062,6 +1065,7 @@ function FloatingCompanion({ mode, t }) {
       <AnimatePresence>
         {bubbleVisible && (
           <motion.div
+            key={current.state}
             className="companion-speech"
             initial={{ opacity: 0, scale: .84, y: 9 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1160,8 +1164,10 @@ function App() {
       <footer className="footer">© 2026 JYM Diseño y Arquitectura S.A.C. · Technology, Architecture & Automation.</footer>
     </main>
     <FloatingCompanion mode={mode} t={t} />
-    <ScrollTopButton />
-    <a className="whatsapp" href={wa()} target="_blank" rel="noreferrer">✆</a>
+    <div className="floating-actions">
+      <ScrollTopButton />
+      <a className="whatsapp" href={wa()} target="_blank" rel="noreferrer" aria-label="Contactar por WhatsApp">✆</a>
+    </div>
   </div>;
 }
 
