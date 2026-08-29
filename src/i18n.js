@@ -127,6 +127,51 @@ export const translations = {
         "Climatización"
       ]
     },
+    "techProof": {
+      "kicker": "Experiencia aplicada",
+      "title": "Automatizaciones que ya resolvimos en escenarios reales",
+      "intro": "No vendemos una herramienta genérica. Analizamos el trabajo repetitivo, construimos el flujo y entregamos una solución que tu equipo puede usar y controlar.",
+      "status": "Caso desarrollado",
+      "flowLabel": "Flujo de la solución",
+      "cta": "Quiero una solución similar",
+      "whatsapp": "Hola JYM, quiero conversar sobre una solución similar a",
+      "cases": [
+        {
+          "category": "DATOS + VALIDACIÓN",
+          "title": "Consultas masivas y control de inconsistencias",
+          "description": "Automatización para leer lotes desde Excel, consultar fuentes autorizadas, comparar resultados y separar válidos, observados y errores.",
+          "flow": ["Excel", "Validación", "Reporte"],
+          "outputs": ["Procesamiento por lotes", "Reintentos y trazabilidad", "Exportación Excel, CSV y evidencias"]
+        },
+        {
+          "category": "DOCUMENTOS + OPERACIÓN",
+          "title": "Bots para registro y gestión documental",
+          "description": "Flujos asistidos que revisan archivos, completan formularios, controlan confirmaciones y continúan sin perder el avance del operador.",
+          "flow": ["Archivos", "Bot asistido", "Resultado"],
+          "outputs": ["Validación previa de documentos", "Pausa, reanudación y registro", "Reporte de pendientes y errores"]
+        },
+        {
+          "category": "MONITOREO + EVIDENCIA",
+          "title": "Plataformas de monitoreo digital",
+          "description": "Sistemas para organizar publicaciones, evidencias y multimedia por proyecto, con revisión, filtros y reportes para la toma de decisiones.",
+          "flow": ["Fuentes", "Clasificación", "Dashboard"],
+          "outputs": ["Panel por cliente o proyecto", "Evidencias y archivos centralizados", "Filtros, métricas y exportación"]
+        },
+        {
+          "category": "IA + ASISTENCIA HUMANA",
+          "title": "Asistentes inteligentes para equipos",
+          "description": "IA aplicada para leer, sugerir, clasificar y guiar tareas mediante texto, voz u OCR, manteniendo confirmación humana en acciones sensibles.",
+          "flow": ["Entrada", "Asistente IA", "Revisión"],
+          "outputs": ["Ayuda contextual y conversacional", "OCR y sugerencias de clasificación", "Control humano y trazabilidad"]
+        }
+      ],
+      "auditKicker": "DIAGNÓSTICO DE AUTOMATIZACIÓN",
+      "auditTitle": "Muéstranos la tarea que repites cada día",
+      "auditText": "Evaluamos tu proceso y te explicamos qué parte puede automatizarse, qué información necesita y cómo mantener el control humano.",
+      "auditPoints": ["Sin compromiso", "Enfoque práctico", "Propuesta a medida"],
+      "auditCta": "Evaluar mi proceso",
+      "auditWhatsapp": "Hola JYM, quiero evaluar una tarea repetitiva de mi negocio para saber si puede automatizarse."
+    },
     "success": {
       "kicker": "Portafolio",
       "title": "Mostramos resultados, no solo servicios",
@@ -480,6 +525,51 @@ export const translations = {
         "AI automation",
         "HVAC solutions"
       ]
+    },
+    "techProof": {
+      "kicker": "Applied experience",
+      "title": "Automation built for real-world scenarios",
+      "intro": "We do not sell a generic tool. We study repetitive work, build the workflow and deliver a solution your team can use and control.",
+      "status": "Completed case",
+      "flowLabel": "Solution workflow",
+      "cta": "I need a similar solution",
+      "whatsapp": "Hello JYM, I would like to discuss a solution similar to",
+      "cases": [
+        {
+          "category": "DATA + VALIDATION",
+          "title": "Batch queries and inconsistency control",
+          "description": "Automation that reads Excel batches, checks authorized sources, compares results and separates valid, observed and failed records.",
+          "flow": ["Excel", "Validation", "Report"],
+          "outputs": ["Batch processing", "Retries and traceability", "Excel, CSV and evidence exports"]
+        },
+        {
+          "category": "DOCUMENTS + OPERATIONS",
+          "title": "Document registration and management bots",
+          "description": "Assisted flows that review files, complete forms, handle confirmations and continue without losing the operator's progress.",
+          "flow": ["Files", "Assisted bot", "Result"],
+          "outputs": ["Document pre-validation", "Pause, resume and activity log", "Pending items and error report"]
+        },
+        {
+          "category": "MONITORING + EVIDENCE",
+          "title": "Digital monitoring platforms",
+          "description": "Systems that organize publications, evidence and media by project, with review tools, filters and decision-ready reports.",
+          "flow": ["Sources", "Classification", "Dashboard"],
+          "outputs": ["Client or project dashboard", "Centralized evidence and files", "Filters, metrics and exports"]
+        },
+        {
+          "category": "AI + HUMAN OVERSIGHT",
+          "title": "Smart assistants for teams",
+          "description": "AI that reads, suggests, classifies and guides tasks through text, voice or OCR while keeping human confirmation for sensitive actions.",
+          "flow": ["Input", "AI assistant", "Review"],
+          "outputs": ["Contextual conversational help", "OCR and classification suggestions", "Human control and traceability"]
+        }
+      ],
+      "auditKicker": "AUTOMATION ASSESSMENT",
+      "auditTitle": "Show us the task you repeat every day",
+      "auditText": "We assess your process and explain what can be automated, what information it requires and how to preserve human oversight.",
+      "auditPoints": ["No commitment", "Practical approach", "Tailored proposal"],
+      "auditCta": "Assess my process",
+      "auditWhatsapp": "Hello JYM, I want to assess a repetitive business task and find out whether it can be automated."
     },
     "success": {
       "kicker": "Portfolio",

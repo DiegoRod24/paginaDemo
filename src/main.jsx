@@ -436,6 +436,59 @@ function TechShowroom({ t }) {
   </section>;
 }
 
+function TechProof({ t }) {
+  const proof = t.techProof;
+  if (!proof) return null;
+
+  const proofIcons = [Database, Workflow, Monitor, Bot];
+  return <section className="tech-proof" id="casos-reales">
+    <div className="section-title proof-heading">
+      <p>{proof.kicker}</p>
+      <h2>{proof.title}</h2>
+      <span>{proof.intro}</span>
+    </div>
+
+    <div className="proof-grid">
+      {proof.cases.map((item, index) => {
+        const Icon = proofIcons[index] || Sparkles;
+        return <article className="proof-card" key={item.title}>
+          <div className="proof-card-top">
+            <span className="proof-number">{String(index + 1).padStart(2, "0")}</span>
+            <span className="proof-status"><i />{proof.status}</span>
+          </div>
+          <div className="proof-icon"><Icon size={28}/></div>
+          <small>{item.category}</small>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+          <div className="proof-flow" aria-label={proof.flowLabel}>
+            {item.flow.map((step, stepIndex) => <React.Fragment key={step}>
+              <span>{step}</span>{stepIndex < item.flow.length - 1 && <ArrowRight size={14}/>}
+            </React.Fragment>)}
+          </div>
+          <ul>{item.outputs.map(output => <li key={output}><Sparkles size={14}/>{output}</li>)}</ul>
+          <a href={wa(`${proof.whatsapp}: ${item.title}`)} target="_blank" rel="noreferrer">
+            {proof.cta}<ArrowRight size={16}/>
+          </a>
+        </article>;
+      })}
+    </div>
+
+    <div className="automation-audit">
+      <div>
+        <small>{proof.auditKicker}</small>
+        <h3>{proof.auditTitle}</h3>
+        <p>{proof.auditText}</p>
+      </div>
+      <div className="audit-points">
+        {proof.auditPoints.map(point => <span key={point}><Sparkles size={16}/>{point}</span>)}
+      </div>
+      <a className="btn btn-primary" href={wa(proof.auditWhatsapp)} target="_blank" rel="noreferrer">
+        {proof.auditCta}<ArrowRight size={18}/>
+      </a>
+    </div>
+  </section>;
+}
+
 function PortalShowroom({ t }) {
   return <section className="portal-showroom" id="showroom">
     <div className="section-title"><p>{t.showroom.neutralKicker}</p><h2>{t.showroom.neutralTitle}</h2></div>
@@ -965,6 +1018,7 @@ function App() {
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
       <Showroom mode={mode} t={t} />
+      {mode === "tech" && <TechProof t={t} />}
       <Services mode={mode} t={t} />
       <ProcessSection t={t} />
       <SuccessCases mode={mode} t={t} />
