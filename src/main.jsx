@@ -683,24 +683,46 @@ function useVisibleCompanionSection(enabled, mode) {
       .map(item => ({ ...item, element: document.getElementById(item.id) }))
       .filter(item => item.element);
 
-    const observer = new IntersectionObserver(
-      entries => {
-        const visible = entries
-          .filter(entry => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+    let frame = 0;
+    const updateCurrentSection = () => {
+      frame = 0;
+      // La línea de activación representa lo que el visitante está leyendo.
+      // Si cae entre dos secciones, gana el borde más cercano; así no queda
+      // una mascota vieja mientras la siguiente sección ya está entrando.
+      const activationLine = window.innerHeight * .46;
+      let selected = targets[0];
+      let bestDistance = Number.POSITIVE_INFINITY;
 
-        if (!visible.length) return;
-        const found = targets.find(item => item.element === visible[0].target);
-        if (found) setCurrent(found);
-      },
-      {
-        rootMargin: "-18% 0px -56% 0px",
-        threshold: [0.08, 0.2, 0.38, 0.58],
-      }
-    );
+      targets.forEach(item => {
+        const rect = item.element.getBoundingClientRect();
+        const containsLine = rect.top <= activationLine && rect.bottom >= activationLine;
+        const distance = containsLine
+          ? 0
+          : Math.min(Math.abs(rect.top - activationLine), Math.abs(rect.bottom - activationLine));
 
-    targets.forEach(item => observer.observe(item.element));
-    return () => observer.disconnect();
+        if (distance < bestDistance) {
+          selected = item;
+          bestDistance = distance;
+        }
+      });
+
+      setCurrent(previous => previous.id === selected.id ? previous : selected);
+    };
+
+    const scheduleUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateCurrentSection);
+    };
+
+    updateCurrentSection();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [enabled, mode]);
 
   return current;
