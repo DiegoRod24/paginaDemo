@@ -3322,3 +3322,72 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
 @media (prefers-reduced-motion:reduce) {
   .assistant-mascot-image,.assistant-aura i,.assistant-tool-dock,.assistant-tool-dock * { animation:none!important; }
 }
+
+/* =========================================================
+   V19 — PAQUETE DE POSES + PROFUNDIDAD INTERACTIVA
+========================================================= */
+.companion-tech .companion-character-stage {
+  flex-basis:250px;
+  width:250px;
+  height:220px;
+  perspective:900px;
+}
+.assistant-mascot-tech .assistant-mascot-image {
+  left:0;
+  right:auto;
+  bottom:0;
+  width:245px;
+  height:218px;
+  transform:perspective(900px) rotateX(var(--assistant-rx,0deg)) rotateY(var(--assistant-ry,0deg));
+  transform-origin:50% 72%;
+  animation:assistantPoseEnter .62s cubic-bezier(.2,.85,.2,1) both,assistantPoseFloat 2.8s .62s ease-in-out infinite alternate;
+  transition:transform .18s ease-out,filter .25s ease;
+}
+.assistant-mascot-tech .assistant-tool-dock { display:none; }
+.assistant-mascot-tech .assistant-aura { width:180px;right:28px; }
+.companion-tech.companion-system { width:435px; }
+.companion-tech .companion-speech { flex:0 0 180px; }
+
+/* Al tocar, cada pose ejecuta un gesto corporal distinto. */
+.assistant-mascot-tech.assistant-active .assistant-mascot-image { animation-duration:.58s; }
+.assistant-mascot-tech.assistant-action-showroom.assistant-active .assistant-mascot-image { animation:assistantPresent .55s ease-in-out 4 alternate; }
+.assistant-mascot-tech.assistant-action-services.assistant-active .assistant-mascot-image { animation:assistantProgram .38s ease-in-out 6 alternate; }
+.assistant-mascot-tech.assistant-action-process.assistant-active .assistant-mascot-image { animation:assistantConnect .5s ease-in-out 4 alternate; }
+.assistant-mascot-tech.assistant-action-projects.assistant-active .assistant-mascot-image { animation:assistantApprovePose .55s ease-in-out 4 alternate; }
+.assistant-mascot-tech.assistant-action-automation.assistant-active .assistant-mascot-image { animation:assistantPower .62s ease-in-out 4 alternate; }
+.assistant-mascot-tech.assistant-action-contact.assistant-active .assistant-mascot-image { animation:assistantListen .48s ease-in-out 5 alternate; }
+
+.assistant-mascot-tech::after {
+  content:"";position:absolute;z-index:2;inset:30px 25px 8px;border-radius:50%;
+  border:1px solid rgba(0,217,255,.13);opacity:0;transform:scale(.7);pointer-events:none;
+}
+.assistant-mascot-tech.assistant-active::after { animation:assistantEnergyRing .85s ease-out 2; }
+
+@keyframes assistantPoseEnter {
+  from{opacity:0;scale:.72;filter:blur(12px) brightness(1.7)}
+  to{opacity:1;scale:1;filter:drop-shadow(0 14px 18px rgba(0,0,0,.5))}
+}
+@keyframes assistantPoseFloat {
+  from{translate:var(--assistant-x,0) calc(var(--assistant-y,0px) + 2px)}
+  to{translate:var(--assistant-x,0) calc(var(--assistant-y,0px) - 7px)}
+}
+@keyframes assistantPresent { to{transform:perspective(900px) rotateY(-5deg) translateY(-7px) scale(1.03)} }
+@keyframes assistantProgram { to{transform:perspective(900px) rotateX(3deg) translateY(3px) scale(1.015);filter:drop-shadow(0 0 18px rgba(0,217,255,.65))} }
+@keyframes assistantConnect { to{transform:perspective(900px) rotateY(6deg) translateX(5px) scale(1.025)} }
+@keyframes assistantApprovePose { to{transform:perspective(900px) rotateZ(-1.5deg) translateY(-6px) scale(1.035)} }
+@keyframes assistantPower { to{transform:perspective(900px) scale(1.045);filter:drop-shadow(0 0 27px rgba(0,217,255,.85)) brightness(1.1)} }
+@keyframes assistantListen { to{transform:perspective(900px) rotateY(-4deg) rotateZ(1.5deg) translateY(-4px)} }
+@keyframes assistantEnergyRing { 0%{opacity:.8;transform:scale(.68)}100%{opacity:0;transform:scale(1.28)} }
+
+@media (max-width:1080px) {
+  .companion-tech.companion-system { width:250px; }
+}
+@media (max-width:700px) {
+  .companion-tech.companion-system { width:110px; }
+  .companion-tech .companion-character-stage { flex-basis:110px;width:110px;height:125px; }
+  .assistant-mascot-tech .assistant-mascot-image { width:110px;height:125px; }
+  .assistant-mascot-tech .assistant-aura { width:85px;right:10px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .assistant-mascot-tech .assistant-mascot-image { animation:none!important;transform:none!important;translate:none!important; }
+}

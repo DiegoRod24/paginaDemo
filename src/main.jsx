@@ -888,8 +888,16 @@ function AssistantMascot({ mode, state, active, content, prompt }) {
     contact: Mail,
   };
   const StateIcon = stateIcons[state] || Sparkles;
+  const techPoses = {
+    showroom: "/assets/characters/tech-showroom-v3.webp",
+    services: "/assets/characters/tech-services-v3.webp",
+    process: "/assets/characters/tech-process-v3.webp",
+    projects: "/assets/characters/tech-projects-v3.webp",
+    automation: "/assets/characters/tech-automation-v3.webp",
+    contact: "/assets/characters/tech-contact-v3.webp",
+  };
   const src = mode === "tech"
-    ? "/assets/characters/asistente-tech-v2.webp"
+    ? techPoses[state] || "/assets/characters/asistente-tech-v2.webp"
     : "/assets/characters/asistente-arquitectura-v2.webp";
 
   return <div className={`assistant-mascot assistant-mascot-${mode} assistant-action-${state} ${active ? "assistant-active" : ""}`}>
@@ -965,11 +973,15 @@ function FloatingCompanion({ mode, t }) {
     const y = ((event.clientY - bounds.top) / bounds.height - .5) * 9;
     event.currentTarget.style.setProperty("--assistant-x", `${x.toFixed(2)}px`);
     event.currentTarget.style.setProperty("--assistant-y", `${y.toFixed(2)}px`);
+    event.currentTarget.style.setProperty("--assistant-ry", `${(x * .42).toFixed(2)}deg`);
+    event.currentTarget.style.setProperty("--assistant-rx", `${(-y * .32).toFixed(2)}deg`);
   };
 
   const resetPointer = event => {
     event.currentTarget.style.setProperty("--assistant-x", "0px");
     event.currentTarget.style.setProperty("--assistant-y", "0px");
+    event.currentTarget.style.setProperty("--assistant-ry", "0deg");
+    event.currentTarget.style.setProperty("--assistant-rx", "0deg");
     if (!action) setBubbleVisible(false);
   };
 
