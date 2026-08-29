@@ -1,11 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
+import { Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 
 const CYAN = "#00d9ff";
 const GREEN = "#78ff28";
 const NAVY = "#061a31";
 const SUIT = "#0b3154";
+
+function supportsWebGL() {
+  try {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true })
+      || canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true });
+    context?.getExtension("WEBGL_lose_context")?.loseContext();
+    return Boolean(context);
+  } catch {
+    return false;
+  }
+}
 
 function GlowMaterial({ color = CYAN, opacity = 1 }) {
   return <meshStandardMaterial
@@ -38,10 +51,22 @@ function Arm({ side, shoulderRef, elbowRef }) {
         <sphereGeometry args={[.17, 20, 16]} />
         <meshStandardMaterial color={GREEN} emissive="#1c7800" emissiveIntensity={.35} roughness={.32} />
       </mesh>
+      <mesh position={[0, -.43, .13]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[.105, .025, 8, 20]} />
+        <GlowMaterial />
+      </mesh>
       <mesh position={[0, -.57, .15]} scale={[.62, .34, .35]}>
         <sphereGeometry args={[.12, 16, 12]} />
         <meshStandardMaterial color="#b6ff75" emissive={GREEN} emissiveIntensity={.2} />
       </mesh>
+      {[-.075, 0, .075].map((fingerX, index) => <mesh
+        key={fingerX}
+        position={[fingerX, -.69, .14]}
+        rotation={[.3, 0, (index - 1) * .12]}
+      >
+        <capsuleGeometry args={[.024, .12, 4, 8]} />
+        <meshStandardMaterial color="#a8ff64" emissive="#2c7300" emissiveIntensity={.22} roughness={.28} />
+      </mesh>)}
     </group>
   </group>;
 }
@@ -68,7 +93,15 @@ function Face({ headRef, leftEyeRef, rightEyeRef }) {
   return <group ref={headRef} position={[0, 1.12, 0]}>
     <mesh scale={[1, .88, .82]} castShadow>
       <sphereGeometry args={[.78, 40, 28]} />
-      <meshStandardMaterial color={GREEN} emissive="#174f00" emissiveIntensity={.28} roughness={.24} />
+      <meshPhysicalMaterial color={GREEN} emissive="#174f00" emissiveIntensity={.28} roughness={.2} metalness={.04} clearcoat={.75} clearcoatRoughness={.2} />
+    </mesh>
+    <mesh position={[0, .43, .63]} scale={[1.6, .48, .28]}>
+      <sphereGeometry args={[.25, 24, 16]} />
+      <meshPhysicalMaterial color="#082743" metalness={.72} roughness={.2} clearcoat={.8} />
+    </mesh>
+    <mesh position={[0, .39, .705]} scale={[1.25, .15, .18]}>
+      <sphereGeometry args={[.22, 20, 12]} />
+      <GlowMaterial color={CYAN} opacity={.82} />
     </mesh>
 
     <group position={[-.29, .08, .61]} rotation={[0, -.08, 0]}>
@@ -146,6 +179,10 @@ function Face({ headRef, leftEyeRef, rightEyeRef }) {
       <torusGeometry args={[.12, .03, 8, 20]} />
       <GlowMaterial />
     </mesh>
+    <mesh position={[-.83, 0, .04]} rotation={[0, Math.PI / 2, 0]}>
+      <torusGeometry args={[.12, .03, 8, 20]} />
+      <GlowMaterial />
+    </mesh>
   </group>;
 }
 
@@ -153,11 +190,27 @@ function Body({ coreRef }) {
   return <>
     <mesh position={[0, .05, 0]} scale={[.92, 1.04, .68]} castShadow>
       <capsuleGeometry args={[.52, .62, 10, 24]} />
-      <meshStandardMaterial color={SUIT} metalness={.58} roughness={.26} />
+      <meshPhysicalMaterial color={SUIT} metalness={.62} roughness={.22} clearcoat={.65} clearcoatRoughness={.2} />
     </mesh>
+    <mesh position={[0, .72, .01]} rotation={[Math.PI / 2, 0, 0]}>
+      <torusGeometry args={[.45, .06, 10, 32]} />
+      <meshPhysicalMaterial color="#071c30" metalness={.8} roughness={.18} clearcoat={1} />
+    </mesh>
+    {[-1, 1].map(side => <mesh key={side} position={[side * .64, .43, .04]} scale={[1.55, .72, 1.25]} rotation={[0, 0, side * -.17]} castShadow>
+      <sphereGeometry args={[.24, 24, 16]} />
+      <meshPhysicalMaterial color="#0c416c" metalness={.68} roughness={.2} clearcoat={.85} />
+    </mesh>)}
     <mesh position={[0, .28, .49]} scale={[1.5, .82, .3]}>
       <sphereGeometry args={[.32, 24, 18]} />
       <meshStandardMaterial color="#06192b" metalness={.65} roughness={.2} />
+    </mesh>
+    <mesh position={[-.27, .37, .63]} rotation={[0, 0, -.42]}>
+      <boxGeometry args={[.42, .11, .06]} />
+      <meshPhysicalMaterial color="#176090" metalness={.72} roughness={.18} clearcoat={.8} />
+    </mesh>
+    <mesh position={[.27, .37, .63]} rotation={[0, 0, .42]}>
+      <boxGeometry args={[.42, .11, .06]} />
+      <meshPhysicalMaterial color="#176090" metalness={.72} roughness={.18} clearcoat={.8} />
     </mesh>
     <group ref={coreRef} position={[0, .29, .72]}>
       <mesh rotation={[Math.PI / 2, 0, 0]}>
@@ -173,7 +226,37 @@ function Body({ coreRef }) {
       <boxGeometry args={[.7, .09, .09]} />
       <GlowMaterial color="#1679ff" opacity={.75} />
     </mesh>
+    {[-1, 1].map(side => <mesh key={side} position={[side * .48, -.48, .23]} rotation={[0, side * .2, side * .08]}>
+      <boxGeometry args={[.22, .34, .2]} />
+      <meshPhysicalMaterial color="#071a2e" metalness={.75} roughness={.2} clearcoat={.7} />
+    </mesh>)}
   </>;
+}
+
+function EnergyPedestal({ active }) {
+  const outerRef = useRef();
+  const innerRef = useRef();
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    outerRef.current.rotation.z = t * .42;
+    innerRef.current.rotation.z = -t * .72;
+    const pulse = 1 + Math.sin(t * 2.4) * .06 + (active ? .08 : 0);
+    outerRef.current.scale.setScalar(pulse);
+  });
+  return <group position={[0, -1.78, -.05]} rotation={[Math.PI / 2, 0, 0]}>
+    <mesh ref={outerRef}>
+      <torusGeometry args={[1.02, .025, 8, 54]} />
+      <GlowMaterial color={CYAN} opacity={.65} />
+    </mesh>
+    <mesh ref={innerRef}>
+      <torusGeometry args={[.72, .018, 8, 46]} />
+      <GlowMaterial color={GREEN} opacity={.55} />
+    </mesh>
+    <mesh position={[0, 0, -.025]}>
+      <circleGeometry args={[.9, 48]} />
+      <meshBasicMaterial color="#007d99" transparent opacity={.07} side={THREE.DoubleSide} />
+    </mesh>
+  </group>;
 }
 
 function HologramPanel({ position = [-1.95, .3, -.35], bars = 3 }) {
@@ -417,8 +500,11 @@ function TechAssistantModel({ state, active, pointer }) {
     applyLimb(rightShoulderRef, rightElbowRef, right);
 
     rootRef.current.position.y = Math.sin(t * 1.7) * .055;
+    rootRef.current.position.x = Math.sin(t * .82) * .018;
     rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, pointer.current.x * .22, smooth);
     rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, -pointer.current.y * .08, smooth);
+    const workingLean = state === "services" ? Math.sin(t * 2.8) * .025 : state === "process" ? -.035 : 0;
+    rootRef.current.rotation.z = THREE.MathUtils.lerp(rootRef.current.rotation.z, workingLean, smooth);
     headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, pointer.current.x * .28, smooth);
     headRef.current.rotation.x = THREE.MathUtils.lerp(headRef.current.rotation.x, -pointer.current.y * .16 + Math.sin(t * 1.3) * .025, smooth);
 
@@ -431,6 +517,7 @@ function TechAssistantModel({ state, active, pointer }) {
   });
 
   return <group ref={rootRef} position={[.35, -.08, 0]} scale={.93}>
+    <EnergyPedestal active={active} />
     <Body coreRef={coreRef} />
     <Face headRef={headRef} leftEyeRef={leftEyeRef} rightEyeRef={rightEyeRef} />
     <Arm side="left" shoulderRef={leftShoulderRef} elbowRef={leftElbowRef} />
@@ -443,6 +530,7 @@ function TechAssistantModel({ state, active, pointer }) {
 
 export default function AnimatedTechAssistant({ state, active, fallbackSrc }) {
   const [ready, setReady] = useState(false);
+  const [webglAvailable] = useState(supportsWebGL);
   const pointer = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -454,9 +542,9 @@ export default function AnimatedTechAssistant({ state, active, fallbackSrc }) {
     return () => window.removeEventListener("pointermove", follow);
   }, []);
 
-  return <div className={`assistant-live3d ${ready ? "is-ready" : ""}`} aria-hidden="true">
+  return <div className={`assistant-live3d ${ready ? "is-ready" : ""} ${webglAvailable ? "" : "no-webgl"}`} aria-hidden="true">
     <img className="assistant-live3d-fallback" src={fallbackSrc} alt="" draggable="false" />
-    <Canvas
+    {webglAvailable && <Canvas
       dpr={[1, 1.5]}
       camera={{ position: [0, .15, 7.4], fov: 35 }}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
@@ -469,7 +557,8 @@ export default function AnimatedTechAssistant({ state, active, fallbackSrc }) {
       <directionalLight position={[3, 5, 5]} intensity={2.1} color="#baf7ff" />
       <pointLight position={[-3, 1, 3]} intensity={10} distance={8} color={CYAN} />
       <pointLight position={[2, 2, 2]} intensity={7} distance={7} color={GREEN} />
+      <Sparkles count={24} scale={[4.2, 3.5, 2]} size={2.2} speed={.45} color={CYAN} opacity={.75} />
       <TechAssistantModel state={state} active={active} pointer={pointer} />
-    </Canvas>
+    </Canvas>}
   </div>;
 }
