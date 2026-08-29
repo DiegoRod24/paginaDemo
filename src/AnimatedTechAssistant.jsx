@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Component, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Sparkles } from "@react-three/drei";
 import * as THREE from "three";
@@ -7,6 +7,22 @@ const CYAN = "#00d9ff";
 const GREEN = "#78ff28";
 const NAVY = "#061a31";
 const SUIT = "#0b3154";
+
+class WebGLBoundary extends Component {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch() {
+    this.props.onError?.();
+  }
+
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 function supportsWebGL() {
   try {
@@ -531,6 +547,7 @@ function TechAssistantModel({ state, active, pointer }) {
 export default function AnimatedTechAssistant({ state, active, fallbackSrc }) {
   const [ready, setReady] = useState(false);
   const [webglAvailable] = useState(supportsWebGL);
+  const [webglFailed, setWebglFailed] = useState(false);
   const pointer = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -542,23 +559,25 @@ export default function AnimatedTechAssistant({ state, active, fallbackSrc }) {
     return () => window.removeEventListener("pointermove", follow);
   }, []);
 
-  return <div className={`assistant-live3d ${ready ? "is-ready" : ""} ${webglAvailable ? "" : "no-webgl"}`} aria-hidden="true">
+  return <div className={`assistant-live3d ${ready ? "is-ready" : ""} ${webglAvailable && !webglFailed ? "" : "no-webgl"}`} aria-hidden="true">
     <img className="assistant-live3d-fallback" src={fallbackSrc} alt="" draggable="false" />
-    {webglAvailable && <Canvas
-      dpr={[1, 1.5]}
-      camera={{ position: [0, .15, 7.4], fov: 35 }}
-      gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
-      onCreated={({ gl }) => {
-        gl.setClearColor(0x000000, 0);
-        setReady(true);
-      }}
-    >
-      <ambientLight intensity={1.35} />
-      <directionalLight position={[3, 5, 5]} intensity={2.1} color="#baf7ff" />
-      <pointLight position={[-3, 1, 3]} intensity={10} distance={8} color={CYAN} />
-      <pointLight position={[2, 2, 2]} intensity={7} distance={7} color={GREEN} />
-      <Sparkles count={24} scale={[4.2, 3.5, 2]} size={2.2} speed={.45} color={CYAN} opacity={.75} />
-      <TechAssistantModel state={state} active={active} pointer={pointer} />
-    </Canvas>}
+    {webglAvailable && <WebGLBoundary onError={() => setWebglFailed(true)}>
+      <Canvas
+        dpr={[1, 1.5]}
+        camera={{ position: [0, .15, 7.4], fov: 35 }}
+        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0);
+          setReady(true);
+        }}
+      >
+        <ambientLight intensity={1.35} />
+        <directionalLight position={[3, 5, 5]} intensity={2.1} color="#baf7ff" />
+        <pointLight position={[-3, 1, 3]} intensity={10} distance={8} color={CYAN} />
+        <pointLight position={[2, 2, 2]} intensity={7} distance={7} color={GREEN} />
+        <Sparkles count={24} scale={[4.2, 3.5, 2]} size={2.2} speed={.45} color={CYAN} opacity={.75} />
+        <TechAssistantModel state={state} active={active} pointer={pointer} />
+      </Canvas>
+    </WebGLBoundary>}
   </div>;
 }
