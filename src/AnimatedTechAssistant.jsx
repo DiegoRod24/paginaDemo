@@ -566,7 +566,7 @@ export default function AnimatedTechAssistant({ state, active, fallbackSrc }) {
       <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, .15, 7.4], fov: 35 }}
-        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+        gl={{ alpha: true, antialias: true, powerPreference: "default", failIfMajorPerformanceCaveat: false }}
         onCreated={({ gl }) => {
           gl.setClearColor(0x000000, 0);
           setReady(true);
