@@ -877,7 +877,7 @@ function ArchitectWorker({ state, active }) {
   );
 }
 
-function AssistantMascot({ mode, state, active, content }) {
+function AssistantMascot({ mode, state, active, content, prompt }) {
   const stateIcons = {
     home: Sparkles,
     showroom: Monitor,
@@ -896,9 +896,14 @@ function AssistantMascot({ mode, state, active, content }) {
     <div className="assistant-aura"><i/><i/><i/></div>
     <img className="assistant-mascot-image" src={src} alt="" draggable="false" />
     <div className="assistant-tool-dock" aria-hidden="true">
-      <StateIcon size={24}/>
-      <span>{content.eyebrow}</span>
-      <i/><i/><i/>
+      <div className="assistant-dock-head"><StateIcon size={20}/><span>{content.eyebrow}</span></div>
+      <div className={`assistant-mini-scene mini-scene-${state}`}>
+        <i className="mini-line line-a"/><i className="mini-line line-b"/><i className="mini-line line-c"/>
+        <b className="mini-node node-a"/><b className="mini-node node-b"/><b className="mini-node node-c"/>
+        <em className="mini-scan"/>
+        <strong>{state === "automation" ? "AI" : state === "projects" ? "OK" : ""}</strong>
+      </div>
+      <small>{prompt}</small>
     </div>
   </div>;
 }
@@ -954,6 +959,20 @@ function FloatingCompanion({ mode, t }) {
     window.setTimeout(() => setAction(false), current.state === "contact" ? 2900 : 1900);
   };
 
+  const followPointer = event => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width - .5) * 12;
+    const y = ((event.clientY - bounds.top) / bounds.height - .5) * 9;
+    event.currentTarget.style.setProperty("--assistant-x", `${x.toFixed(2)}px`);
+    event.currentTarget.style.setProperty("--assistant-y", `${y.toFixed(2)}px`);
+  };
+
+  const resetPointer = event => {
+    event.currentTarget.style.setProperty("--assistant-x", "0px");
+    event.currentTarget.style.setProperty("--assistant-y", "0px");
+    if (!action) setBubbleVisible(false);
+  };
+
   if (hidden) {
     return (
       <motion.button
@@ -978,10 +997,9 @@ function FloatingCompanion({ mode, t }) {
       initial={{ opacity: 0, x: current.side === "left" ? -90 : 90, y: 16 }}
       animate={{ opacity: 1, x: 0, y: 0 }}
       transition={{ type: "spring", stiffness: 110, damping: 18 }}
+      onPointerMove={followPointer}
       onMouseEnter={() => setBubbleVisible(true)}
-      onMouseLeave={() => {
-        if (!action) setBubbleVisible(false);
-      }}
+      onMouseLeave={resetPointer}
       onClick={triggerAction}
       onKeyDown={event => {
         if (event.key === "Enter" || event.key === " ") triggerAction();
@@ -1000,7 +1018,7 @@ function FloatingCompanion({ mode, t }) {
             <i className="hero-ufo-spark s2" />
           </div>
         ) : (
-          <AssistantMascot mode={mode} state={current.state} active={action} content={content} />
+          <AssistantMascot mode={mode} state={current.state} active={action} content={content} prompt={t.companion.actionPrompt} />
         )}
       </div>
 
