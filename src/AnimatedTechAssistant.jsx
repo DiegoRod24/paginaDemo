@@ -29,8 +29,9 @@ function supportsWebGL() {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true })
       || canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true });
-    context?.getExtension("WEBGL_lose_context")?.loseContext();
-    return Boolean(context);
+    if (!context || context.isContextLost()) return false;
+    context.getParameter(context.VERSION);
+    return true;
   } catch {
     return false;
   }
