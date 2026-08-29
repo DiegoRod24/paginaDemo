@@ -8,7 +8,13 @@ export const translations = {
       "success": "Portafolio",
       "process": "Proceso",
       "ai": "Automatización IA",
-      "quote": "Cotizar"
+      "quote": "Cotizar",
+      "solutions": "Soluciones",
+      "realCases": "Casos reales",
+      "projects": "Proyectos",
+      "contact": "Contacto",
+      "switchArch": "Ir a Arquitectura",
+      "switchTech": "Ir a Sistemas"
     },
     "hero": {
       "neutralBadge": "JYM Diseño, Arquitectura y Tecnología",
@@ -17,11 +23,14 @@ export const translations = {
       "neutralTitle": "Transformamos ideas en soluciones digitales y espacios memorables",
       "neutralText": "Elige el servicio que necesitas: tecnología para automatizar tu empresa o arquitectura para diseñar y ejecutar tus espacios.",
       "techTitle": "Creamos sistemas que automatizan y hacen crecer tu operación",
-      "techText": "Desarrollo web, bots, dashboards, IA, monitoreo y automatización de procesos empresariales.",
+      "techText": "Encontramos cuellos de botella, automatizamos tareas repetitivas y aplicamos IA para que tu equipo trabaje más rápido, con menos errores y manteniendo el control.",
       "archTitle": "Diseñamos y ejecutamos espacios modernos para vivir, vender y crecer",
       "archText": "Diseño residencial, diseño comercial y corporativo, ejecución de obras y aire acondicionado.",
       "techCta": "Ver soluciones tecnológicas",
-      "archCta": "Ver arquitectura"
+      "archCta": "Ver arquitectura",
+      "techPrimary": "Ver casos reales",
+      "techSecondary": "Evaluar mi proceso",
+      "techWhatsapp": "Hola JYM, quiero evaluar un proceso repetitivo o cuello de botella de mi empresa para automatizarlo."
     },
     "showroom": {
       "neutralKicker": "Elige tu servicio",
@@ -80,19 +89,19 @@ export const translations = {
         "Panel para analizar publicaciones, perfilar redes, generar evidencias y reportes para clientes."
       ],
       "pj": [
-        "Poder Judicial masivo",
-        "Automatización legal",
-        "Búsqueda masiva, control de resultados, validación y exportación ordenada."
+        "Consulta y verificación masiva",
+        "Automatización de fuentes",
+        "Búsqueda por lotes, control de resultados, trazabilidad y exportación ordenada."
       ],
       "sunat": [
-        "SUNAT masivo",
-        "Validación tributaria",
-        "Consulta masiva, consolidación, filtros y reportes para control empresarial."
+        "Validación empresarial por lotes",
+        "Datos y consistencia",
+        "Consolidación de fuentes autorizadas, filtros y reportes para control empresarial."
       ],
       "dni": [
-        "DNI masivo",
-        "Validación de identidad",
-        "Comparación, observaciones, errores y reportes para lotes grandes de personas."
+        "Control masivo de registros",
+        "Calidad de datos",
+        "Comparación, observaciones, errores y reportes para grandes volúmenes de registros."
       ],
       "bots": [
         "Bots de automatización",
@@ -172,6 +181,21 @@ export const translations = {
       "auditCta": "Evaluar mi proceso",
       "auditWhatsapp": "Hola JYM, quiero evaluar una tarea repetitiva de mi negocio para saber si puede automatizarse."
     },
+    "bottleneck": {
+      "kicker": "DETECTAMOS ANTES DE AUTOMATIZAR",
+      "title": "¿Dónde está perdiendo tiempo tu empresa?",
+      "text": "Una buena automatización no empieza comprando software. Empieza entendiendo dónde se repite el trabajo, dónde se acumulan los errores y qué decisión necesita mejores datos.",
+      "steps": [
+        {"title": "Observamos el trabajo", "text": "Mapeamos tareas manuales, archivos, sistemas y responsables."},
+        {"title": "Detectamos el cuello de botella", "text": "Identificamos demoras, duplicidad, errores y puntos sin trazabilidad."},
+        {"title": "Diseñamos el flujo", "text": "Definimos qué automatizar, qué integrar y qué debe revisar una persona."},
+        {"title": "Implementamos y medimos", "text": "Entregamos una solución usable, registros de actividad y mejora continua."}
+      ],
+      "resultTitle": "El objetivo no es reemplazar a tu equipo.",
+      "resultText": "Es quitarle trabajo repetitivo para que se concentre en decisiones, clientes y crecimiento.",
+      "cta": "Analizar mi cuello de botella",
+      "whatsapp": "Hola JYM, quiero identificar y solucionar un cuello de botella de mi empresa."
+    },
     "success": {
       "kicker": "Portafolio",
       "title": "Mostramos resultados, no solo servicios",
@@ -209,6 +233,8 @@ export const translations = {
     "process": {
       "kicker": "Proceso",
       "title": "Un flujo profesional para trabajar con clientes",
+      "techTitle": "De una tarea repetitiva a un flujo inteligente",
+      "archTitle": "Del concepto al espacio terminado",
       "steps": [
         [
           "Diagnóstico",
@@ -226,6 +252,18 @@ export const translations = {
           "Entrega",
           "Presentamos resultados, evidencia y soporte."
         ]
+      ],
+      "techSteps": [
+        ["Diagnóstico", "Observamos el proceso, sus demoras, errores y responsables."],
+        ["Diseño del flujo", "Definimos automatización, integraciones y revisión humana."],
+        ["Construcción y pruebas", "Desarrollamos por etapas con datos de prueba y evidencia."],
+        ["Entrega y mejora", "Capacitamos, medimos resultados y acompañamos la evolución."]
+      ],
+      "archSteps": [
+        ["Diagnóstico", "Entendemos el espacio, necesidad, medidas y objetivos."],
+        ["Propuesta", "Diseñamos distribución, estilo, materiales y alcance."],
+        ["Ejecución", "Coordinamos e implementamos con control de cada etapa."],
+        ["Entrega", "Presentamos el espacio terminado, evidencias y soporte."]
       ]
     },
     "ai": {
@@ -241,6 +279,8 @@ export const translations = {
     "contact": {
       "kicker": "Contacto comercial",
       "title": "¿Listo para construir tu proyecto?",
+      "techTitle": "¿Qué proceso quieres agilizar?",
+      "archTitle": "¿Qué espacio quieres transformar?",
       "name": "Tu nombre",
       "message": "Cuéntanos qué necesitas",
       "send": "Enviar por WhatsApp",
@@ -407,7 +447,13 @@ export const translations = {
       "success": "Portfolio",
       "process": "Process",
       "ai": "AI Automation",
-      "quote": "Get quote"
+      "quote": "Get quote",
+      "solutions": "Solutions",
+      "realCases": "Real cases",
+      "projects": "Projects",
+      "contact": "Contact",
+      "switchArch": "Go to Architecture",
+      "switchTech": "Go to Systems"
     },
     "hero": {
       "neutralBadge": "JYM Design, Architecture and Technology",
@@ -416,11 +462,14 @@ export const translations = {
       "neutralTitle": "We transform ideas into digital solutions and memorable spaces",
       "neutralText": "Choose what you need: technology to automate your company or architecture to design and build your spaces.",
       "techTitle": "We create systems that automate and grow your operation",
-      "techText": "Web development, bots, dashboards, AI, monitoring and business process automation.",
+      "techText": "We find bottlenecks, automate repetitive tasks and apply AI so your team works faster, makes fewer mistakes and remains in control.",
       "archTitle": "We design and build modern spaces to live, sell and grow",
       "archText": "Residential design, commercial and corporate design, construction execution and air conditioning.",
       "techCta": "View technology solutions",
-      "archCta": "View architecture"
+      "archCta": "View architecture",
+      "techPrimary": "View real cases",
+      "techSecondary": "Assess my process",
+      "techWhatsapp": "Hello JYM, I want to assess a repetitive process or bottleneck in my company and automate it."
     },
     "showroom": {
       "neutralKicker": "Choose your service",
@@ -479,19 +528,19 @@ export const translations = {
         "Panel to analyze posts, profile networks, generate evidence and client reports."
       ],
       "pj": [
-        "Mass Judicial Search",
-        "Legal automation",
-        "Mass search, result control, validation and organized export."
+        "Batch search and verification",
+        "Source automation",
+        "Batch searches, result control, traceability and organized export."
       ],
       "sunat": [
-        "Mass SUNAT",
-        "Tax validation",
-        "Mass query, consolidation, filters and reports for business control."
+        "Batch business validation",
+        "Data and consistency",
+        "Authorized-source consolidation, filters and reports for business control."
       ],
       "dni": [
-        "Mass ID validation",
-        "Identity validation",
-        "Comparison, observations, errors and reports for large people batches."
+        "Mass record control",
+        "Data quality",
+        "Comparison, observations, errors and reports for large record volumes."
       ],
       "bots": [
         "Automation bots",
@@ -571,6 +620,21 @@ export const translations = {
       "auditCta": "Assess my process",
       "auditWhatsapp": "Hello JYM, I want to assess a repetitive business task and find out whether it can be automated."
     },
+    "bottleneck": {
+      "kicker": "WE DIAGNOSE BEFORE WE AUTOMATE",
+      "title": "Where is your company losing time?",
+      "text": "Good automation does not begin by buying software. It begins by understanding repeated work, accumulated errors and decisions that need better data.",
+      "steps": [
+        {"title": "We observe the work", "text": "We map manual tasks, files, systems and owners."},
+        {"title": "We find the bottleneck", "text": "We identify delays, duplication, errors and missing traceability."},
+        {"title": "We design the workflow", "text": "We define what to automate, what to integrate and what requires human review."},
+        {"title": "We implement and measure", "text": "We deliver a usable solution, activity records and continuous improvement."}
+      ],
+      "resultTitle": "The goal is not to replace your team.",
+      "resultText": "It is to remove repetitive work so people can focus on decisions, customers and growth.",
+      "cta": "Analyze my bottleneck",
+      "whatsapp": "Hello JYM, I want to identify and fix a bottleneck in my company."
+    },
     "success": {
       "kicker": "Portfolio",
       "title": "We show results, not only services",
@@ -608,6 +672,8 @@ export const translations = {
     "process": {
       "kicker": "Process",
       "title": "A professional workflow to work with clients",
+      "techTitle": "From a repetitive task to a smart workflow",
+      "archTitle": "From concept to finished space",
       "steps": [
         [
           "Discovery",
@@ -625,6 +691,18 @@ export const translations = {
           "Delivery",
           "We present results, evidence and support."
         ]
+      ],
+      "techSteps": [
+        ["Discovery", "We observe the process, delays, errors and owners."],
+        ["Workflow design", "We define automation, integrations and human review."],
+        ["Build and test", "We develop in stages with test data and evidence."],
+        ["Delivery and improvement", "We train, measure results and support its evolution."]
+      ],
+      "archSteps": [
+        ["Discovery", "We understand the space, needs, measurements and goals."],
+        ["Proposal", "We design the layout, style, materials and scope."],
+        ["Execution", "We coordinate and implement with control at every stage."],
+        ["Delivery", "We present the finished space, evidence and support."]
       ]
     },
     "ai": {
@@ -640,6 +718,8 @@ export const translations = {
     "contact": {
       "kicker": "Sales contact",
       "title": "Ready to build your project?",
+      "techTitle": "Which process do you want to streamline?",
+      "archTitle": "Which space do you want to transform?",
       "name": "Your name",
       "message": "Tell us what you need",
       "send": "Send via WhatsApp",

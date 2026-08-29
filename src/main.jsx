@@ -208,7 +208,7 @@ function RealHouse({ focus }) {
 function Scene3D({ mode }) {
   const focusTech = mode === "tech";
   const focusArch = mode === "arch";
-  return <Canvas className="scene3d" dpr={[1, 1.75]} shadows gl={{ alpha: true, antialias: true }}>
+  return <Canvas className="scene3d" dpr={[1, 1.45]} shadows gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }} performance={{ min: .55 }}>
     <PerspectiveCamera makeDefault position={[0, 0.1, 8]} fov={50} />
     <ambientLight intensity={0.52} />
     <directionalLight position={[5, 6, 4]} intensity={2.1} castShadow color={focusArch ? "#ffd89a" : "#9eefff"} />
@@ -226,23 +226,29 @@ function Scene3D({ mode }) {
 
 function Header({ mode, setMode, lang, setLang, t }) {
   const [open, setOpen] = useState(false);
-  const navItems = [
-    ["#inicio", t.nav.portal, () => setMode("portal")],
-    ["#servicios", t.nav.services, null],
-    ["#showroom", mode === "arch" ? t.nav.arch : t.nav.tech, null],
-    ["#proceso", t.nav.process, null],
-    ["#casos", t.nav.success, null]
+  const navItems = mode === "tech" ? [
+    ["#inicio", t.nav.portal],
+    ["#showroom", t.nav.solutions],
+    ["#casos-reales", t.nav.realCases],
+    ["#proceso", t.nav.process],
+    ["#contacto", t.nav.contact]
+  ] : mode === "arch" ? [
+    ["#inicio", t.nav.portal],
+    ["#showroom", t.nav.projects],
+    ["#servicios", t.nav.services],
+    ["#proceso", t.nav.process],
+    ["#contacto", t.nav.contact]
+  ] : [
+    ["#inicio", t.nav.portal],
+    ["#showroom", t.nav.services],
+    ["#contacto", t.nav.contact]
   ];
 
   return <header className="topbar premium-nav">
     <a className="brand-mini" href="#inicio" onClick={() => setMode("portal")}><img src="/assets/brand/logo-jym-bg.jpg" alt="JYM" /></a>
 
     <nav className="top-tabs">
-      {navItems.map(([href, label, action]) => action ? (
-        <button key={label} className={mode === "portal" ? "top-choice active" : "top-choice"} onClick={action}>{label}</button>
-      ) : (
-        <a key={label} className="top-choice ghost-link" href={href}>{label}</a>
-      ))}
+      {navItems.map(([href, label]) => <a key={label} className="top-choice ghost-link" href={href}>{label}</a>)}
     </nav>
 
     <button className="lang-switch" onClick={() => setLang(lang === "es" ? "en" : "es")} aria-label="Cambiar idioma">
@@ -251,6 +257,9 @@ function Header({ mode, setMode, lang, setLang, t }) {
       <span className={lang === "en" ? "active" : ""}>EN</span>
     </button>
 
+    {mode !== "portal" && <button className={`world-switch world-switch-${mode}`} onClick={() => setMode(mode === "tech" ? "arch" : "tech")}>
+      {mode === "tech" ? t.nav.switchArch : t.nav.switchTech}
+    </button>}
     <a className="btn btn-primary" href={wa()} target="_blank" rel="noreferrer">{t.nav.quote}</a>
 
     <button className="menu-btn" onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button>
@@ -258,9 +267,7 @@ function Header({ mode, setMode, lang, setLang, t }) {
       <button onClick={() => { setMode("portal"); setOpen(false); }}>{t.nav.portal}</button>
       <button onClick={() => { setMode("tech"); setOpen(false); }}>{t.nav.tech}</button>
       <button onClick={() => { setMode("arch"); setOpen(false); }}>{t.nav.arch}</button>
-      <a href="#servicios">{t.nav.services}</a>
-      <a href="#proceso">{t.nav.process}</a>
-      <a href="#casos">{t.nav.success}</a>
+      {navItems.slice(1).map(([href, label]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}
       <button onClick={() => setLang(lang === "es" ? "en" : "es")}>{lang === "es" ? "English" : "Español"}</button>
     </nav>}
   </header>;
@@ -341,7 +348,8 @@ function Hero({ mode, setMode, t }) {
         <h1>{t.hero.techTitle}</h1>
         <span>{t.hero.techText}</span>
         <div className="world-actions">
-          <a className="btn btn-cold" href="#showroom">{t.nav.services}<ArrowRight size={18}/></a>
+          <a className="btn btn-cold" href="#casos-reales">{t.hero.techPrimary}<ArrowRight size={18}/></a>
+          <a className="btn btn-primary" href={wa(t.hero.techWhatsapp)} target="_blank" rel="noreferrer">{t.hero.techSecondary}<ArrowRight size={18}/></a>
           <button className="btn btn-warm" onClick={() => setMode("arch")}>{t.hero.archCta}<ArrowRight size={18}/></button>
         </div>
       </motion.div>}
@@ -489,6 +497,36 @@ function TechProof({ t }) {
   </section>;
 }
 
+function BottleneckSection({ t }) {
+  const content = t.bottleneck;
+  if (!content) return null;
+  const icons = [MousePointerClick, Workflow, BarChart3, Bot];
+  return <section className="bottleneck-section" id="cuellos-botella">
+    <div className="bottleneck-intro">
+      <div>
+        <p>{content.kicker}</p>
+        <h2>{content.title}</h2>
+      </div>
+      <span>{content.text}</span>
+    </div>
+    <div className="bottleneck-grid">
+      {content.steps.map((step, index) => {
+        const Icon = icons[index] || Sparkles;
+        return <article key={step.title}>
+          <div><Icon size={25}/><span>{String(index + 1).padStart(2, "0")}</span></div>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </article>;
+      })}
+    </div>
+    <div className="bottleneck-result">
+      <strong>{content.resultTitle}</strong>
+      <span>{content.resultText}</span>
+      <a href={wa(content.whatsapp)} target="_blank" rel="noreferrer">{content.cta}<ArrowRight size={17}/></a>
+    </div>
+  </section>;
+}
+
 function PortalShowroom({ t }) {
   return <section className="portal-showroom" id="showroom">
     <div className="section-title"><p>{t.showroom.neutralKicker}</p><h2>{t.showroom.neutralTitle}</h2></div>
@@ -526,11 +564,13 @@ function Services({ mode, t }) {
   </section>;
 }
 
-function ProcessSection({ t }) {
+function ProcessSection({ t, mode }) {
+  const title = mode === "arch" ? t.process.archTitle : mode === "tech" ? t.process.techTitle : t.process.title;
+  const steps = mode === "arch" ? t.process.archSteps : mode === "tech" ? t.process.techSteps : t.process.steps;
   return <section className="process-section" id="proceso">
-    <div className="section-title"><p>{t.process.kicker}</p><h2>{t.process.title}</h2></div>
+    <div className="section-title"><p>{t.process.kicker}</p><h2>{title}</h2></div>
     <div className="process-grid">
-      {t.process.steps.map(([title, desc], i) => <article key={title}>
+      {steps.map(([title, desc], i) => <article key={title}>
         <span>{String(i + 1).padStart(2, "0")}</span>
         <h3>{title}</h3>
         <p>{desc}</p>
@@ -581,10 +621,11 @@ ${t.contact.messageLabel}: ${form.message}`;
     window.open(wa(message), "_blank", "noopener,noreferrer");
   };
 
+  const contactTitle = mode === "tech" ? t.contact.techTitle : mode === "arch" ? t.contact.archTitle : t.contact.title;
   return <section className="contact" id="contacto">
     <div className="contact-copy">
       <p>{t.contact.kicker}</p>
-      <h2>{t.contact.title}</h2>
+      <h2>{contactTitle}</h2>
       <a href={`mailto:${EMAIL}`}><Mail/> {EMAIL}</a>
       <a href={wa()} target="_blank" rel="noreferrer">+51 923 558 554</a>
       <div className="social-links">
@@ -608,23 +649,37 @@ ${t.contact.messageLabel}: ${form.message}`;
 
 
 
-const COMPANION_SECTIONS = [
-  { id: "inicio", state: "home", side: "left" },
-  { id: "showroom", state: "showroom", side: "left" },
-  { id: "servicios", state: "services", side: "right" },
-  { id: "proceso", state: "process", side: "left" },
-  { id: "casos", state: "projects", side: "right" },
-  { id: "automatizacion", state: "automation", side: "left" },
-  { id: "contacto", state: "contact", side: "right" },
-];
+const COMPANION_SECTIONS = {
+  tech: [
+    { id: "inicio", state: "home", side: "right" },
+    { id: "showroom", state: "showroom", side: "right" },
+    { id: "cuellos-botella", state: "process", side: "left" },
+    { id: "casos-reales", state: "projects", side: "right" },
+    { id: "servicios", state: "services", side: "left" },
+    { id: "automatizacion", state: "automation", side: "right" },
+    { id: "contacto", state: "contact", side: "left" },
+  ],
+  arch: [
+    { id: "inicio", state: "home", side: "left" },
+    { id: "showroom", state: "showroom", side: "right" },
+    { id: "servicios", state: "services", side: "left" },
+    { id: "proceso", state: "process", side: "right" },
+    { id: "casos", state: "projects", side: "left" },
+    { id: "automatizacion", state: "automation", side: "right" },
+    { id: "contacto", state: "contact", side: "left" },
+  ]
+};
 
-function useVisibleCompanionSection(enabled) {
-  const [current, setCurrent] = useState(COMPANION_SECTIONS[0]);
+function useVisibleCompanionSection(enabled, mode) {
+  const sections = COMPANION_SECTIONS[mode] || COMPANION_SECTIONS.tech;
+  const [current, setCurrent] = useState(sections[0]);
+
+  useEffect(() => setCurrent(sections[0]), [mode]);
 
   useEffect(() => {
     if (!enabled) return undefined;
 
-    const targets = COMPANION_SECTIONS
+    const targets = sections
       .map(item => ({ ...item, element: document.getElementById(item.id) }))
       .filter(item => item.element);
 
@@ -646,7 +701,7 @@ function useVisibleCompanionSection(enabled) {
 
     targets.forEach(item => observer.observe(item.element));
     return () => observer.disconnect();
-  }, [enabled]);
+  }, [enabled, mode]);
 
   return current;
 }
@@ -824,7 +879,7 @@ function ArchitectWorker({ state, active }) {
 
 function FloatingCompanion({ mode, t }) {
   const enabled = mode === "tech" || mode === "arch";
-  const current = useVisibleCompanionSection(enabled);
+  const current = useVisibleCompanionSection(enabled, mode);
   const [action, setAction] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [bubbleVisible, setBubbleVisible] = useState(true);
@@ -893,9 +948,7 @@ function FloatingCompanion({ mode, t }) {
   return (
     <motion.aside
       key={`${mode}-${current.state}`}
-      className={`companion-system companion-${mode} ${
-        mode === "arch" ? "companion-left" : `companion-${current.side}`
-      } companion-${current.state} ${action ? "is-performing" : ""}`}
+      className={`companion-system companion-${mode} companion-${current.side} companion-${current.state} ${action ? "is-performing" : ""}`}
       initial={{ opacity: 0, x: current.side === "left" ? -90 : 90, y: 16 }}
       animate={{ opacity: 1, x: 0, y: 0 }}
       transition={{ type: "spring", stiffness: 110, damping: 18 }}
@@ -1018,10 +1071,11 @@ function App() {
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
       <Showroom mode={mode} t={t} />
+      {mode === "tech" && <BottleneckSection t={t} />}
       {mode === "tech" && <TechProof t={t} />}
       <Services mode={mode} t={t} />
-      <ProcessSection t={t} />
-      <SuccessCases mode={mode} t={t} />
+      <ProcessSection t={t} mode={mode} />
+      {mode !== "tech" && <SuccessCases mode={mode} t={t} />}
       <SmartSection mode={mode} t={t} />
       <Contact t={t} mode={mode} />
       <footer className="footer">© 2026 JYM Diseño y Arquitectura S.A.C. · Technology, Architecture & Automation.</footer>

@@ -3100,3 +3100,103 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
     top: auto !important;
   }
 }
+
+/* =========================================================
+   V16 — DOS AMBIENTES INDEPENDIENTES + RECORRIDO COMERCIAL
+========================================================= */
+.world-switch {
+  min-height: 42px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line); color: #dce7ef; background: rgba(255,255,255,.035);
+  font-size: .72rem; font-weight: 900; white-space: nowrap;
+}
+.world-switch-tech { border-color: rgba(217,168,61,.34); }
+.world-switch-arch { border-color: rgba(0,217,255,.34); }
+
+/* Cada hero tiene su propia geometría; ninguna regla depende del otro mundo. */
+.hero-tech { min-height: 100svh; align-items: center; padding-left: clamp(34px,7vw,138px); }
+.hero-tech .world-copy-tech { width: min(620px,42vw); margin: 0; text-align: left; }
+.hero-tech .world-copy-tech h1 { font-size: clamp(3rem,4.7vw,5.7rem); line-height: .92; }
+.hero-tech .world-model-tech { width: 52%; right: 1.5%; top: 51%; transform: translateY(-46%); }
+.hero-tech .world-actions { max-width: 650px; }
+.hero-tech .world-actions .btn-warm { background: rgba(217,168,61,.04); }
+
+.hero-arch { min-height: 100svh; align-items: center; padding-right: clamp(34px,7vw,138px); }
+.hero-arch .world-copy-arch { width: min(620px,42vw); margin: 0 0 0 auto; text-align: right; }
+.hero-arch .world-copy-arch h1 { font-size: clamp(3rem,4.7vw,5.7rem); line-height: .92; }
+.hero-arch .world-model-arch { width: 54%; left: 0; top: 51%; transform: translateY(-46%); }
+
+/* Diagnóstico de cuellos de botella */
+.bottleneck-section { position: relative; }
+.bottleneck-section::before { content:""; position:absolute; inset: 8% -12% auto; height: 62%; pointer-events:none; background: radial-gradient(circle,rgba(0,217,255,.075),transparent 68%); }
+.bottleneck-intro { position: relative; display:grid; grid-template-columns: 1fr .8fr; gap: clamp(30px,6vw,90px); align-items:end; margin-bottom: 42px; }
+.bottleneck-intro p { margin:0 0 10px; color:var(--cyan); font-size:.76rem; font-weight:900; letter-spacing:.16em; }
+.bottleneck-intro h2 { margin:0; max-width:780px; font-size:clamp(2.2rem,4vw,4.6rem); line-height:.98; letter-spacing:-.055em; }
+.bottleneck-intro > span { color:var(--muted); line-height:1.75; }
+.bottleneck-grid { position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.bottleneck-grid article { min-height:240px; padding:24px; border:1px solid var(--line); border-radius:24px; background:rgba(255,255,255,.025); }
+.bottleneck-grid article > div { display:flex; justify-content:space-between; align-items:center; color:var(--cyan); }
+.bottleneck-grid article > div span { font-size:1.35rem; font-weight:900; opacity:.65; }
+.bottleneck-grid h3 { margin:34px 0 10px; font-size:1.25rem; }
+.bottleneck-grid p { margin:0; color:var(--muted); line-height:1.6; font-size:.86rem; }
+.bottleneck-result { position:relative; margin-top:16px; padding:25px 28px; display:grid; grid-template-columns:auto 1fr auto; gap:22px; align-items:center; border:1px solid rgba(0,217,255,.24); border-radius:22px; background:rgba(0,217,255,.055); }
+.bottleneck-result strong { font-size:1.05rem; }
+.bottleneck-result > span { color:var(--muted); line-height:1.5; }
+.bottleneck-result a { display:inline-flex; align-items:center; gap:8px; color:var(--cyan); font-weight:900; white-space:nowrap; }
+
+/* Mascota de Sistemas: derecha en inicio; Arquitectura: izquierda en inicio. */
+.companion-system { top:auto !important; bottom:24px; width:340px; min-height:170px; transform:none !important; transition:left .45s ease,right .45s ease,bottom .35s ease; }
+.companion-system.companion-tech.companion-home { left:auto !important; right:24px !important; }
+.companion-system.companion-arch.companion-home { left:24px !important; right:auto !important; top:auto !important; bottom:24px !important; }
+.companion-system.companion-left { left:18px !important; right:auto !important; flex-direction:row !important; }
+.companion-system.companion-right { right:18px !important; left:auto !important; flex-direction:row-reverse !important; }
+.companion-system.companion-left .companion-speech { order:2; border-radius:21px 21px 21px 6px; }
+.companion-system.companion-right .companion-speech { order:2; border-radius:21px 21px 6px 21px; }
+.companion-system.companion-left .companion-speech::after { left:-9px; right:auto; border:0; border-left:1px solid rgba(255,255,255,.13); border-bottom:1px solid rgba(255,255,255,.13); }
+.companion-system.companion-right .companion-speech::after { right:-9px; left:auto; border:0; border-top:1px solid rgba(255,255,255,.13); border-right:1px solid rgba(255,255,255,.13); }
+.companion-character-stage { flex-basis:145px; width:145px; height:170px; transform:scale(.92); transform-origin:bottom center; }
+.companion-speech { width:180px; }
+.hero-ufo { width:143px; height:118px; top:28px; }
+.hero-ufo-beam { top:118px; }
+
+/* Movimiento continuo, distinto por función. La interacción acelera la acción. */
+.companion-tech.companion-showroom .hologram-screen { animation:v15Present 2.1s ease-in-out infinite alternate; }
+.companion-tech.companion-services .alien-worker-arm.arm-right { animation:v15Work .75s ease-in-out infinite alternate; }
+.companion-tech.companion-process .alien-pointer { animation:v15Explain 1.2s ease-in-out infinite alternate; }
+.companion-tech.companion-projects .alien-visor { animation:v15Inspect 1.6s ease-in-out infinite alternate; }
+.companion-tech.companion-automation .robot-arm { animation:v15RobotArm 1.2s ease-in-out infinite alternate; }
+.companion-arch.companion-showroom .material-panel { animation:v15Present 2.2s ease-in-out infinite alternate; }
+.companion-arch.companion-services .architect-pencil { animation:v15Pencil 1s ease-in-out infinite alternate; }
+.companion-arch.companion-process .measure-tape { animation:v15Explain 1.5s ease-in-out infinite alternate; }
+.companion-arch.companion-projects .inspection-glass { animation:v15Inspect 1.7s ease-in-out infinite alternate; }
+.companion-arch.companion-contact .architect-worker-arm.arm-right { animation:v15Work .8s ease-in-out infinite alternate; }
+
+@media (max-width: 1250px) {
+  .topbar { width:min(1180px,calc(100% - 24px)); }
+  .world-switch { display:none; }
+  .hero-tech .world-copy-tech,.hero-arch .world-copy-arch { width:min(680px,48vw); }
+}
+@media (max-width: 1120px) {
+  .hero-tech,.hero-arch { padding:110px 24px 50px; display:grid; }
+  .hero-tech .world-copy-tech,.hero-arch .world-copy-arch { width:100%; max-width:760px; margin:20px auto 0; text-align:center; }
+  .hero-tech .world-model-tech,.hero-arch .world-model-arch { width:100%; height:390px; left:auto; right:auto; top:auto; transform:none; position:relative; order:-1; }
+  .hero-tech .world-actions,.hero-arch .world-actions { justify-content:center; max-width:none; }
+  .bottleneck-grid { grid-template-columns:repeat(2,1fr); }
+  .bottleneck-result { grid-template-columns:1fr 1fr; }
+  .bottleneck-result a { grid-column:1/-1; }
+  .companion-system { width:150px; }
+  .companion-speech { display:none; }
+}
+@media (max-width: 700px) {
+  .hero-tech,.hero-arch { padding:96px 16px 40px; }
+  .hero-tech .world-model-tech,.hero-arch .world-model-arch { height:270px; }
+  .hero-tech .world-copy-tech h1,.hero-arch .world-copy-arch h1 { font-size:clamp(2.4rem,11vw,3.45rem); }
+  .hero-tech .world-actions .btn,.hero-arch .world-actions .btn { width:100%; }
+  .bottleneck-intro,.bottleneck-grid,.bottleneck-result { grid-template-columns:1fr; }
+  .bottleneck-grid article { min-height:auto; }
+  .bottleneck-result a { grid-column:auto; white-space:normal; }
+  .companion-system { width:90px; min-height:100px; bottom:68px !important; opacity:.94; }
+  .companion-system.companion-left { left:2px !important; }
+  .companion-system.companion-right { right:48px !important; }
+  .companion-character-stage { flex-basis:90px; width:90px; height:110px; transform:scale(.62); transform-origin:bottom center; }
+  .companion-recall { top:auto; bottom:82px; width:46px; height:46px; }
+}
