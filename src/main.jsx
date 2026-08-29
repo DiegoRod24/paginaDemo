@@ -877,6 +877,32 @@ function ArchitectWorker({ state, active }) {
   );
 }
 
+function AssistantMascot({ mode, state, active, content }) {
+  const stateIcons = {
+    home: Sparkles,
+    showroom: Monitor,
+    services: Code2,
+    process: Workflow,
+    projects: BarChart3,
+    automation: Bot,
+    contact: Mail,
+  };
+  const StateIcon = stateIcons[state] || Sparkles;
+  const src = mode === "tech"
+    ? "/assets/characters/asistente-tech-v2.webp"
+    : "/assets/characters/asistente-arquitectura-v2.webp";
+
+  return <div className={`assistant-mascot assistant-mascot-${mode} assistant-action-${state} ${active ? "assistant-active" : ""}`}>
+    <div className="assistant-aura"><i/><i/><i/></div>
+    <img className="assistant-mascot-image" src={src} alt="" draggable="false" />
+    <div className="assistant-tool-dock" aria-hidden="true">
+      <StateIcon size={24}/>
+      <span>{content.eyebrow}</span>
+      <i/><i/><i/>
+    </div>
+  </div>;
+}
+
 function FloatingCompanion({ mode, t }) {
   const enabled = mode === "tech" || mode === "arch";
   const current = useVisibleCompanionSection(enabled, mode);
@@ -973,10 +999,8 @@ function FloatingCompanion({ mode, t }) {
             <i className="hero-ufo-spark s1" />
             <i className="hero-ufo-spark s2" />
           </div>
-        ) : mode === "tech" ? (
-          <AlienWorker state={current.state} active={action} />
         ) : (
-          <ArchitectWorker state={current.state} active={action} />
+          <AssistantMascot mode={mode} state={current.state} active={action} content={content} />
         )}
       </div>
 
