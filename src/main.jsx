@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { archCatalog, techCatalog } from "./catalog.js";
 import { translations } from "./i18n.js";
+import AnimatedTechAssistant from "./AnimatedTechAssistant.jsx";
 import "./styles.css";
 
 const WHATSAPP = "51923558554";
@@ -924,7 +925,9 @@ function AssistantMascot({ mode, state, active, content, prompt }) {
 
   return <div className={`assistant-mascot assistant-mascot-${mode} assistant-action-${state} ${active ? "assistant-active" : ""}`}>
     <div className="assistant-aura"><i/><i/><i/></div>
-    <img className="assistant-mascot-image" src={src} alt="" draggable="false" />
+    {mode === "tech"
+      ? <AnimatedTechAssistant state={state} active={active} fallbackSrc={src} />
+      : <img className="assistant-mascot-image" src={src} alt="" draggable="false" />}
     <div className="assistant-tool-dock" aria-hidden="true">
       <div className="assistant-dock-head"><StateIcon size={20}/><span>{content.eyebrow}</span></div>
       <div className={`assistant-mini-scene mini-scene-${state}`}>

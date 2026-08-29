@@ -3391,3 +3391,85 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
 @media (prefers-reduced-motion:reduce) {
   .assistant-mascot-tech .assistant-mascot-image { animation:none!important;transform:none!important;translate:none!important; }
 }
+
+/* =========================================================
+   V20 — ASISTENTE TECNOLÓGICO 3D ARTICULADO EN TIEMPO REAL
+========================================================= */
+.companion-tech .companion-character-stage {
+  flex-basis: 270px;
+  width: 270px;
+  height: 235px;
+}
+.companion-tech.companion-system { width:455px; }
+.assistant-mascot-tech { overflow:visible; }
+.assistant-live3d {
+  position:absolute;
+  z-index:4;
+  inset:-16px -22px -10px -30px;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(16px) scale(.82);
+  filter:drop-shadow(0 18px 26px rgba(0,0,0,.58));
+  transition:opacity .28s ease;
+}
+.assistant-live3d.is-ready {
+  opacity:1;
+  animation:assistant3dEnter .65s cubic-bezier(.2,.82,.22,1) both;
+}
+.assistant-live3d canvas {
+  position:absolute!important;
+  inset:0;
+  width:100%!important;
+  height:100%!important;
+  pointer-events:none!important;
+}
+.assistant-live3d-fallback {
+  position:absolute;
+  z-index:-1;
+  right:22px;
+  bottom:9px;
+  width:220px;
+  height:205px;
+  object-fit:contain;
+  object-position:center bottom;
+  opacity:1;
+  transition:opacity .25s ease;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,.5));
+}
+.assistant-live3d.is-ready .assistant-live3d-fallback { opacity:0; }
+.assistant-mascot-tech .assistant-aura {
+  right:38px;
+  bottom:3px;
+  width:190px;
+  opacity:.7;
+  animation:assistant3dAura 1.8s ease-in-out infinite alternate;
+}
+.assistant-mascot-tech.assistant-active .assistant-live3d {
+  filter:drop-shadow(0 18px 28px rgba(0,0,0,.58)) drop-shadow(0 0 17px rgba(0,217,255,.48));
+}
+.companion-tech:hover .assistant-live3d {
+  filter:drop-shadow(0 21px 31px rgba(0,0,0,.62)) drop-shadow(0 0 14px rgba(0,217,255,.38));
+}
+
+@keyframes assistant3dEnter {
+  from{opacity:0;transform:translateY(18px) scale(.78);filter:blur(8px) brightness(1.45)}
+  to{opacity:1;transform:translateY(0) scale(1);filter:drop-shadow(0 18px 26px rgba(0,0,0,.58))}
+}
+@keyframes assistant3dAura {
+  to{transform:scale(1.18);opacity:.42;filter:blur(20px)}
+}
+
+@media (max-width:1080px) {
+  .companion-tech.companion-system { width:270px; }
+  .companion-tech .companion-character-stage { flex-basis:270px; }
+}
+@media (max-width:700px) {
+  .companion-tech.companion-system { width:128px; }
+  .companion-tech .companion-character-stage { flex-basis:128px;width:128px;height:142px; }
+  .assistant-live3d { inset:-8px -15px -5px -18px; }
+  .assistant-live3d-fallback { width:118px;height:135px;right:7px; }
+  .assistant-mascot-tech .assistant-aura { width:100px;right:12px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .assistant-live3d,.assistant-mascot-tech .assistant-aura { animation:none!important; }
+}
