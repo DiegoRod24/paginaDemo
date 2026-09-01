@@ -1,0 +1,50 @@
+/* JYM — capa ligera de rendimiento UI/UX
+   Mantiene la experiencia visual y reduce trabajo fuera de pantalla. */
+
+@supports (content-visibility: auto) {
+  main > section:not(.hero) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+}
+
+/* Evita pintar contenido lejano mientras el usuario está en el hero. */
+.showroom-shell,
+.tech-grid,
+.process-grid,
+.success-grid,
+.ai-section,
+.contact {
+  contain: layout paint;
+}
+
+/* En equipos pequeños priorizamos fluidez sobre blur excesivo. */
+@media (max-width: 760px) {
+  .topbar,
+  .mobile-menu,
+  .guide-companion,
+  .contact,
+  .portal-world {
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
+  }
+
+  .world-model {
+    filter: drop-shadow(0 24px 55px rgba(0,0,0,.46)) !important;
+  }
+
+  .orbit-a,
+  .orbit-b {
+    display: none !important;
+  }
+}
+
+/* Respeta accesibilidad y evita ciclos de animación innecesarios. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
