@@ -91,6 +91,18 @@ export const archCatalog = [
     "videos": []
   },
   {
+    "id": "aire-acondicionado",
+    "title": "Aire acondicionado",
+    "tag": "Venta e instalación",
+    "description": "Suministro e instalación de equipos de aire acondicionado con evidencias reales de entrega, montaje y acabado final.",
+    "images": [
+      "/assets/arquitectura/aire_acondicionado_instalacion.svg",
+      "/assets/arquitectura/aire_acondicionado_instalado.svg",
+      "/assets/arquitectura/aire_acondicionado_entrega.svg"
+    ],
+    "videos": []
+  },
+  {
     "id": "ejecucion",
     "title": "Ejecución",
     "tag": "Obra terminada",
@@ -125,7 +137,9 @@ export const archCatalog = [
     "tag": "Recorridos 3D",
     "description": "Visualización integral del departamento, distribución de ambientes y recorridos por primer y segundo piso.",
     "images": [
-      "/assets/arquitectura/departamento_portada.webp"
+      "/assets/arquitectura/departamento_portada.webp",
+      "/assets/arquitectura/departamento_plano_01.svg",
+      "/assets/arquitectura/departamento_plano_02.svg"
     ],
     "videos": [
       {
