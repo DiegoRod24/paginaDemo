@@ -1,0 +1,48 @@
+/* Ajustes visuales rápidos JYM - WhatsApp 3D */
+.floating-actions .whatsapp-3d{
+  width:68px!important;height:68px!important;
+  perspective:700px!important;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,.42));
+}
+.whatsapp-3d-core{
+  border:1px solid rgba(255,255,255,.5)!important;
+  background:
+    radial-gradient(circle at 31% 24%,rgba(255,255,255,.72) 0 5%,rgba(255,255,255,.18) 6% 15%,transparent 16%),
+    linear-gradient(145deg,#65ffac 0%,#25d366 37%,#12a950 66%,#08743a 100%)!important;
+  box-shadow:
+    inset 8px 9px 13px rgba(255,255,255,.34),
+    inset -11px -13px 17px rgba(0,64,31,.34),
+    0 8px 0 #08743a,
+    0 15px 0 #045d2d,
+    0 23px 34px rgba(0,0,0,.48),
+    0 0 28px rgba(37,211,102,.28)!important;
+  transform:rotateX(7deg) rotateY(-7deg)!important;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease!important;
+}
+.whatsapp-3d-core:after{
+  content:"";position:absolute;inset:7px;border-radius:50%;
+  border-top:1px solid rgba(255,255,255,.65);
+  border-left:1px solid rgba(255,255,255,.25);
+  pointer-events:none;
+}
+.whatsapp-3d:hover .whatsapp-3d-core,
+.whatsapp-3d:focus-visible .whatsapp-3d-core{
+  transform:translateY(-7px) rotateX(13deg) rotateY(10deg) scale(1.08)!important;
+  box-shadow:
+    inset 10px 11px 15px rgba(255,255,255,.38),
+    inset -13px -15px 19px rgba(0,64,31,.36),
+    0 10px 0 #08743a,
+    0 18px 0 #045d2d,
+    0 28px 42px rgba(0,0,0,.54),
+    0 0 42px rgba(37,211,102,.5)!important;
+}
+.whatsapp-chat{width:34px!important;height:34px!important;filter:drop-shadow(0 2px 2px rgba(0,55,26,.5));}
+.whatsapp-phone{width:18px!important;height:18px!important;filter:drop-shadow(0 1px 1px rgba(0,55,26,.55));}
+.whatsapp-3d-label{
+  width:150px!important;padding:10px 13px!important;
+  border:1px solid rgba(80,255,157,.34)!important;
+  background:linear-gradient(145deg,rgba(7,47,28,.97),rgba(3,23,14,.97))!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.08),0 12px 30px rgba(0,0,0,.4)!important;
+}
+.whatsapp-3d-label b{font-size:.78rem!important}.whatsapp-3d-label small{font-size:.68rem!important}
+@media(max-width:700px){.floating-actions .whatsapp-3d{width:58px!important;height:58px!important}.whatsapp-chat{width:30px!important;height:30px!important}}
