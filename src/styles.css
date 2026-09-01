@@ -4097,3 +4097,253 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
 @media(prefers-reduced-motion:reduce) {
   .scene-fallback * { animation:none!important; }
 }
+
+/* =========================================================
+   V24 — PORTADA 50/50 · TECNOLOGÍA VS ARQUITECTURA
+========================================================= */
+.hero-portal {
+  min-height:100svh;
+  padding:108px clamp(18px,3vw,46px) 30px;
+  align-items:stretch;
+}
+.hero-portal .hero-ambient {
+  background:
+    radial-gradient(circle at 18% 54%,rgba(0,217,255,.21),transparent 36%),
+    radial-gradient(circle at 82% 54%,rgba(217,168,61,.23),transparent 36%),
+    linear-gradient(90deg,#01111d 0%,#03070b 46%,#090704 54%,#1a1006 100%);
+}
+.portal-split {
+  width:min(1320px,100%);
+  min-height:calc(100svh - 138px);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr);
+  grid-template-rows:auto minmax(480px,1fr) auto;
+  grid-template-areas:
+    "intro intro intro"
+    "tech versus arch"
+    "social social social";
+  gap:15px 18px;
+  align-items:stretch;
+  transition:grid-template-columns .5s cubic-bezier(.2,.8,.2,1);
+}
+.portal-split.portal-focus-tech { grid-template-columns:minmax(0,1.09fr) 76px minmax(0,.91fr); }
+.portal-split.portal-focus-arch { grid-template-columns:minmax(0,.91fr) 76px minmax(0,1.09fr); }
+.portal-split-intro {
+  grid-area:intro;
+  max-width:760px;
+  margin:0 auto 3px;
+  text-align:center;
+}
+.portal-split-intro p {
+  margin:0 0 5px;
+  color:#d8b75e;
+  font-size:.65rem;
+  font-weight:900;
+  letter-spacing:.19em;
+  text-transform:uppercase;
+}
+.portal-split-intro h1 {
+  margin:0;
+  font-size:clamp(2rem,3.2vw,3.7rem);
+  line-height:.98;
+  letter-spacing:-.06em;
+}
+.portal-split-intro > span {
+  display:block;
+  max-width:680px;
+  margin:8px auto 0;
+  color:#9aabba;
+  font-size:.78rem;
+  line-height:1.5;
+}
+.portal-split .portal-world {
+  min-width:0;
+  min-height:480px;
+  height:100%;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  border-radius:32px;
+  text-align:left;
+  transform:none;
+  backdrop-filter:blur(18px);
+  transition:transform .42s cubic-bezier(.2,.8,.2,1),border-color .35s ease,box-shadow .35s ease,filter .35s ease;
+}
+.portal-split .portal-tech {
+  grid-area:tech;
+  border-color:rgba(0,217,255,.2);
+  background:linear-gradient(145deg,rgba(4,26,39,.91),rgba(3,9,14,.94));
+}
+.portal-split .portal-arch {
+  grid-area:arch;
+  border-color:rgba(217,168,61,.22);
+  background:linear-gradient(215deg,rgba(35,23,8,.91),rgba(10,8,5,.95));
+}
+.portal-split .portal-world:hover,
+.portal-split .portal-world:focus-visible {
+  transform:translateY(-5px);
+  outline:none;
+}
+.portal-split .portal-tech:hover,.portal-split .portal-tech:focus-visible {
+  border-color:rgba(0,217,255,.72);
+  box-shadow:0 30px 100px rgba(0,217,255,.16),inset 0 0 70px rgba(0,217,255,.035);
+}
+.portal-split .portal-arch:hover,.portal-split .portal-arch:focus-visible {
+  border-color:rgba(217,168,61,.76);
+  box-shadow:0 30px 100px rgba(217,168,61,.16),inset 0 0 70px rgba(217,168,61,.035);
+}
+.portal-split .portal-visual {
+  height:150px;
+  flex:0 0 150px;
+  margin:0 0 19px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  transition:height .4s ease,flex-basis .4s ease,filter .35s ease;
+}
+.portal-split .portal-world:hover .portal-visual { filter:brightness(1.16) saturate(1.18); }
+.portal-split .portal-visual > svg {
+  width:72px;
+  height:72px;
+  stroke-width:1.35;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .35s ease;
+}
+.portal-split .portal-world:hover .portal-visual > svg { transform:scale(1.12) translateY(-3px);filter:drop-shadow(0 0 18px currentColor); }
+.portal-world-heading { display:flex;align-items:center;justify-content:space-between;gap:16px; }
+.portal-world-heading small { color:#9aabba;font-size:.6rem; }
+.portal-world-heading b { color:rgba(255,255,255,.2);font-size:1rem;letter-spacing:.08em; }
+.portal-split .portal-world h2 {
+  margin:10px 0 12px;
+  display:grid;
+  gap:7px;
+  font-size:clamp(2.25rem,3.4vw,4.25rem);
+  line-height:.94;
+  letter-spacing:-.06em;
+}
+.portal-split .portal-world h2 em {
+  max-width:410px;
+  color:#b7c4ce;
+  font-size:.7rem;
+  font-style:normal;
+  font-weight:700;
+  letter-spacing:.01em;
+  line-height:1.35;
+}
+.portal-split .portal-tech h2 { color:#eefcff; }
+.portal-split .portal-arch h2 { color:#fffaf0; }
+.portal-split .portal-world > p {
+  max-width:510px;
+  min-height:auto;
+  margin:0;
+  color:#8fa1af;
+  font-size:.78rem;
+  line-height:1.62;
+}
+.portal-benefits {
+  margin:17px 0 20px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.portal-benefits b {
+  padding:7px 9px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:999px;
+  color:#a9b8c4;
+  background:rgba(255,255,255,.025);
+  font-size:.57rem;
+  font-weight:800;
+}
+.portal-tech .portal-benefits svg { color:var(--cyan); }
+.portal-arch .portal-benefits svg { color:var(--gold); }
+.portal-split .portal-world > span {
+  margin-top:auto;
+  min-height:46px;
+  padding:0 4px;
+  justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.07);
+  font-size:.72rem;
+}
+.portal-tech > span { color:#bff7ff; }
+.portal-arch > span { color:#f1d590; }
+.portal-versus {
+  grid-area:versus;
+  min-width:0;
+  display:grid;
+  grid-template-rows:1fr auto auto 1fr;
+  place-items:center;
+  gap:7px;
+}
+.portal-versus i {
+  width:1px;
+  height:100%;
+  background:linear-gradient(transparent,rgba(255,255,255,.25));
+}
+.portal-versus i:last-child { background:linear-gradient(rgba(255,255,255,.25),transparent); }
+.portal-versus span {
+  width:62px;
+  height:62px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:50%;
+  color:white;
+  background:linear-gradient(135deg,rgba(0,217,255,.17),rgba(217,168,61,.18)),#070a0e;
+  box-shadow:-12px 0 35px rgba(0,217,255,.12),12px 0 35px rgba(217,168,61,.12);
+  font-size:.9rem;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.portal-versus small { color:#6f8190;font-size:.5rem;font-weight:900;letter-spacing:.2em; }
+.portal-social-strip {
+  grid-area:social;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+}
+.portal-social-strip > small { color:#617486;font-size:.54rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase; }
+.portal-social-strip .instagram-pill,.portal-social-strip .tiktok-pill { padding:6px 11px;font-size:.65rem; }
+
+@media(max-width:980px) {
+  .hero-portal { padding-top:104px; }
+  .portal-split,
+  .portal-split.portal-focus-tech,
+  .portal-split.portal-focus-arch {
+    grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);
+    grid-template-rows:auto minmax(450px,1fr) auto;
+    gap:13px 10px;
+  }
+  .portal-split .portal-world { min-height:450px;padding:19px; }
+  .portal-split .portal-visual { height:126px;flex-basis:126px; }
+  .portal-split .portal-world h2 { font-size:clamp(2rem,5vw,3.3rem); }
+  .portal-versus span { width:50px;height:50px; }
+}
+@media(max-width:720px) {
+  .hero-portal { min-height:auto;padding:94px 14px 30px; }
+  .portal-split,
+  .portal-split.portal-focus-tech,
+  .portal-split.portal-focus-arch {
+    min-height:0;
+    display:grid;
+    grid-template-columns:1fr;
+    grid-template-rows:auto auto 54px auto auto;
+    grid-template-areas:"intro" "tech" "versus" "arch" "social";
+    gap:12px;
+  }
+  .portal-split-intro { margin-bottom:3px; }
+  .portal-split-intro h1 { font-size:clamp(2rem,10vw,3rem); }
+  .portal-split-intro > span { font-size:.72rem; }
+  .portal-split .portal-world { min-height:420px;padding:20px;border-radius:25px; }
+  .portal-split .portal-visual { height:130px;flex-basis:130px; }
+  .portal-split .portal-world h2 { font-size:clamp(2.35rem,12vw,3.4rem); }
+  .portal-versus { grid-template-columns:1fr auto auto 1fr;grid-template-rows:1fr;gap:8px; }
+  .portal-versus i { width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25)); }
+  .portal-versus i:last-child { background:linear-gradient(90deg,rgba(255,255,255,.25),transparent); }
+  .portal-versus span { width:44px;height:44px;font-size:.72rem; }
+  .portal-social-strip { padding-top:2px; }
+}

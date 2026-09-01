@@ -332,6 +332,7 @@ function Hero({ mode, setMode, t }) {
   const isTech = mode === "tech";
   const isArch = mode === "arch";
   const portal = mode === "portal";
+  const [portalFocus, setPortalFocus] = useState("none");
 
   return <section className={`hero hero-${mode}`} id="inicio">
     <div className="hero-ambient" />
@@ -349,47 +350,67 @@ function Hero({ mode, setMode, t }) {
     <AnimatePresence mode="wait">
       {portal && <motion.div
         key="portal"
-        className="portal-layout"
+        className={`portal-layout portal-split portal-focus-${portalFocus}`}
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, scale: .97 }}
       >
-        <button className="portal-world portal-tech" onClick={() => setMode("tech")}>
+        <div className="portal-split-intro">
+          <p>{t.hero.neutralBadge}</p>
+          <h1>{t.hero.splitTitle}</h1>
+          <span>{t.hero.splitText}</span>
+        </div>
+
+        <button
+          className="portal-world portal-tech"
+          onClick={() => setMode("tech")}
+          onMouseEnter={() => setPortalFocus("tech")}
+          onMouseLeave={() => setPortalFocus("none")}
+          onFocus={() => setPortalFocus("tech")}
+          onBlur={() => setPortalFocus("none")}
+        >
           <div className="portal-visual portal-visual-tech">
             <Monitor size={66} />
             <i /><i /><i />
           </div>
-          <small>{t.hero.techBadge}</small>
-          <h2>{t.nav.tech}</h2>
+          <div className="portal-world-heading"><small>{t.hero.techBadge}</small><b>01</b></div>
+          <h2>{t.nav.tech}<em>{t.hero.techPromise}</em></h2>
           <p>{t.hero.techText}</p>
+          <div className="portal-benefits">{t.hero.techPoints.map(point => <b key={point}><Sparkles size={14}/>{point}</b>)}</div>
           <span>{t.hero.techCta} <ArrowRight size={18}/></span>
         </button>
 
-        <div className="portal-center">
-          <p>{t.hero.neutralBadge}</p>
-          <h1>{t.hero.neutralTitle}</h1>
-          <span>{t.hero.neutralText}</span>
-          <div className="portal-actions">
-            <button className="btn btn-cold" onClick={() => setMode("tech")}><Code2 size={18}/>{t.hero.techCta}</button>
-            <button className="btn btn-warm" onClick={() => setMode("arch")}><Building2 size={18}/>{t.hero.archCta}</button>
-          </div>
-          <div className="hero-socials">
-            <small>{t.labels.follow}</small>
-            <a className="instagram-pill" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Instagram</a>
-            <a className="tiktok-pill" href={TIKTOK_URL} target="_blank" rel="noreferrer">TikTok</a>
-          </div>
+        <div className="portal-versus" aria-hidden="true">
+          <i />
+          <span>{t.hero.versus}</span>
+          <small>JYM</small>
+          <i />
         </div>
 
-        <button className="portal-world portal-arch" onClick={() => setMode("arch")}>
+        <button
+          className="portal-world portal-arch"
+          onClick={() => setMode("arch")}
+          onMouseEnter={() => setPortalFocus("arch")}
+          onMouseLeave={() => setPortalFocus("none")}
+          onFocus={() => setPortalFocus("arch")}
+          onBlur={() => setPortalFocus("none")}
+        >
           <div className="portal-visual portal-visual-arch">
             <Building2 size={66} />
             <i /><i /><i />
           </div>
-          <small>{t.hero.archBadge}</small>
-          <h2>{t.nav.arch}</h2>
+          <div className="portal-world-heading"><small>{t.hero.archBadge}</small><b>02</b></div>
+          <h2>{t.nav.arch}<em>{t.hero.archPromise}</em></h2>
           <p>{t.hero.archText}</p>
+          <div className="portal-benefits">{t.hero.archPoints.map(point => <b key={point}><Sparkles size={14}/>{point}</b>)}</div>
           <span>{t.hero.archCta} <ArrowRight size={18}/></span>
         </button>
+
+        <div className="portal-social-strip">
+          <small>{t.labels.follow}</small>
+          <a className="instagram-pill" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Instagram</a>
+          <a className="tiktok-pill" href={TIKTOK_URL} target="_blank" rel="noreferrer">TikTok</a>
+        </div>
       </motion.div>}
 
       {isTech && <motion.div
