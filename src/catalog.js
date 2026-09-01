@@ -123,8 +123,10 @@ export const archCatalog = [
     "id": "departamento",
     "title": "Departamento",
     "tag": "Recorridos 3D",
-    "description": "Videos de primer y segundo piso para mostrar distribución, acabados y experiencia de recorrido.",
-    "images": [],
+    "description": "Visualización integral del departamento, distribución de ambientes y recorridos por primer y segundo piso.",
+    "images": [
+      "/assets/arquitectura/departamento_portada.webp"
+    ],
     "videos": [
       {
         "title": "Primer piso",
