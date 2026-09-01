@@ -4003,3 +4003,97 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
 @media(prefers-reduced-motion:reduce) {
   .automation-lab * { animation:none!important;scroll-behavior:auto!important; }
 }
+
+/* Respaldo visual: la experiencia nunca queda vacía si el equipo no ofrece WebGL. */
+.scene-fallback {
+  --scene-accent:var(--cyan);
+  --scene-glow:rgba(0,217,255,.22);
+  position:absolute;
+  inset:5%;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--scene-glow),transparent 58%);
+  filter:drop-shadow(0 32px 70px rgba(0,0,0,.45));
+}
+.scene-fallback-arch { --scene-accent:var(--gold);--scene-glow:rgba(217,168,61,.23); }
+.scene-fallback-orbit {
+  position:absolute;
+  width:min(78%,520px);
+  aspect-ratio:1;
+  border:1px solid color-mix(in srgb,var(--scene-accent) 38%,transparent);
+  border-radius:50%;
+  animation:sceneFallbackRotate 14s linear infinite;
+}
+.scene-fallback-orbit::before,.scene-fallback-orbit::after {
+  content:"";
+  position:absolute;
+  inset:13%;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:50%;
+}
+.scene-fallback-orbit::after { inset:28%;border-color:color-mix(in srgb,var(--scene-accent) 24%,transparent); }
+.scene-fallback-orbit i {
+  position:absolute;
+  width:10px;height:10px;
+  border-radius:50%;
+  background:var(--scene-accent);
+  box-shadow:0 0 18px var(--scene-accent);
+}
+.scene-fallback-orbit i:nth-child(1) { left:13%;top:18%; }
+.scene-fallback-orbit i:nth-child(2) { right:2%;top:48%; }
+.scene-fallback-orbit i:nth-child(3) { left:32%;bottom:2%; }
+.scene-fallback-core {
+  position:relative;
+  z-index:2;
+  width:clamp(145px,25vw,255px);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  border:1px solid color-mix(in srgb,var(--scene-accent) 60%,transparent);
+  border-radius:34%;
+  color:var(--scene-accent);
+  background:linear-gradient(145deg,rgba(8,20,30,.94),rgba(3,7,11,.92));
+  box-shadow:inset 0 0 45px var(--scene-glow),0 0 70px var(--scene-glow);
+  transform:rotate(-7deg);
+  animation:sceneFallbackFloat 2.5s ease-in-out infinite alternate;
+}
+.scene-fallback-arch .scene-fallback-core { border-radius:20% 20% 32% 32%; }
+.scene-fallback-core svg { width:44%;height:44%;stroke-width:1.4; }
+.scene-fallback-core span {
+  position:absolute;
+  right:13%;bottom:10%;
+  color:white;
+  font-size:.66rem;
+  font-weight:900;
+  letter-spacing:.16em;
+}
+.scene-fallback-data {
+  position:absolute;
+  z-index:3;
+  width:min(82%,560px);
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+}
+.scene-fallback-data span {
+  padding:8px 11px;
+  border:1px solid color-mix(in srgb,var(--scene-accent) 38%,transparent);
+  border-radius:999px;
+  color:var(--scene-accent);
+  background:rgba(3,8,12,.78);
+  font-size:.55rem;
+  font-weight:900;
+  letter-spacing:.09em;
+  box-shadow:0 0 24px var(--scene-glow);
+  animation:sceneFallbackTag 1.8s ease-in-out infinite alternate;
+}
+.scene-fallback-data span:nth-child(2) { animation-delay:.35s; }
+.scene-fallback-data span:nth-child(3) { animation-delay:.7s; }
+@keyframes sceneFallbackRotate { to{transform:rotate(360deg)} }
+@keyframes sceneFallbackFloat { to{transform:translateY(-12px) rotate(5deg)} }
+@keyframes sceneFallbackTag { to{transform:translateY(-9px)} }
+@media(prefers-reduced-motion:reduce) {
+  .scene-fallback * { animation:none!important; }
+}

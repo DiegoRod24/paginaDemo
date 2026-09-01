@@ -226,6 +226,59 @@ function Scene3D({ mode }) {
   </Canvas>;
 }
 
+function SceneFallback({ mode }) {
+  const isTech = mode === "tech";
+  const Icon = isTech ? Monitor : Building2;
+  return <div className={`scene-fallback scene-fallback-${mode}`} role="img" aria-label={isTech ? "Laboratorio digital JYM" : "Proyecto arquitectónico JYM"}>
+    <div className="scene-fallback-orbit"><i/><i/><i/></div>
+    <div className="scene-fallback-core"><Icon/><span>{isTech ? "AI" : "JYM"}</span></div>
+    <div className="scene-fallback-data">
+      <span>{isTech ? "DATA" : "DISEÑO"}</span>
+      <span>{isTech ? "BOT" : "ESPACIO"}</span>
+      <span>{isTech ? "FLOW" : "OBRA"}</span>
+    </div>
+  </div>;
+}
+
+class SceneErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error) {
+    console.warn("JYM 3D fallback activado:", error?.message || error);
+  }
+
+  render() {
+    return this.state.failed ? <SceneFallback mode={this.props.mode}/> : this.props.children;
+  }
+}
+
+function SafeScene3D({ mode }) {
+  const [webgl, setWebgl] = useState(null);
+
+  useEffect(() => {
+    let supported = false;
+    try {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("webgl2") || canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      supported = Boolean(context);
+      context?.getExtension?.("WEBGL_lose_context")?.loseContext?.();
+    } catch {
+      supported = false;
+    }
+    setWebgl(supported);
+  }, []);
+
+  if (webgl !== true) return <SceneFallback mode={mode}/>;
+  return <SceneErrorBoundary mode={mode}><Scene3D mode={mode}/></SceneErrorBoundary>;
+}
+
 function Header({ mode, setMode, lang, setLang, t }) {
   const [open, setOpen] = useState(false);
   const navItems = mode === "tech" ? [
@@ -286,11 +339,11 @@ function Hero({ mode, setMode, t }) {
     <div className="hero-orbit orbit-b" />
 
     {isTech && <div className="world-model world-model-tech">
-      <Scene3D mode="tech" />
+      <SafeScene3D mode="tech" />
     </div>}
 
     {isArch && <div className="world-model world-model-arch">
-      <Scene3D mode="arch" />
+      <SafeScene3D mode="arch" />
     </div>}
 
     <AnimatePresence mode="wait">
