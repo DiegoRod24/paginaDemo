@@ -333,6 +333,21 @@ function Hero({ mode, setMode, t }) {
   const isArch = mode === "arch";
   const portal = mode === "portal";
   const [portalFocus, setPortalFocus] = useState("none");
+  const [portalSelection, setPortalSelection] = useState("none");
+  const portalTimer = useRef();
+
+  useEffect(() => () => window.clearTimeout(portalTimer.current), []);
+
+  const selectPortalWorld = (next) => {
+    if (portalSelection !== "none") return;
+    setPortalSelection(next);
+    setPortalFocus(next);
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    portalTimer.current = window.setTimeout(
+      () => setMode(next, { direct: true }),
+      reducedMotion ? 80 : 780
+    );
+  };
 
   return <section className={`hero hero-${mode}`} id="inicio">
     <div className="hero-ambient" />
@@ -350,10 +365,11 @@ function Hero({ mode, setMode, t }) {
     <AnimatePresence mode="wait">
       {portal && <motion.div
         key="portal"
-        className={`portal-layout portal-split portal-focus-${portalFocus}`}
+        className={`portal-layout portal-split portal-focus-${portalFocus} portal-selection-${portalSelection}`}
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, scale: .97 }}
+        aria-busy={portalSelection !== "none"}
       >
         <div className="portal-split-intro">
           <p>{t.hero.neutralBadge}</p>
@@ -363,15 +379,21 @@ function Hero({ mode, setMode, t }) {
 
         <button
           className="portal-world portal-tech"
-          onClick={() => setMode("tech")}
+          onClick={() => selectPortalWorld("tech")}
           onMouseEnter={() => setPortalFocus("tech")}
           onMouseLeave={() => setPortalFocus("none")}
           onFocus={() => setPortalFocus("tech")}
           onBlur={() => setPortalFocus("none")}
+          disabled={portalSelection !== "none"}
+          aria-label={`${t.hero.techCta}. ${t.hero.techPromise}`}
         >
           <div className="portal-visual portal-visual-tech">
             <Monitor size={66} />
             <i /><i /><i />
+          </div>
+          <div className="portal-entry-mascot portal-entry-mascot-tech" aria-hidden="true">
+            <img src="/assets/characters/marcianito-nave.png" alt="" draggable="false" />
+            <i />
           </div>
           <div className="portal-world-heading"><small>{t.hero.techBadge}</small><b>01</b></div>
           <h2>{t.nav.tech}<em>{t.hero.techPromise}</em></h2>
@@ -389,15 +411,21 @@ function Hero({ mode, setMode, t }) {
 
         <button
           className="portal-world portal-arch"
-          onClick={() => setMode("arch")}
+          onClick={() => selectPortalWorld("arch")}
           onMouseEnter={() => setPortalFocus("arch")}
           onMouseLeave={() => setPortalFocus("none")}
           onFocus={() => setPortalFocus("arch")}
           onBlur={() => setPortalFocus("none")}
+          disabled={portalSelection !== "none"}
+          aria-label={`${t.hero.archCta}. ${t.hero.archPromise}`}
         >
           <div className="portal-visual portal-visual-arch">
             <Building2 size={66} />
             <i /><i /><i />
+          </div>
+          <div className="portal-entry-mascot portal-entry-mascot-arch" aria-hidden="true">
+            <img src="/assets/characters/asistente-arquitectura-v2.webp" alt="" draggable="false" />
+            <i />
           </div>
           <div className="portal-world-heading"><small>{t.hero.archBadge}</small><b>02</b></div>
           <h2>{t.nav.arch}<em>{t.hero.archPromise}</em></h2>
@@ -1307,7 +1335,7 @@ function App() {
   const t = translations[lang];
   const overlay = useRef();
 
-  const setMode = (next) => {
+  const setMode = (next, options = {}) => {
     if (next === mode) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -1320,6 +1348,13 @@ function App() {
       overlay.current?.classList.remove("active");
       setModeState("portal");
       window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+      return;
+    }
+
+    if (options.direct) {
+      overlay.current?.classList.remove("active");
+      setModeState(next);
+      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
       return;
     }
 
