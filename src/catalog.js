@@ -113,9 +113,9 @@ export const archCatalog = [
         "poster": "/assets/arquitectura/ejecucion/poster_03.webp"
       },
       {
-        "title": "Detalle de sala",
-        "src": "/assets/arquitectura/ejecucion/ejecucion_sala_terminada_02.mp4",
-        "poster": "/assets/arquitectura/ejecucion/poster_04.webp"
+        "title": "Cocina moderna terminada",
+        "src": "/assets/arquitectura/ejecucion/ejecucion_cocina_moderna.mp4",
+        "poster": "/assets/arquitectura/ejecucion/poster_cocina_moderna.webp"
       }
     ]
   },

@@ -4676,3 +4676,146 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
   .portal-selection-arch .portal-tech { top:-50svh;left:0;width:100%;height:0; }
   .portal-selection-arch .portal-arch { top:0;left:0;width:100%;height:100svh; }
 }
+
+/* =========================================================
+   V26 — WHATSAPP 3D RECONOCIBLE Y SIN SOLAPES
+========================================================= */
+.floating-actions .whatsapp-3d {
+  --wa-light:#46f493;
+  --wa-main:#21d66f;
+  --wa-dark:#087e3d;
+  width:58px;
+  height:58px;
+  overflow:visible;
+  isolation:isolate;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  perspective:480px;
+  transform-style:preserve-3d;
+}
+.whatsapp-3d::before {
+  content:"";
+  position:absolute;
+  z-index:-2;
+  left:9px;
+  right:9px;
+  bottom:-9px;
+  height:15px;
+  border-radius:50%;
+  background:rgba(0,0,0,.58);
+  filter:blur(7px);
+  transform:rotateX(72deg);
+  transition:transform .3s ease,opacity .3s ease;
+}
+.whatsapp-3d::after {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-5px;
+  border:1px solid rgba(70,244,147,.5);
+  border-radius:50%;
+  opacity:.48;
+  animation:whatsappRing 2.4s ease-out infinite;
+}
+.whatsapp-3d-core {
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.62);
+  border-radius:50%;
+  color:white;
+  background:
+    radial-gradient(circle at 31% 22%,rgba(255,255,255,.68),transparent 15%),
+    linear-gradient(145deg,var(--wa-light) 0%,var(--wa-main) 44%,#0ca956 100%);
+  box-shadow:
+    inset 8px 9px 13px rgba(255,255,255,.28),
+    inset -10px -12px 16px rgba(0,62,29,.34),
+    0 7px 0 var(--wa-dark),
+    0 15px 26px rgba(0,0,0,.42),
+    0 0 24px rgba(33,214,111,.3);
+  transform:rotateX(10deg) rotateY(-9deg) translateZ(0);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease;
+  animation:whatsappFloat 2.8s ease-in-out infinite alternate;
+}
+.whatsapp-chat {
+  width:34px;
+  height:34px;
+  fill:rgba(4,108,52,.22);
+  stroke:white;
+  stroke-width:2;
+  filter:drop-shadow(0 2px 2px rgba(0,66,31,.35));
+}
+.whatsapp-phone {
+  position:absolute;
+  width:15px;
+  height:15px;
+  color:white;
+  stroke-width:2.8;
+  transform:rotate(-13deg);
+  filter:drop-shadow(0 1px 2px rgba(0,55,26,.42));
+}
+.whatsapp-3d-label {
+  position:absolute;
+  z-index:-1;
+  top:50%;
+  right:calc(100% + 13px);
+  width:136px;
+  min-height:48px;
+  padding:8px 14px 8px 12px;
+  display:grid;
+  align-content:center;
+  border:1px solid rgba(70,244,147,.32);
+  border-radius:16px 7px 7px 16px;
+  text-align:right;
+  opacity:0;
+  pointer-events:none;
+  background:linear-gradient(120deg,rgba(5,17,12,.96),rgba(8,40,25,.94));
+  box-shadow:0 14px 34px rgba(0,0,0,.42),inset 0 0 22px rgba(33,214,111,.05);
+  backdrop-filter:blur(16px);
+  transform:translate(12px,-50%) scale(.9);
+  transform-origin:right center;
+  transition:opacity .24s ease,transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.whatsapp-3d-label::after {
+  content:"";
+  position:absolute;
+  right:-7px;
+  top:50%;
+  width:13px;
+  height:13px;
+  border-top:1px solid rgba(70,244,147,.32);
+  border-right:1px solid rgba(70,244,147,.32);
+  background:#082819;
+  transform:translateY(-50%) rotate(45deg);
+}
+.whatsapp-3d-label b { color:#effff6;font-size:.72rem;line-height:1.1;letter-spacing:.02em; }
+.whatsapp-3d-label small { margin-top:3px;color:#73f6ad;font-size:.62rem;font-weight:800;letter-spacing:.04em; }
+.whatsapp-3d:hover,
+.whatsapp-3d:focus-visible { transform:translateY(-2px);box-shadow:none; }
+.whatsapp-3d:hover .whatsapp-3d-core,
+.whatsapp-3d:focus-visible .whatsapp-3d-core {
+  transform:translateY(-5px) rotateX(2deg) rotateY(7deg) scale(1.06);
+  box-shadow:
+    inset 7px 8px 12px rgba(255,255,255,.3),
+    inset -10px -12px 16px rgba(0,62,29,.3),
+    0 10px 0 #067238,
+    0 20px 34px rgba(0,0,0,.46),
+    0 0 34px rgba(33,214,111,.52);
+}
+.whatsapp-3d:hover::before,
+.whatsapp-3d:focus-visible::before { opacity:.72;transform:rotateX(72deg) scale(1.15); }
+.whatsapp-3d:hover .whatsapp-3d-label,
+.whatsapp-3d:focus-visible .whatsapp-3d-label { opacity:1;transform:translate(0,-50%) scale(1); }
+@keyframes whatsappFloat { to{ transform:translateY(-3px) rotateX(4deg) rotateY(7deg) } }
+@keyframes whatsappRing { 0%{transform:scale(.82);opacity:.62} 75%,100%{transform:scale(1.28);opacity:0} }
+
+@media(max-width:700px) {
+  .floating-actions .whatsapp-3d { width:52px;height:52px; }
+  .whatsapp-3d-label { display:none; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .whatsapp-3d-core,.whatsapp-3d::after { animation:none!important; }
+}

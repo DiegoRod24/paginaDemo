@@ -7,7 +7,7 @@ import gsap from "gsap";
 import {
   ArrowRight, BarChart3, Bot, Building2, CheckCircle2, ChevronLeft, ChevronRight, Code2,
   Database, Download, FileSpreadsheet, Hammer, Home, IdCard, LockKeyhole, Mail, Menu,
-  Monitor, MousePointerClick, Play, RotateCw, Scale, ShieldCheck, Snowflake, Sparkles,
+  MessageCircle, Monitor, MousePointerClick, Phone, Play, RotateCw, Scale, ShieldCheck, Snowflake, Sparkles,
   Timer, Workflow, X
 } from "lucide-react";
 import { archCatalog, techCatalog } from "./catalog.js";
@@ -15,7 +15,8 @@ import { translations } from "./i18n.js";
 import AnimatedTechAssistant from "./AnimatedTechAssistant.jsx";
 import "./styles.css";
 
-const WHATSAPP = "51923558554";
+const WHATSAPP = "51993212999";
+const WHATSAPP_DISPLAY = "+51 993 212 999";
 const EMAIL = "jmproyectoarquitectura@gmail.com";
 const TIKTOK_URL = "https://www.tiktok.com/@jymdisenoyarquitectura?_r=1&_t=ZS-97jUtwXlYcp.";
 const INSTAGRAM_URL = "https://www.instagram.com/jymdisenoyarquitectura?igsh=dmlyZmdoOXVqcmpx&utm_source=qr.";
@@ -854,7 +855,7 @@ ${t.contact.messageLabel}: ${form.message}`;
       <p>{t.contact.kicker}</p>
       <h2>{contactTitle}</h2>
       <a href={`mailto:${EMAIL}`}><Mail/> {EMAIL}</a>
-      <a href={wa()} target="_blank" rel="noreferrer">+51 923 558 554</a>
+      <a href={wa()} target="_blank" rel="noreferrer"><Phone size={19}/> {WHATSAPP_DISPLAY}</a>
       <div className="social-links">
         <a className="instagram-pill" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Instagram</a>
         <a className="tiktok-pill" href={TIKTOK_URL} target="_blank" rel="noreferrer">TikTok</a>
@@ -1402,7 +1403,13 @@ function App() {
     <FloatingCompanion mode={mode} t={t} />
     <div className="floating-actions">
       <ScrollTopButton />
-      <a className="whatsapp" href={wa()} target="_blank" rel="noreferrer" aria-label="Contactar por WhatsApp">✆</a>
+      <a className="whatsapp whatsapp-3d" href={wa()} target="_blank" rel="noreferrer" aria-label={`Contactar por WhatsApp al ${WHATSAPP_DISPLAY}`}>
+        <span className="whatsapp-3d-core" aria-hidden="true">
+          <MessageCircle className="whatsapp-chat" />
+          <Phone className="whatsapp-phone" />
+        </span>
+        <span className="whatsapp-3d-label" aria-hidden="true"><b>WhatsApp</b><small>993 212 999</small></span>
+      </a>
     </div>
   </div>;
 }
