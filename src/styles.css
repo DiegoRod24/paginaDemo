@@ -4621,3 +4621,58 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
   .portal-split,.portal-world,.portal-visual,.portal-entry-mascot,.portal-split-intro,.portal-versus { transition-duration:.01ms!important;animation:none!important; }
   .portal-split .portal-visual::before,.portal-split .portal-visual::after,.portal-split .portal-visual > svg { animation:none!important; }
 }
+
+/* La apertura se anima por posición y tamaño para mantener un 50/50 exacto
+   y una expansión fluida en todos los navegadores. */
+.portal-split,
+.portal-split.portal-focus-tech,
+.portal-split.portal-focus-arch,
+.portal-split.portal-selection-tech,
+.portal-split.portal-selection-arch {
+  display:block;
+}
+.portal-split .portal-world {
+  position:absolute;
+  top:0;
+  bottom:auto;
+  width:50%;
+  transition:
+    left .72s cubic-bezier(.76,0,.24,1),
+    width .72s cubic-bezier(.76,0,.24,1),
+    opacity .4s ease,
+    filter .4s ease,
+    background .38s ease;
+}
+.portal-split .portal-tech { left:0; }
+.portal-split .portal-arch { left:50%; }
+.portal-split .portal-versus { position:absolute;left:50%;top:0;transform:translateX(-50%); }
+.portal-selection-tech .portal-tech { left:0;width:100%; }
+.portal-selection-tech .portal-arch { left:100%;width:0; }
+.portal-selection-arch .portal-tech { left:-50%;width:0; }
+.portal-selection-arch .portal-arch { left:0;width:100%; }
+
+@media(max-width:720px) {
+  .portal-split,
+  .portal-split.portal-focus-tech,
+  .portal-split.portal-focus-arch,
+  .portal-split.portal-selection-tech,
+  .portal-split.portal-selection-arch { display:block;min-height:100svh;height:100svh; }
+  .portal-split .portal-world {
+    left:0;
+    width:100%;
+    height:50svh;
+    transition:
+      top .72s cubic-bezier(.76,0,.24,1),
+      height .72s cubic-bezier(.76,0,.24,1),
+      opacity .4s ease,
+      filter .4s ease,
+      background .38s ease;
+  }
+  .portal-split .portal-tech { top:0; }
+  .portal-split .portal-arch { top:50svh; }
+  .portal-split .portal-versus { left:50%;top:50%;transform:translate(-50%,-50%); }
+  .portal-selection-tech .portal-tech { top:0;left:0;width:100%;height:100svh; }
+  .portal-selection-tech .portal-arch { top:100svh;left:0;width:100%;height:0; }
+  .portal-selection-arch .portal-tech { top:-50svh;left:0;width:100%;height:0; }
+  .portal-selection-arch .portal-arch { top:0;left:0;width:100%;height:100svh; }
+}
