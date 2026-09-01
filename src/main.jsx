@@ -5,9 +5,10 @@ import { Environment, Float, Html, OrbitControls, PerspectiveCamera, Stars } fro
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import {
-  ArrowRight, BarChart3, Bot, Building2, ChevronLeft, ChevronRight, Code2,
-  Database, Hammer, Home, IdCard, Mail, Menu, Monitor, MousePointerClick,
-  Play, Scale, Snowflake, Sparkles, Workflow, X
+  ArrowRight, BarChart3, Bot, Building2, CheckCircle2, ChevronLeft, ChevronRight, Code2,
+  Database, Download, FileSpreadsheet, Hammer, Home, IdCard, LockKeyhole, Mail, Menu,
+  Monitor, MousePointerClick, Play, RotateCw, Scale, ShieldCheck, Snowflake, Sparkles,
+  Timer, Workflow, X
 } from "lucide-react";
 import { archCatalog, techCatalog } from "./catalog.js";
 import { translations } from "./i18n.js";
@@ -230,7 +231,7 @@ function Header({ mode, setMode, lang, setLang, t }) {
   const navItems = mode === "tech" ? [
     ["#inicio", t.nav.portal],
     ["#showroom", t.nav.solutions],
-    ["#casos-reales", t.nav.realCases],
+    ["#laboratorio", t.nav.lab],
     ["#proceso", t.nav.process],
     ["#contacto", t.nav.contact]
   ] : mode === "arch" ? [
@@ -498,6 +499,129 @@ function TechProof({ t }) {
   </section>;
 }
 
+function AutomationLab({ t }) {
+  const content = t.aiLab;
+  const [active, setActive] = useState(0);
+  const [status, setStatus] = useState("idle");
+  const timerRef = useRef();
+  const scenario = content.scenarios[active];
+  const icons = [FileSpreadsheet, Workflow, Monitor, ShieldCheck];
+
+  const selectScenario = (index) => {
+    window.clearTimeout(timerRef.current);
+    setActive(index);
+    setStatus("idle");
+  };
+
+  const runDemo = () => {
+    window.clearTimeout(timerRef.current);
+    setStatus("running");
+    timerRef.current = window.setTimeout(() => setStatus("done"), 2300);
+  };
+
+  useEffect(() => () => window.clearTimeout(timerRef.current), []);
+
+  return <section className="automation-lab" id="laboratorio">
+    <div className="lab-heading">
+      <div>
+        <p>{content.kicker}</p>
+        <h2>{content.title}</h2>
+      </div>
+      <span>{content.intro}</span>
+    </div>
+
+    <div className="lab-capabilities" aria-label={content.capabilitiesLabel}>
+      {content.capabilities.map((capability, index) => <span key={capability}>
+        <i>{String(index + 1).padStart(2, "0")}</i>{capability}
+      </span>)}
+    </div>
+
+    <div className="lab-console">
+      <div className="lab-selector">
+        <small>{content.choose}</small>
+        {content.scenarios.map((item, index) => {
+          const Icon = icons[index] || Bot;
+          return <button
+            type="button"
+            className={active === index ? "active" : ""}
+            key={item.title}
+            onClick={() => selectScenario(index)}
+          >
+            <Icon size={21}/>
+            <span><b>{item.title}</b><em>{item.category}</em></span>
+            <ArrowRight size={16}/>
+          </button>;
+        })}
+        <div className="lab-safe-note"><LockKeyhole size={17}/><span><b>{content.safeTitle}</b>{content.safeText}</span></div>
+      </div>
+
+      <motion.div
+        className={`lab-screen lab-${status}`}
+        key={scenario.title}
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="lab-screen-bar">
+          <span><i/><i/><i/></span>
+          <b>{content.liveBadge}</b>
+          <em>{status === "running" ? content.processing : status === "done" ? content.completed : content.ready}</em>
+        </div>
+
+        <div className="lab-screen-copy">
+          <small>{scenario.category}</small>
+          <h3>{scenario.headline}</h3>
+          <p>{scenario.problem}</p>
+        </div>
+
+        <div className="lab-flow" aria-label={content.flowLabel}>
+          {scenario.flow.map((step, index) => <React.Fragment key={step.label}>
+            <div className={`lab-flow-step ${status === "running" && index === 1 ? "working" : ""} ${status === "done" ? "complete" : ""}`}>
+              <span>{index === 0 ? <FileSpreadsheet/> : index === 1 ? <Bot/> : index === 2 ? <CheckCircle2/> : <BarChart3/>}</span>
+              <small>{step.kicker}</small>
+              <b>{step.label}</b>
+            </div>
+            {index < scenario.flow.length - 1 && <div className="lab-connector"><i/></div>}
+          </React.Fragment>)}
+        </div>
+
+        <div className="lab-results">
+          <div className="lab-result-bars">
+            {scenario.results.map((result, index) => <div key={result.label}>
+              <span><b>{result.value}</b>{result.label}</span>
+              <i><em style={{ "--result-width": `${result.percent}%`, "--result-delay": `${index * .18}s` }}/></i>
+            </div>)}
+          </div>
+          <div className="lab-impact">
+            <small>{content.impactLabel}</small>
+            <strong>{scenario.impact}</strong>
+            <span>{scenario.impactText}</span>
+          </div>
+        </div>
+
+        <button type="button" className="lab-run" onClick={runDemo} disabled={status === "running"}>
+          {status === "running" ? <RotateCw className="spin"/> : status === "done" ? <CheckCircle2/> : <Play/>}
+          {status === "running" ? content.processingButton : status === "done" ? content.runAgain : content.run}
+        </button>
+      </motion.div>
+    </div>
+
+    <div className="trial-program">
+      <div className="trial-title">
+        <span><Download size={22}/></span>
+        <div><small>{content.trial.kicker}</small><h3>{content.trial.title}</h3><p>{content.trial.text}</p></div>
+      </div>
+      <div className="trial-rules">
+        <span><Timer/>{content.trial.uses}</span>
+        <span><FileSpreadsheet/>{content.trial.data}</span>
+        <span><LockKeyhole/>{content.trial.security}</span>
+      </div>
+      <a className="btn btn-primary" href={wa(content.trial.whatsapp)} target="_blank" rel="noreferrer">
+        {content.trial.cta}<ArrowRight size={18}/>
+      </a>
+    </div>
+  </section>;
+}
+
 function BottleneckSection({ t }) {
   const content = t.bottleneck;
   if (!content) return null;
@@ -655,8 +779,10 @@ const COMPANION_SECTIONS = {
     { id: "inicio", state: "home", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
     { id: "cuellos-botella", state: "process", side: "right" },
+    { id: "laboratorio", state: "automation", side: "left" },
     { id: "casos-reales", state: "projects", side: "right" },
     { id: "servicios", state: "services", side: "right" },
+    { id: "proceso", state: "process", side: "left" },
     { id: "automatizacion", state: "automation", side: "right" },
     { id: "contacto", state: "contact", side: "left" },
   ],
@@ -1155,6 +1281,7 @@ function App() {
       <Hero mode={mode} setMode={setMode} t={t} />
       <Showroom mode={mode} t={t} />
       {mode === "tech" && <BottleneckSection t={t} />}
+      {mode === "tech" && <AutomationLab t={t} />}
       {mode === "tech" && <TechProof t={t} />}
       <Services mode={mode} t={t} />
       <ProcessSection t={t} mode={mode} />

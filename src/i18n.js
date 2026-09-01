@@ -11,6 +11,7 @@ export const translations = {
       "quote": "Cotizar",
       "solutions": "Soluciones",
       "realCases": "Casos reales",
+      "lab": "Demos IA",
       "projects": "Proyectos",
       "contact": "Contacto",
       "switchArch": "Ir a Arquitectura",
@@ -180,6 +181,120 @@ export const translations = {
       "auditPoints": ["Sin compromiso", "Enfoque práctico", "Propuesta a medida"],
       "auditCta": "Evaluar mi proceso",
       "auditWhatsapp": "Hola JYM, quiero evaluar una tarea repetitiva de mi negocio para saber si puede automatizarse."
+    },
+    "aiLab": {
+      "kicker": "IA EN ACCIÓN · LABORATORIO JYM",
+      "title": "No solo te contamos la automatización. Mírala trabajar.",
+      "intro": "Elige un problema frecuente y ejecuta una simulación segura. Verás cómo conectamos datos, reglas, IA y revisión humana para transformar trabajo repetitivo en un resultado útil.",
+      "capabilitiesLabel": "Capacidades de inteligencia artificial y automatización",
+      "capabilities": [
+        "Automatizar tareas",
+        "Integrar información",
+        "Detectar riesgos",
+        "Mejorar decisiones",
+        "Personalizar respuestas",
+        "Medir resultados"
+      ],
+      "choose": "Elige un escenario",
+      "safeTitle": "Entorno de demostración",
+      "safeText": "Datos simulados, sin credenciales ni sistemas externos.",
+      "liveBadge": "DEMO INTERACTIVA",
+      "ready": "Lista para ejecutar",
+      "processing": "Procesando flujo",
+      "completed": "Resultado generado",
+      "flowLabel": "Flujo simulado de automatización",
+      "impactLabel": "Impacto estimado",
+      "run": "Ejecutar automatización",
+      "processingButton": "Analizando y procesando...",
+      "runAgain": "Ejecutar nuevamente",
+      "scenarios": [
+        {
+          "title": "Datos y validación",
+          "category": "EXCEL + REGLAS",
+          "headline": "De una hoja desordenada a un reporte listo",
+          "problem": "El equipo revisa registro por registro, compara información y separa manualmente inconsistencias.",
+          "flow": [
+            {"kicker": "ENTRADA", "label": "120 registros"},
+            {"kicker": "AUTOMATIZACIÓN", "label": "Cruce y reglas"},
+            {"kicker": "CONTROL", "label": "Revisión humana"},
+            {"kicker": "SALIDA", "label": "Reporte Excel"}
+          ],
+          "results": [
+            {"value": "104", "label": "Válidos", "percent": 87},
+            {"value": "11", "label": "Por revisar", "percent": 38},
+            {"value": "5", "label": "Errores", "percent": 19}
+          ],
+          "impact": "86% menos revisión manual",
+          "impactText": "La persona revisa excepciones; el sistema procesa el volumen."
+        },
+        {
+          "title": "Documentos y OCR",
+          "category": "PDF + CLASIFICACIÓN",
+          "headline": "Expedientes preparados para una decisión humana",
+          "problem": "Archivos con distintos formatos deben leerse, ordenarse y validarse antes de que una persona pueda revisarlos.",
+          "flow": [
+            {"kicker": "ENTRADA", "label": "40 documentos"},
+            {"kicker": "IA", "label": "Lectura y OCR"},
+            {"kicker": "CONTROL", "label": "Validar alertas"},
+            {"kicker": "SALIDA", "label": "Expediente listo"}
+          ],
+          "results": [
+            {"value": "36", "label": "Completos", "percent": 90},
+            {"value": "3", "label": "Por revisar", "percent": 31},
+            {"value": "1", "label": "Faltante", "percent": 12}
+          ],
+          "impact": "4 horas → 25 minutos",
+          "impactText": "La IA prepara; el especialista confirma lo importante."
+        },
+        {
+          "title": "Monitoreo digital",
+          "category": "FUENTES + EVIDENCIA",
+          "headline": "Señales dispersas convertidas en decisiones",
+          "problem": "Publicaciones y archivos llegan desde varias fuentes y el equipo pierde tiempo buscando, clasificando y consolidando.",
+          "flow": [
+            {"kicker": "ENTRADA", "label": "250 contenidos"},
+            {"kicker": "IA", "label": "Clasificar"},
+            {"kicker": "CONTROL", "label": "Confirmar hallazgos"},
+            {"kicker": "SALIDA", "label": "Dashboard"}
+          ],
+          "results": [
+            {"value": "68", "label": "Relevantes", "percent": 78},
+            {"value": "9", "label": "Alertas", "percent": 34},
+            {"value": "1", "label": "Informe", "percent": 16}
+          ],
+          "impact": "Evidencia ordenada en minutos",
+          "impactText": "Filtros, trazabilidad y multimedia en un solo lugar."
+        },
+        {
+          "title": "Evidencia en campo",
+          "category": "CÁMARA + GEO + HASH",
+          "headline": "Capturas verificables desde el lugar de trabajo",
+          "problem": "Las fotografías de campo necesitan hora, ubicación, identidad y un reporte ordenado para conservar su valor como evidencia.",
+          "flow": [
+            {"kicker": "ENTRADA", "label": "24 capturas"},
+            {"kicker": "AUTOMATIZACIÓN", "label": "Geo y verificador"},
+            {"kicker": "CONTROL", "label": "Revisar calidad"},
+            {"kicker": "SALIDA", "label": "Excel + ZIP"}
+          ],
+          "results": [
+            {"value": "22", "label": "Verificadas", "percent": 92},
+            {"value": "24", "label": "Ubicadas", "percent": 100},
+            {"value": "2", "label": "Por revisar", "percent": 21}
+          ],
+          "impact": "Trazabilidad desde la captura",
+          "impactText": "Caso inspirado en ONE SHOT, nuestra solución web/PWA de campo."
+        }
+      ],
+      "trial": {
+        "kicker": "DEMOS CONTROLADAS",
+        "title": "Prueba una versión corta antes de contratar",
+        "text": "Preparamos pilotos web o ejecutables de alcance limitado para que el cliente compruebe el flujo sin recibir el sistema completo.",
+        "uses": "5 ejecuciones o 10 registros",
+        "data": "Datos de ejemplo o anonimizados",
+        "security": "Sin credenciales ni acceso real",
+        "cta": "Solicitar una demo",
+        "whatsapp": "Hola JYM, quiero solicitar una demo controlada de sus soluciones de automatización e IA."
+      }
     },
     "bottleneck": {
       "kicker": "DETECTAMOS ANTES DE AUTOMATIZAR",
@@ -450,6 +565,7 @@ export const translations = {
       "quote": "Get quote",
       "solutions": "Solutions",
       "realCases": "Real cases",
+      "lab": "AI demos",
       "projects": "Projects",
       "contact": "Contact",
       "switchArch": "Go to Architecture",
@@ -619,6 +735,120 @@ export const translations = {
       "auditPoints": ["No commitment", "Practical approach", "Tailored proposal"],
       "auditCta": "Assess my process",
       "auditWhatsapp": "Hello JYM, I want to assess a repetitive business task and find out whether it can be automated."
+    },
+    "aiLab": {
+      "kicker": "AI IN ACTION · JYM LAB",
+      "title": "We do not just describe automation. Watch it work.",
+      "intro": "Choose a common business problem and run a safe simulation. See how we combine data, rules, AI and human review to turn repetitive work into a useful result.",
+      "capabilitiesLabel": "Artificial intelligence and automation capabilities",
+      "capabilities": [
+        "Automate tasks",
+        "Integrate information",
+        "Detect risks",
+        "Improve decisions",
+        "Personalize responses",
+        "Measure results"
+      ],
+      "choose": "Choose a scenario",
+      "safeTitle": "Demonstration environment",
+      "safeText": "Simulated data with no credentials or external systems.",
+      "liveBadge": "INTERACTIVE DEMO",
+      "ready": "Ready to run",
+      "processing": "Processing workflow",
+      "completed": "Result generated",
+      "flowLabel": "Simulated automation workflow",
+      "impactLabel": "Estimated impact",
+      "run": "Run automation",
+      "processingButton": "Analyzing and processing...",
+      "runAgain": "Run again",
+      "scenarios": [
+        {
+          "title": "Data validation",
+          "category": "EXCEL + RULES",
+          "headline": "From a messy spreadsheet to a ready report",
+          "problem": "The team checks every record, compares information and manually separates inconsistencies.",
+          "flow": [
+            {"kicker": "INPUT", "label": "120 records"},
+            {"kicker": "AUTOMATION", "label": "Checks and rules"},
+            {"kicker": "CONTROL", "label": "Human review"},
+            {"kicker": "OUTPUT", "label": "Excel report"}
+          ],
+          "results": [
+            {"value": "104", "label": "Valid", "percent": 87},
+            {"value": "11", "label": "Review", "percent": 38},
+            {"value": "5", "label": "Errors", "percent": 19}
+          ],
+          "impact": "86% less manual review",
+          "impactText": "People review exceptions while the system handles volume."
+        },
+        {
+          "title": "Documents and OCR",
+          "category": "PDF + CLASSIFICATION",
+          "headline": "Files prepared for a human decision",
+          "problem": "Different file formats must be read, organized and validated before a person can review them.",
+          "flow": [
+            {"kicker": "INPUT", "label": "40 documents"},
+            {"kicker": "AI", "label": "Reading and OCR"},
+            {"kicker": "CONTROL", "label": "Review alerts"},
+            {"kicker": "OUTPUT", "label": "Ready file"}
+          ],
+          "results": [
+            {"value": "36", "label": "Complete", "percent": 90},
+            {"value": "3", "label": "Review", "percent": 31},
+            {"value": "1", "label": "Missing", "percent": 12}
+          ],
+          "impact": "4 hours → 25 minutes",
+          "impactText": "AI prepares the work; the specialist confirms what matters."
+        },
+        {
+          "title": "Digital monitoring",
+          "category": "SOURCES + EVIDENCE",
+          "headline": "Scattered signals turned into decisions",
+          "problem": "Posts and files arrive from multiple sources and the team spends time searching, classifying and consolidating.",
+          "flow": [
+            {"kicker": "INPUT", "label": "250 items"},
+            {"kicker": "AI", "label": "Classify"},
+            {"kicker": "CONTROL", "label": "Confirm findings"},
+            {"kicker": "OUTPUT", "label": "Dashboard"}
+          ],
+          "results": [
+            {"value": "68", "label": "Relevant", "percent": 78},
+            {"value": "9", "label": "Alerts", "percent": 34},
+            {"value": "1", "label": "Report", "percent": 16}
+          ],
+          "impact": "Evidence organized in minutes",
+          "impactText": "Filters, traceability and media in one place."
+        },
+        {
+          "title": "Field evidence",
+          "category": "CAMERA + GEO + HASH",
+          "headline": "Verifiable captures from the workplace",
+          "problem": "Field photographs need time, location, identity and an organized report to preserve their value as evidence.",
+          "flow": [
+            {"kicker": "INPUT", "label": "24 captures"},
+            {"kicker": "AUTOMATION", "label": "Geo and verifier"},
+            {"kicker": "CONTROL", "label": "Quality review"},
+            {"kicker": "OUTPUT", "label": "Excel + ZIP"}
+          ],
+          "results": [
+            {"value": "22", "label": "Verified", "percent": 92},
+            {"value": "24", "label": "Located", "percent": 100},
+            {"value": "2", "label": "Review", "percent": 21}
+          ],
+          "impact": "Traceability from capture",
+          "impactText": "Inspired by ONE SHOT, our field web/PWA solution."
+        }
+      ],
+      "trial": {
+        "kicker": "CONTROLLED DEMOS",
+        "title": "Try a short version before you hire us",
+        "text": "We prepare limited web pilots or executables so clients can validate the workflow without receiving the complete system.",
+        "uses": "5 runs or 10 records",
+        "data": "Sample or anonymized data",
+        "security": "No credentials or live access",
+        "cta": "Request a demo",
+        "whatsapp": "Hello JYM, I would like to request a controlled demo of your AI and automation solutions."
+      }
     },
     "bottleneck": {
       "kicker": "WE DIAGNOSE BEFORE WE AUTOMATE",
