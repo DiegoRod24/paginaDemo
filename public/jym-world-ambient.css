@@ -1,0 +1,59 @@
+/* JYM — ambientación viva del portal sin alterar la composición */
+.hero-portal .jym-world-ambient{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;border-radius:inherit;
+  opacity:.42;transition:opacity .35s ease,filter .35s ease,transform .45s ease;
+}
+.hero-portal .portal-world>*:not(.jym-world-ambient){position:relative;z-index:2;}
+.hero-portal .portal-tech:hover .jym-world-ambient,
+.hero-portal .portal-focus-tech .portal-tech .jym-world-ambient{opacity:.82;filter:brightness(1.12);transform:scale(1.018);}
+.hero-portal .portal-arch:hover .jym-world-ambient,
+.hero-portal .portal-focus-arch .portal-arch .jym-world-ambient{opacity:.82;filter:brightness(1.1);transform:scale(1.018);}
+
+/* ===== SISTEMAS ===== */
+.jym-world-ambient-tech{
+  background:radial-gradient(circle at 72% 36%,rgba(0,217,255,.09),transparent 34%);
+}
+.jym-tech-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,217,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(0,217,255,.05) 1px,transparent 1px);
+  background-size:34px 34px;mask-image:linear-gradient(135deg,transparent 12%,#000 42%,#000 82%,transparent 100%);
+  transform:perspective(650px) rotateX(64deg) translateY(37%);transform-origin:center bottom;
+}
+.jym-tech-code{position:absolute;right:5%;top:18%;display:grid;gap:8px;text-align:right;font:700 .58rem/1.2 ui-monospace,Consolas,monospace;color:rgba(117,239,255,.52);letter-spacing:.05em;}
+.jym-tech-code span{animation:jymCodeBlink 3s ease-in-out infinite;}
+.jym-tech-code span:nth-child(2){animation-delay:.5s}.jym-tech-code span:nth-child(3){animation-delay:1s}.jym-tech-code span:nth-child(4){animation-delay:1.5s}
+@keyframes jymCodeBlink{0%,100%{opacity:.25;transform:translateX(0)}50%{opacity:.9;transform:translateX(-5px)}}
+.jym-tech-hud{position:absolute;right:8%;bottom:21%;width:115px;height:115px;border:1px solid rgba(0,217,255,.17);border-radius:50%;animation:jymHudSpin 13s linear infinite;}
+.jym-tech-hud:before,.jym-tech-hud:after{content:"";position:absolute;border-radius:50%;inset:14px;border:1px dashed rgba(0,217,255,.2)}
+.jym-tech-hud:after{inset:34px;border-style:solid;border-color:rgba(0,217,255,.28)}
+.jym-tech-hud i{position:absolute;width:7px;height:7px;border-radius:50%;background:#67edff;box-shadow:0 0 13px #00d9ff;}
+.jym-tech-hud i:nth-child(1){left:12px;top:52px}.jym-tech-hud i:nth-child(2){right:22px;top:17px}.jym-tech-hud i:nth-child(3){right:13px;bottom:33px}
+@keyframes jymHudSpin{to{transform:rotate(360deg)}}
+.jym-tech-node{position:absolute;width:9px;height:9px;border:1px solid #67edff;border-radius:3px;background:rgba(0,217,255,.15);box-shadow:0 0 15px rgba(0,217,255,.55);animation:jymNodePulse 2.2s ease-in-out infinite;}
+.jym-tech-node.n1{left:54%;top:31%}.jym-tech-node.n2{left:71%;top:48%;animation-delay:.45s}.jym-tech-node.n3{left:58%;top:65%;animation-delay:.9s}
+@keyframes jymNodePulse{50%{transform:scale(1.7);opacity:.95}}
+.jym-tech-link{position:absolute;height:1px;transform-origin:left;background:linear-gradient(90deg,rgba(0,217,255,.65),transparent);}
+.jym-tech-link.l1{left:54%;top:32%;width:21%;transform:rotate(31deg)}.jym-tech-link.l2{left:58%;top:65%;width:18%;transform:rotate(-47deg)}
+
+/* ===== ARQUITECTURA ===== */
+.jym-world-ambient-arch{background:radial-gradient(circle at 28% 38%,rgba(217,168,61,.1),transparent 34%);}
+.jym-arch-grid{position:absolute;inset:7%;border:1px solid rgba(226,185,78,.08);background-image:linear-gradient(rgba(226,185,78,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(226,185,78,.055) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(225deg,transparent 5%,#000 40%,#000 82%,transparent 100%);}
+.jym-arch-house{position:absolute;left:7%;bottom:20%;width:165px;height:118px;filter:drop-shadow(0 0 12px rgba(217,168,61,.15));}
+.jym-arch-house i{position:absolute;display:block;border:1px solid rgba(239,196,100,.5);background:rgba(217,168,61,.025);transition:.4s ease;}
+.jym-arch-house .roof{left:18px;top:6px;width:125px;height:64px;transform:skewY(-26deg) rotate(-2deg);border-bottom-color:transparent;}
+.jym-arch-house .wall.w1{left:20px;top:54px;width:65px;height:54px}.jym-arch-house .wall.w2{left:85px;top:45px;width:60px;height:63px}.jym-arch-house .floor.f1{left:10px;bottom:0;width:145px;height:6px;background:rgba(217,168,61,.12)}.jym-arch-house .floor.f2{left:30px;bottom:27px;width:108px;height:2px}
+.portal-arch:hover .jym-arch-house .wall,.portal-focus-arch .portal-arch .jym-arch-house .wall{background:rgba(217,168,61,.08);box-shadow:inset 0 0 16px rgba(217,168,61,.08)}
+.jym-arch-measure{position:absolute;color:rgba(242,201,108,.48);font:700 .55rem/1 ui-monospace,Consolas,monospace;letter-spacing:.08em;}
+.jym-arch-measure:before{content:"";position:absolute;height:1px;background:rgba(242,201,108,.25);top:50%;}
+.jym-arch-measure.m1{left:10%;bottom:14%}.jym-arch-measure.m1:before{left:48px;width:88px}.jym-arch-measure.m2{left:31%;bottom:38%;transform:rotate(-90deg)}.jym-arch-measure.m2:before{left:45px;width:54px}
+.jym-arch-material{position:absolute;width:48px;height:8px;border-radius:2px;background:linear-gradient(90deg,#5a3214,#ad7131,#6d3b17);box-shadow:0 5px 12px rgba(0,0,0,.25);animation:jymMaterialFloat 3.4s ease-in-out infinite alternate;}
+.jym-arch-material.mat1{left:34%;top:28%;transform:rotate(-8deg)}.jym-arch-material.mat2{left:24%;top:37%;transform:rotate(5deg);animation-delay:.6s}.jym-arch-material.mat3{left:41%;top:46%;transform:rotate(-2deg);animation-delay:1.2s}
+@keyframes jymMaterialFloat{to{translate:0 -7px}}
+
+.jym-world-status{position:absolute;bottom:8%;font:800 .54rem/1 ui-monospace,Consolas,monospace;letter-spacing:.14em;border:1px solid currentColor;border-radius:999px;padding:7px 10px;opacity:.58;}
+.jym-world-ambient-tech .jym-world-status{right:6%;color:#68efff;background:rgba(0,217,255,.04)}
+.jym-world-ambient-arch .jym-world-status{left:6%;color:#efc461;background:rgba(217,168,61,.04)}
+
+@media(max-width:1050px){.jym-tech-code{display:none}.jym-tech-hud{width:88px;height:88px}.jym-arch-house{transform:scale(.82);transform-origin:left bottom}.jym-arch-material{opacity:.45}}
+@media(max-width:700px){.hero-portal .jym-world-ambient{opacity:.25}.jym-tech-code,.jym-tech-hud,.jym-tech-node,.jym-tech-link,.jym-arch-measure,.jym-arch-material,.jym-world-status{display:none!important}.jym-arch-house{opacity:.45;transform:scale(.72)}}
+@media(prefers-reduced-motion:reduce){.jym-world-ambient *{animation:none!important;transition:none!important}}
