@@ -1,0 +1,230 @@
+/* JYM — hotfix de estabilidad visual del hero */
+
+/* 1) El bloque principal debe usar todo el ancho real disponible. */
+.hero-portal .portal-layout.portal-split{
+  position:relative!important;
+  width:min(1480px,calc(100% - 36px))!important;
+  margin:0 auto!important;
+  grid-template-columns:minmax(0,1fr) 84px minmax(0,1fr)!important;
+  justify-content:stretch!important;
+  justify-items:stretch!important;
+  column-gap:20px!important;
+}
+.hero-portal .portal-tech,
+.hero-portal .portal-arch{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  justify-self:stretch!important;
+}
+
+/* 2) Encabezado general siempre centrado en la pantalla, nunca dependiente del ancho de una tarjeta. */
+.hero-portal .portal-split-intro{
+  position:absolute!important;
+  top:0!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  width:min(980px,88vw)!important;
+  max-width:none!important;
+  padding:0 18px!important;
+  margin:0!important;
+  overflow:visible!important;
+  text-align:center!important;
+  z-index:20!important;
+}
+.hero-portal .portal-split-intro>p,
+.hero-portal .portal-split-intro>h1,
+.hero-portal .portal-split-intro>span{
+  width:100%!important;
+  max-width:100%!important;
+  overflow:visible!important;
+  white-space:normal!important;
+  text-overflow:clip!important;
+}
+.hero-portal .portal-split-intro h1{
+  font-size:clamp(2.65rem,4.1vw,4.65rem)!important;
+  line-height:.96!important;
+  margin:0 0 9px!important;
+  text-wrap:balance!important;
+}
+.hero-portal .portal-split-intro>span{
+  font-size:clamp(.86rem,1vw,1rem)!important;
+  line-height:1.5!important;
+}
+
+/* Reservamos el espacio superior que ocupa el titular absoluto. */
+.hero-portal .portal-layout.portal-split{
+  padding-top:145px!important;
+}
+
+/* 3) Contenido de las dos tarjetas más limpio y proporcionado. */
+.hero-portal .portal-world{
+  min-height:500px!important;
+  padding:30px 34px 26px!important;
+  overflow:hidden!important;
+}
+.hero-portal .portal-world h2{
+  font-size:clamp(2.4rem,6.8cqi,4.45rem)!important;
+  line-height:.95!important;
+  margin:0 0 10px!important;
+}
+.hero-portal .portal-world h2 em{
+  font-size:clamp(.78rem,1.85cqi,.94rem)!important;
+  max-width:420px!important;
+}
+.hero-portal .portal-world>p{
+  max-width:470px!important;
+  font-size:clamp(.82rem,1.45cqi,.95rem)!important;
+}
+.hero-portal .portal-arch h2,
+.hero-portal .portal-arch h2 em,
+.hero-portal .portal-arch>p{
+  margin-left:auto!important;
+}
+
+/* 4) Los efectos ambientales nunca pisan el área principal de lectura. */
+.hero-portal .jym-world-ambient{
+  z-index:0!important;
+  opacity:.28!important;
+}
+.hero-portal .portal-world>*:not(.jym-world-ambient){
+  position:relative!important;
+  z-index:4!important;
+}
+.hero-portal .portal-tech .jym-world-ambient{
+  clip-path:inset(0 0 0 44%)!important;
+}
+.hero-portal .portal-arch .jym-world-ambient{
+  clip-path:inset(0 44% 0 0)!important;
+}
+.hero-portal .portal-tech:hover .jym-world-ambient,
+.hero-portal .portal-focus-tech .portal-tech .jym-world-ambient,
+.hero-portal .portal-arch:hover .jym-world-ambient,
+.hero-portal .portal-focus-arch .portal-arch .jym-world-ambient{
+  opacity:.58!important;
+  transform:scale(1.01)!important;
+}
+
+/* Tecnología: código reducido y llevado al fondo derecho. */
+.hero-portal .jym-tech-code{
+  right:7%!important;
+  top:13%!important;
+  max-width:180px!important;
+  gap:6px!important;
+  font-size:.5rem!important;
+  line-height:1.25!important;
+  opacity:.6!important;
+}
+.hero-portal .jym-tech-hud{
+  right:8%!important;
+  bottom:16%!important;
+  width:96px!important;
+  height:96px!important;
+  opacity:.72!important;
+}
+.hero-portal .jym-world-ambient-tech .jym-world-status{
+  right:7%!important;
+  bottom:7%!important;
+  font-size:.48rem!important;
+}
+
+/* Arquitectura: medidas, wireframe y materiales solo en la mitad izquierda libre. */
+.hero-portal .jym-arch-house{
+  left:7%!important;
+  bottom:17%!important;
+  transform:scale(.82)!important;
+  transform-origin:left bottom!important;
+  opacity:.72!important;
+}
+.hero-portal .jym-arch-measure{font-size:.48rem!important;opacity:.7!important;}
+.hero-portal .jym-arch-material{opacity:.42!important;}
+.hero-portal .jym-world-ambient-arch .jym-world-status{
+  left:7%!important;
+  bottom:7%!important;
+  font-size:.48rem!important;
+}
+
+/* 5) Mascotas del portal: pequeñas, laterales y sin tocar títulos. */
+.hero-portal .portal-entry-mascot{
+  top:auto!important;
+  bottom:122px!important;
+  width:90px!important;
+  height:90px!important;
+  opacity:.82!important;
+  z-index:3!important;
+}
+.hero-portal .portal-entry-mascot-tech{right:7%!important;}
+.hero-portal .portal-entry-mascot-arch{left:7%!important;}
+
+/* 6) Simetría real del centro y tarjetas. */
+.hero-portal .portal-versus{
+  width:84px!important;
+  min-width:84px!important;
+  justify-self:center!important;
+}
+.hero-portal .portal-versus small{
+  width:70px!important;
+  height:70px!important;
+}
+.hero-portal .portal-benefits{
+  max-width:470px!important;
+}
+.hero-portal .portal-arch .portal-benefits{margin-left:auto!important;}
+.hero-portal .portal-world>span{font-size:.82rem!important;}
+
+/* 7) El hover da protagonismo sin aplastar el lado contrario. */
+.hero-portal .portal-focus-tech{
+  grid-template-columns:minmax(0,1.12fr) 80px minmax(0,.88fr)!important;
+}
+.hero-portal .portal-focus-arch{
+  grid-template-columns:minmax(0,.88fr) 80px minmax(0,1.12fr)!important;
+}
+.hero-portal .portal-focus-tech .portal-arch,
+.hero-portal .portal-focus-arch .portal-tech{
+  opacity:.82!important;
+  filter:saturate(.84) brightness(.88)!important;
+}
+
+/* 8) Redes: cápsula pequeña, no una barra gigante. */
+.hero-portal .portal-social-strip{
+  width:max-content!important;
+  max-width:100%!important;
+  min-height:36px!important;
+  margin:4px auto 0!important;
+  padding:5px 10px!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:999px!important;
+  background:rgba(5,8,12,.65)!important;
+}
+
+/* 9) Pantallas bajas: priorizamos contenido limpio. */
+@media(max-height:760px) and (min-width:901px){
+  .hero-portal .portal-layout.portal-split{padding-top:118px!important;}
+  .hero-portal .portal-split-intro h1{font-size:clamp(2.25rem,3.45vw,3.7rem)!important;}
+  .hero-portal .portal-world{min-height:430px!important;padding-top:24px!important;padding-bottom:22px!important;}
+  .hero-portal .portal-entry-mascot{width:72px!important;height:72px!important;bottom:104px!important;}
+  .hero-portal .jym-tech-code,.hero-portal .jym-arch-measure,.hero-portal .jym-arch-material{opacity:.3!important;}
+}
+
+/* 10) Tablet: se eliminan decoraciones secundarias antes de sacrificar texto. */
+@media(max-width:1100px){
+  .hero-portal .portal-layout.portal-split{width:calc(100% - 24px)!important;grid-template-columns:minmax(0,1fr) 66px minmax(0,1fr)!important;column-gap:12px!important;}
+  .hero-portal .portal-world{padding:26px 24px!important;}
+  .hero-portal .portal-entry-mascot{display:none!important;}
+  .hero-portal .jym-tech-code,.hero-portal .jym-arch-material,.hero-portal .jym-arch-measure{display:none!important;}
+}
+
+/* 11) Móvil mantiene flujo vertical y sin clipping. */
+@media(max-width:700px){
+  .hero-portal .portal-layout.portal-split{
+    padding-top:122px!important;
+    width:calc(100% - 18px)!important;
+    grid-template-columns:1fr!important;
+    grid-template-areas:"tech" "core" "arch" "social"!important;
+  }
+  .hero-portal .portal-split-intro{width:calc(100vw - 28px)!important;}
+  .hero-portal .portal-tech .jym-world-ambient,
+  .hero-portal .portal-arch .jym-world-ambient{clip-path:none!important;opacity:.16!important;}
+  .hero-portal .portal-world{min-height:390px!important;}
+  .hero-portal .portal-versus{width:100%!important;min-width:0!important;}
+}
