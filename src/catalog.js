@@ -96,11 +96,22 @@ export const archCatalog = [
     "tag": "Venta e instalación",
     "description": "Suministro e instalación de equipos de aire acondicionado con evidencias reales de entrega, montaje y acabado final.",
     "images": [
-      "/assets/arquitectura/aire_acondicionado_instalacion.svg",
-      "/assets/arquitectura/aire_acondicionado_instalado.svg",
-      "/assets/arquitectura/aire_acondicionado_entrega.svg"
+      "/assets/arquitectura/aire1.jpeg",
+      "/assets/arquitectura/aire2.jpeg",
+      "/assets/arquitectura/aire3.jpeg"
     ],
-    "videos": []
+    "videos": [
+      {
+        "title": "Instalación de aire acondicionado",
+        "src": "/assets/arquitectura/aire4.mp4",
+        "poster": "/assets/arquitectura/aire2.jpeg"
+      },
+      {
+        "title": "Equipo instalado y funcionando",
+        "src": "/assets/arquitectura/aire5.mp4",
+        "poster": "/assets/arquitectura/aire1.jpeg"
+      }
+    ]
   },
   {
     "id": "ejecucion",
@@ -135,11 +146,10 @@ export const archCatalog = [
     "id": "departamento",
     "title": "Departamento",
     "tag": "Recorridos 3D",
-    "description": "Visualización integral del departamento, distribución de ambientes y recorridos por primer y segundo piso.",
+    "description": "Videos de primer y segundo piso para mostrar distribución, acabados y experiencia de recorrido, acompañados por las dos vistas generales del departamento.",
     "images": [
-      "/assets/arquitectura/departamento_portada.webp",
-      "/assets/arquitectura/departamento_plano_01.svg",
-      "/assets/arquitectura/departamento_plano_02.svg"
+      "/assets/arquitectura/departamento1.png",
+      "/assets/arquitectura/departamento2.png"
     ],
     "videos": [
       {
