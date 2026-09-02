@@ -260,9 +260,63 @@
     }, delay);
   };
 
+  const ensureSceneEnhancementStyles = () => {
+    if (document.getElementById('jym-scene-enhancement-runtime')) return;
+    const style = document.createElement('style');
+    style.id = 'jym-scene-enhancement-runtime';
+    style.textContent = `
+      .world-model{isolation:isolate}
+      .jym-scene-overlay{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+      .jym-scene-overlay-tech .jym-data-panel{position:absolute;min-width:112px;padding:9px 11px;border:1px solid rgba(0,217,255,.38);border-radius:12px;background:linear-gradient(145deg,rgba(2,18,30,.82),rgba(3,10,17,.68));box-shadow:inset 0 0 22px rgba(0,217,255,.06),0 0 24px rgba(0,217,255,.08);backdrop-filter:blur(8px);color:#eaffff;animation:jymFloatPanel 4.8s ease-in-out infinite}
+      .jym-scene-overlay-tech .jym-data-panel small{display:block;color:#62efff;font:800 .48rem/1.2 monospace;letter-spacing:.15em}.jym-scene-overlay-tech .jym-data-panel b{display:block;margin-top:3px;font:900 .78rem/1.1 system-ui}.jym-scene-overlay-tech .jym-data-panel span{display:block;margin-top:5px;color:#68ffbd;font:700 .47rem/1 monospace;letter-spacing:.09em}
+      .jym-scene-overlay-tech .panel-api{left:9%;top:21%}.jym-scene-overlay-tech .panel-bot{right:9%;top:26%;animation-delay:-1.2s}.jym-scene-overlay-tech .panel-data{right:12%;bottom:22%;animation-delay:-2.4s}
+      .jym-scene-overlay-tech .jym-node-line{position:absolute;height:1px;transform-origin:left;background:linear-gradient(90deg,rgba(0,217,255,.08),rgba(98,239,255,.7),rgba(0,217,255,.08));box-shadow:0 0 12px rgba(0,217,255,.24);opacity:.56}.jym-scene-overlay-tech .l1{left:21%;top:38%;width:26%;transform:rotate(12deg)}.jym-scene-overlay-tech .l2{right:20%;top:43%;width:23%;transform:rotate(-13deg)}.jym-scene-overlay-tech .l3{right:20%;bottom:34%;width:25%;transform:rotate(14deg)}
+      .jym-scene-overlay-tech .jym-core-pulse{position:absolute;left:50%;top:51%;width:360px;height:360px;transform:translate(-50%,-50%);border:1px solid rgba(0,217,255,.12);border-radius:50%;box-shadow:0 0 60px rgba(0,217,255,.05);animation:jymCorePulse 3.6s ease-in-out infinite}
+      .jym-scene-overlay-arch .jym-arch-label{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);padding:7px 12px;border:1px solid rgba(217,168,61,.32);border-radius:999px;background:rgba(27,17,7,.72);backdrop-filter:blur(8px);color:#e7c678;font:800 .5rem/1 monospace;letter-spacing:.12em;white-space:nowrap}
+      .jym-scene-overlay-arch .jym-plan-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(217,168,61,.5),transparent);opacity:.42}.jym-scene-overlay-arch .a1{left:12%;bottom:27%;width:31%}.jym-scene-overlay-arch .a2{right:11%;top:34%;width:27%;transform:rotate(-12deg)}.jym-scene-overlay-arch .a3{left:23%;top:26%;width:22%;transform:rotate(8deg)}
+      .jym-scene-overlay-arch .jym-dimension{position:absolute;color:#dcb661;font:700 .52rem/1 monospace;opacity:.64}.jym-scene-overlay-arch .d1{left:22%;bottom:30%}.jym-scene-overlay-arch .d2{right:20%;top:32%}.jym-scene-overlay-arch .jym-warm-glow{position:absolute;left:50%;top:50%;width:420px;height:300px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(217,168,61,.11),transparent 67%);filter:blur(12px);animation:jymWarmPulse 4.2s ease-in-out infinite}
+      @keyframes jymFloatPanel{0%,100%{transform:translateY(0);opacity:.78}50%{transform:translateY(-8px);opacity:1}}@keyframes jymCorePulse{0%,100%{transform:translate(-50%,-50%) scale(.96);opacity:.42}50%{transform:translate(-50%,-50%) scale(1.04);opacity:.76}}@keyframes jymWarmPulse{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.96)}50%{opacity:.76;transform:translate(-50%,-50%) scale(1.05)}}
+      @media(max-width:900px){.jym-scene-overlay-tech .jym-data-panel{transform:scale(.82);transform-origin:center}.jym-scene-overlay-tech .panel-api{left:4%}.jym-scene-overlay-tech .panel-bot{right:4%}.jym-scene-overlay-tech .panel-data{display:none}.jym-scene-overlay-arch .jym-dimension{display:none}}
+      @media(prefers-reduced-motion:reduce){.jym-scene-overlay *{animation:none!important}}
+    `;
+    document.head.appendChild(style);
+  };
+
+  const enhanceInternalScenes = () => {
+    ensureSceneEnhancementStyles();
+
+    const techModel = document.querySelector('.hero-tech .world-model-tech');
+    if (techModel && !techModel.querySelector('.jym-scene-overlay-tech')) {
+      const overlay = document.createElement('div');
+      overlay.className = 'jym-scene-overlay jym-scene-overlay-tech';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.innerHTML = `
+        <div class="jym-core-pulse"></div>
+        <div class="jym-node-line l1"></div><div class="jym-node-line l2"></div><div class="jym-node-line l3"></div>
+        <div class="jym-data-panel panel-api"><small>JYM NODE</small><b>API</b><span>CONNECTED</span></div>
+        <div class="jym-data-panel panel-bot"><small>AI ENGINE</small><b>BOT</b><span>ONLINE</span></div>
+        <div class="jym-data-panel panel-data"><small>PIPELINE</small><b>DATA</b><span>SYNC 100%</span></div>`;
+      techModel.appendChild(overlay);
+    }
+
+    const archModel = document.querySelector('.hero-arch .world-model-arch');
+    if (archModel && !archModel.querySelector('.jym-scene-overlay-arch')) {
+      const overlay = document.createElement('div');
+      overlay.className = 'jym-scene-overlay jym-scene-overlay-arch';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.innerHTML = `
+        <div class="jym-warm-glow"></div>
+        <div class="jym-plan-line a1"></div><div class="jym-plan-line a2"></div><div class="jym-plan-line a3"></div>
+        <span class="jym-dimension d1">5.20 m</span><span class="jym-dimension d2">3.40 m</span>
+        <div class="jym-arch-label">PLANO JYM · DISEÑO + EJECUCIÓN</div>`;
+      archModel.appendChild(overlay);
+    }
+  };
+
   const enhanceAll = () => {
     enhanceRoomCarousel();
     enhanceWorldDirections();
+    enhanceInternalScenes();
   };
 
   document.addEventListener('click', goToPortal, true);
