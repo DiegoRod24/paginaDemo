@@ -1,0 +1,134 @@
+/* HERO JYM — dos mundos interactivos */
+.hero-portal{overflow:hidden!important;}
+.hero-portal .portal-split{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 86px minmax(0,1fr)!important;
+  grid-template-areas:
+    "intro intro intro"
+    "tech core arch"
+    "social social social"!important;
+  gap:20px 18px!important;
+  align-items:stretch!important;
+  transition:grid-template-columns .52s cubic-bezier(.2,.8,.2,1)!important;
+}
+.hero-portal .portal-split-intro{grid-area:intro!important;text-align:center!important;position:relative!important;z-index:6!important;}
+.hero-portal .portal-tech{grid-area:tech!important;}
+.hero-portal .portal-arch{grid-area:arch!important;}
+.hero-portal .portal-versus{grid-area:core!important;}
+.hero-portal .portal-social-strip{grid-area:social!important;}
+
+.hero-portal .portal-world{
+  position:relative!important;
+  min-width:0!important;
+  isolation:isolate!important;
+  transition:transform .52s cubic-bezier(.2,.8,.2,1),opacity .4s ease,filter .4s ease,border-color .35s ease,box-shadow .35s ease!important;
+}
+.hero-portal .portal-world:after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;z-index:-1;
+  background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.08),transparent 46%);
+}
+
+.hero-portal .portal-focus-tech{
+  grid-template-columns:minmax(0,1.32fr) 78px minmax(0,.68fr)!important;
+}
+.hero-portal .portal-focus-arch{
+  grid-template-columns:minmax(0,.68fr) 78px minmax(0,1.32fr)!important;
+}
+.hero-portal .portal-focus-tech .portal-tech{transform:translateY(-8px) scale(1.015)!important;box-shadow:0 34px 110px rgba(0,217,255,.18)!important;}
+.hero-portal .portal-focus-tech .portal-arch{transform:scale(.975)!important;opacity:.6!important;filter:saturate(.65) brightness(.72)!important;}
+.hero-portal .portal-focus-arch .portal-arch{transform:translateY(-8px) scale(1.015)!important;box-shadow:0 34px 110px rgba(217,168,61,.2)!important;}
+.hero-portal .portal-focus-arch .portal-tech{transform:scale(.975)!important;opacity:.6!important;filter:saturate(.65) brightness(.72)!important;}
+
+.hero-portal .portal-versus{
+  position:relative!important;
+  min-height:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:10px!important;
+  pointer-events:none!important;
+  z-index:8!important;
+}
+.hero-portal .portal-versus:before{
+  content:"";position:absolute;top:3%;bottom:3%;left:50%;width:2px;transform:translateX(-50%);
+  background:linear-gradient(to bottom,transparent,rgba(0,217,255,.8) 25%,#fff 50%,rgba(217,168,61,.9) 75%,transparent);
+  box-shadow:-8px 0 30px rgba(0,217,255,.35),8px 0 30px rgba(217,168,61,.35);
+  animation:jymCorePulse 2.4s ease-in-out infinite;
+}
+.hero-portal .portal-versus span{display:none!important;}
+.hero-portal .portal-versus small{
+  width:64px!important;height:64px!important;border-radius:50%!important;
+  display:grid!important;place-items:center!important;
+  position:relative!important;z-index:2!important;
+  font-size:.78rem!important;letter-spacing:.18em!important;font-weight:900!important;
+  color:white!important;background:rgba(5,8,12,.88)!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  box-shadow:0 0 0 8px rgba(255,255,255,.025),0 0 38px rgba(255,255,255,.17)!important;
+  backdrop-filter:blur(16px)!important;
+}
+.hero-portal .portal-versus small:after{content:"TEC × ARQ";position:absolute;top:76px;left:50%;transform:translateX(-50%);white-space:nowrap;color:#97a8b8;font-size:.48rem;letter-spacing:.18em;font-weight:800;}
+@keyframes jymCorePulse{50%{opacity:.65;filter:brightness(1.65);transform:translateX(-50%) scaleY(1.03)}}
+
+/* Capa de transición */
+.jym-world-transition{
+  position:absolute;inset:0;z-index:85;pointer-events:none;overflow:hidden;opacity:0;
+  transition:opacity .12s ease;
+}
+.jym-world-transition.is-active{opacity:1;}
+.jym-world-transition .world-wash{position:absolute;inset:0;opacity:0;}
+.jym-world-transition.tech .world-wash{background:radial-gradient(circle at 35% 50%,rgba(0,217,255,.34),transparent 42%),linear-gradient(90deg,rgba(0,8,18,.98),rgba(0,18,35,.94));animation:techWash .78s ease both;}
+.jym-world-transition.arch .world-wash{background:radial-gradient(circle at 65% 50%,rgba(217,168,61,.3),transparent 42%),linear-gradient(90deg,rgba(28,17,5,.96),rgba(8,6,3,.98));animation:archWash .78s ease both;}
+@keyframes techWash{0%{opacity:0;clip-path:inset(0 100% 0 0)}55%{opacity:1}100%{opacity:1;clip-path:inset(0 0 0 0)}}
+@keyframes archWash{0%{opacity:0;clip-path:inset(0 0 0 100%)}55%{opacity:1}100%{opacity:1;clip-path:inset(0 0 0 0)}}
+
+.jym-matrix-rain{position:absolute;inset:0;overflow:hidden;}
+.jym-matrix-rain span{
+  position:absolute;top:-22%;left:var(--x);color:#65ecff;font:700 clamp(10px,1vw,14px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;
+  text-shadow:0 0 11px rgba(0,217,255,.85);opacity:0;white-space:pre-line;
+  animation:matrixDrop .72s cubic-bezier(.16,.84,.36,1) var(--d) both;
+}
+@keyframes matrixDrop{0%{opacity:0;transform:translateY(-20vh)}20%{opacity:.9}100%{opacity:.16;transform:translateY(120vh)}}
+.jym-tech-scan{position:absolute;left:0;right:0;height:3px;top:8%;background:linear-gradient(90deg,transparent,#00d9ff,#fff,#00d9ff,transparent);box-shadow:0 0 26px #00d9ff;animation:scanBuild .68s ease-in-out both;}
+@keyframes scanBuild{to{top:92%;opacity:.35}}
+.jym-transition-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;text-align:center;letter-spacing:.2em;text-transform:uppercase;font-weight:900;opacity:0;animation:titleBuild .55s .22s ease both;}
+.jym-transition-title b{display:block;font-size:clamp(1.35rem,3vw,3rem);}
+.jym-transition-title small{display:block;margin-top:10px;color:#a8bdcb;font-size:.66rem;}
+.jym-world-transition.tech .jym-transition-title b{color:#7ceeff;text-shadow:0 0 28px rgba(0,217,255,.55)}
+.jym-world-transition.arch .jym-transition-title b{color:#f2c46c;text-shadow:0 0 28px rgba(217,168,61,.5)}
+@keyframes titleBuild{from{opacity:0;filter:blur(14px);transform:translate(-50%,-44%) scale(.92)}to{opacity:1;filter:blur(0);transform:translate(-50%,-50%) scale(1)}}
+
+/* Arquitectura: plano -> estructura -> material */
+.jym-blueprint{position:absolute;inset:9%;border:1px solid rgba(242,196,108,.22);opacity:0;animation:blueprintIn .52s .05s ease both;}
+.jym-blueprint:before,.jym-blueprint:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 34px,rgba(242,196,108,.13) 35px 36px),repeating-linear-gradient(90deg,transparent 0 34px,rgba(242,196,108,.12) 35px 36px);}
+@keyframes blueprintIn{to{opacity:1}}
+.jym-arch-line{position:absolute;height:2px;background:linear-gradient(90deg,transparent,#f2c46c,#fff);transform-origin:left;transform:scaleX(0);box-shadow:0 0 15px rgba(242,196,108,.5);animation:drawArch .5s var(--d) ease forwards;}
+.jym-arch-line.v{width:2px;height:var(--h);transform-origin:top;transform:scaleY(0);background:linear-gradient(180deg,transparent,#f2c46c,#fff);animation:drawArchV .5s var(--d) ease forwards;}
+@keyframes drawArch{to{transform:scaleX(1)}}@keyframes drawArchV{to{transform:scaleY(1)}}
+.jym-wood-slab{position:absolute;width:22%;height:18px;left:var(--x);top:var(--y);border-radius:3px;background:linear-gradient(90deg,#6b3c17,#b77a36,#7d451d);box-shadow:0 0 0 1px rgba(255,211,135,.16),0 9px 24px rgba(0,0,0,.35);opacity:0;transform:translateY(-70px) rotate(var(--r));animation:woodDrop .38s var(--d) cubic-bezier(.2,.9,.35,1.2) forwards;}
+@keyframes woodDrop{65%{opacity:1}100%{opacity:1;transform:translateY(0) rotate(var(--r))}}
+.jym-hammer-hit{position:absolute;right:18%;bottom:21%;font-size:42px;opacity:0;transform-origin:bottom right;animation:hammerHit .42s .42s ease both;filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));}
+@keyframes hammerHit{0%{opacity:0;transform:rotate(-34deg) scale(.8)}35%{opacity:1}70%{transform:rotate(18deg) scale(1.04)}100%{opacity:.55;transform:rotate(0) scale(1)}}
+
+.hero-portal .portal-selection-tech{grid-template-columns:minmax(0,1.55fr) 60px minmax(0,.45fr)!important;}
+.hero-portal .portal-selection-arch{grid-template-columns:minmax(0,.45fr) 60px minmax(0,1.55fr)!important;}
+.hero-portal .portal-selection-tech .portal-arch,.hero-portal .portal-selection-arch .portal-tech{opacity:.18!important;filter:blur(2px) saturate(.35)!important;}
+
+@media(max-width:900px){
+  .hero-portal .portal-split{grid-template-columns:1fr 56px 1fr!important;gap:14px 8px!important;}
+  .hero-portal .portal-focus-tech,.hero-portal .portal-focus-arch,.hero-portal .portal-selection-tech,.hero-portal .portal-selection-arch{grid-template-columns:1fr 56px 1fr!important;}
+  .hero-portal .portal-versus small{width:50px!important;height:50px!important;font-size:.62rem!important;}
+}
+@media(max-width:700px){
+  .hero-portal .portal-split{display:grid!important;grid-template-columns:1fr!important;grid-template-areas:"intro" "tech" "core" "arch" "social"!important;}
+  .hero-portal .portal-focus-tech,.hero-portal .portal-focus-arch,.hero-portal .portal-selection-tech,.hero-portal .portal-selection-arch{grid-template-columns:1fr!important;}
+  .hero-portal .portal-versus{min-height:52px!important;}
+  .hero-portal .portal-versus:before{left:3%;right:3%;top:50%;bottom:auto;width:auto;height:2px;transform:none;background:linear-gradient(90deg,transparent,#00d9ff,#fff,#d9a83d,transparent);}
+  .hero-portal .portal-versus small:after{display:none!important;}
+  .jym-transition-title small{font-size:.55rem;}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-portal .portal-split,.hero-portal .portal-world,.hero-portal .portal-versus:before{transition:none!important;animation:none!important;}
+  .jym-matrix-rain span,.jym-tech-scan,.jym-blueprint,.jym-arch-line,.jym-wood-slab,.jym-hammer-hit{animation-duration:.01ms!important;animation-delay:0ms!important;}
+}
