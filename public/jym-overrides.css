@@ -45,4 +45,17 @@
   box-shadow:inset 0 1px rgba(255,255,255,.08),0 12px 30px rgba(0,0,0,.4)!important;
 }
 .whatsapp-3d-label b{font-size:.78rem!important}.whatsapp-3d-label small{font-size:.68rem!important}
+
+/* El OVNI del primer escenario solo existe en el inicio de Tecnología. */
+.tech-home-visual.is-hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;}
+.tech-home-visual.is-visible{display:block!important;visibility:visible!important;opacity:1!important;}
+.tech-assistant-slot.is-hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;}
+.tech-assistant-slot.is-visible{display:block!important;visibility:visible!important;opacity:1!important;}
+
+/* Evita que una animación del primer estado quede visualmente encima de otras mascotas. */
+.companion-tech:not(.companion-home) .hero-ufo-wrap{display:none!important;animation:none!important;}
+.companion-tech:not(.companion-home) .hero-ufo-beam,
+.companion-tech:not(.companion-home) .hero-ufo-trail,
+.companion-tech:not(.companion-home) .hero-ufo-spark{display:none!important;}
+
 @media(max-width:700px){.floating-actions .whatsapp-3d{width:58px!important;height:58px!important}.whatsapp-chat{width:30px!important;height:30px!important}}
