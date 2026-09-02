@@ -17,6 +17,37 @@
     return layer;
   };
 
+  const ensureAmbient = (world, mode) => {
+    if (!world || world.querySelector(':scope > .jym-world-ambient')) return;
+    const ambient = document.createElement('div');
+    ambient.className = `jym-world-ambient jym-world-ambient-${mode}`;
+    ambient.setAttribute('aria-hidden', 'true');
+
+    if (mode === 'tech') {
+      ambient.innerHTML = `
+        <div class="jym-tech-grid"></div>
+        <div class="jym-tech-code">
+          <span>JYM://AUTOMATION</span><span>API.CONNECT()</span><span>AI_ASSIST = TRUE</span><span>DATA → FLOW → ACTION</span>
+        </div>
+        <div class="jym-tech-hud"><i></i><i></i><i></i></div>
+        <div class="jym-tech-node n1"></div><div class="jym-tech-node n2"></div><div class="jym-tech-node n3"></div>
+        <div class="jym-tech-link l1"></div><div class="jym-tech-link l2"></div>
+        <div class="jym-world-status">SYSTEM READY</div>
+      `;
+    } else {
+      ambient.innerHTML = `
+        <div class="jym-arch-grid"></div>
+        <div class="jym-arch-house">
+          <i class="roof"></i><i class="wall w1"></i><i class="wall w2"></i><i class="floor f1"></i><i class="floor f2"></i>
+        </div>
+        <div class="jym-arch-measure m1">5.20 m</div><div class="jym-arch-measure m2">3.40 m</div>
+        <div class="jym-arch-material mat1"></div><div class="jym-arch-material mat2"></div><div class="jym-arch-material mat3"></div>
+        <div class="jym-world-status">PROYECTO EN TRAZO</div>
+      `;
+    }
+    world.prepend(ambient);
+  };
+
   const renderTech = layer => {
     const rain = matrixTokens.concat(matrixTokens.slice(0, 6)).map((token, index) => {
       const x = 3 + (index * 5.45) % 94;
@@ -66,7 +97,14 @@
 
   const bindHero = () => {
     const hero = document.querySelector('.hero-portal');
-    if (!hero || hero.dataset.jymHeroBound === '1') return;
+    if (!hero) return;
+
+    const tech = hero.querySelector('.portal-tech');
+    const arch = hero.querySelector('.portal-arch');
+    ensureAmbient(tech, 'tech');
+    ensureAmbient(arch, 'arch');
+
+    if (hero.dataset.jymHeroBound === '1') return;
     hero.dataset.jymHeroBound = '1';
 
     hero.addEventListener('pointerdown', event => {
