@@ -1,0 +1,221 @@
+/* JYM UX Structure Pass · orden narrativo, jerarquía y respiración visual */
+
+.app.tech main,
+.app.arch main{
+  display:flex;
+  flex-direction:column;
+}
+
+/* SISTEMAS · Problema -> Solución -> Prueba -> Método -> Contacto */
+.app.tech main > .hero{order:10}
+.app.tech main > .tech-showroom{order:20}
+.app.tech main > .bottleneck-section{order:30}
+.app.tech main > .services{order:40}
+.app.tech main > .automation-lab{order:50}
+.app.tech main > .tech-proof{order:60}
+.app.tech main > .process-section{order:70}
+.app.tech main > .smart-section{order:80}
+.app.tech main > .contact{order:90}
+.app.tech main > .footer{order:100}
+
+/* ARQUITECTURA · Inspiración -> Prueba -> Servicios -> Método -> Contacto */
+.app.arch main > .hero{order:10}
+.app.arch main > .arch-showroom{order:20}
+.app.arch main > .success-section{order:30}
+.app.arch main > .services{order:40}
+.app.arch main > .process-section{order:50}
+.app.arch main > .smart-section{order:60}
+.app.arch main > .contact{order:70}
+.app.arch main > .footer{order:80}
+
+/* El header fijo no debe ocultar el comienzo de ninguna sección. */
+.app.tech main > section[id],
+.app.arch main > section[id]{
+  scroll-margin-top:118px;
+}
+
+/* Menos vacío entre bloques. */
+.app.tech main > section:not(.hero),
+.app.arch main > section:not(.hero){
+  padding-top:clamp(64px,7vw,96px)!important;
+  padding-bottom:clamp(64px,7vw,96px)!important;
+}
+
+/* Jerarquía tipográfica: Hero manda; el resto no compite. */
+.app.tech main > section:not(.hero) .section-title h2,
+.app.arch main > section:not(.hero) .section-title h2,
+.app.tech .lab-heading h2,
+.app.tech .bottleneck-intro h2,
+.app.tech .proof-heading h2,
+.app.tech .smart-section h2,
+.app.arch .smart-section h2{
+  font-size:clamp(2rem,3.5vw,4.15rem)!important;
+  line-height:.98!important;
+  letter-spacing:-.045em!important;
+  max-width:1050px;
+}
+
+.app.tech main > section:not(.hero) .section-title,
+.app.arch main > section:not(.hero) .section-title{
+  margin-bottom:clamp(30px,4vw,52px)!important;
+}
+
+/* Marcadores discretos de capítulo. */
+.app.tech .tech-showroom,
+.app.tech .automation-lab,
+.app.tech .process-section,
+.app.tech .contact,
+.app.arch .arch-showroom,
+.app.arch .services,
+.app.arch .process-section,
+.app.arch .contact{
+  position:relative;
+}
+
+.app.tech .tech-showroom::before,
+.app.tech .automation-lab::before,
+.app.tech .process-section::before,
+.app.tech .contact::before,
+.app.arch .arch-showroom::before,
+.app.arch .services::before,
+.app.arch .process-section::before,
+.app.arch .contact::before{
+  position:absolute;
+  top:24px;
+  left:clamp(20px,5vw,78px);
+  z-index:2;
+  font:800 .62rem/1 monospace;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  opacity:.55;
+}
+
+.app.tech .tech-showroom::before{content:'02 / 05 · SOLUCIONES';color:#7deeff}
+.app.tech .automation-lab::before{content:'03 / 05 · DEMOS Y CASOS';color:#7deeff}
+.app.tech .process-section::before{content:'04 / 05 · PROCESO';color:#7deeff}
+.app.tech .contact::before{content:'05 / 05 · CONTACTO';color:#7deeff}
+.app.arch .arch-showroom::before{content:'02 / 05 · PROYECTOS';color:#e5bd65}
+.app.arch .services::before{content:'03 / 05 · SERVICIOS';color:#e5bd65}
+.app.arch .process-section::before{content:'04 / 05 · PROCESO';color:#e5bd65}
+.app.arch .contact::before{content:'05 / 05 · CONTACTO';color:#e5bd65}
+
+/* La mascota acompaña; no compite con el producto. */
+.companion-system .companion-character-stage{
+  scale:.79;
+  transform-origin:bottom center;
+  transition:scale .28s ease,filter .28s ease;
+  filter:saturate(.94) brightness(.95);
+}
+.companion-system:hover .companion-character-stage,
+.companion-system.is-performing .companion-character-stage{
+  scale:.88;
+  filter:none;
+}
+
+/* Sistemas normalmente a la derecha; Arquitectura a la izquierda. */
+.companion-system.companion-tech{
+  left:auto!important;
+  right:22px!important;
+}
+.companion-system.companion-arch{
+  right:auto!important;
+  left:22px!important;
+}
+
+/* Estado pasivo limpio; el gesto completo aparece al interactuar. */
+.jym-companion-gesture-layer{
+  opacity:.12!important;
+  transition:opacity .25s ease!important;
+}
+.companion-system:hover .jym-companion-gesture-layer,
+.companion-system.is-performing .jym-companion-gesture-layer{
+  opacity:1!important;
+}
+
+/* La conversación no reaparece a cada bloque mientras solo hacemos scroll. */
+.companion-system .companion-speech{
+  opacity:0!important;
+  pointer-events:none!important;
+  transform:translateY(8px) scale(.94)!important;
+  transition:opacity .2s ease,transform .2s ease!important;
+  max-width:245px!important;
+}
+.companion-system:hover .companion-speech,
+.companion-system:focus-visible .companion-speech,
+.companion-system.is-performing .companion-speech{
+  opacity:1!important;
+  transform:none!important;
+}
+
+/* Badge pequeño y estable: una sola referencia de progreso. */
+.jym-companion-chapter-badge{
+  top:10px!important;
+  padding:5px 8px!important;
+  gap:6px!important;
+  opacity:.82;
+  transform:scale(.9);
+  transform-origin:center;
+}
+
+/* El dock también baja protagonismo en reposo. */
+.assistant-tool-dock{
+  opacity:.35!important;
+  scale:.92;
+  transition:opacity .2s ease,scale .2s ease!important;
+}
+.companion-system:hover .assistant-tool-dock,
+.companion-system.is-performing .assistant-tool-dock{
+  opacity:1!important;
+  scale:1;
+}
+
+/* El showroom arquitectónico manda: la mascota nunca debe tapar evidencia. */
+.app.arch .arch-showroom .cinema-card,
+.app.arch .arch-showroom .showroom-shell{
+  position:relative;
+  z-index:3;
+}
+
+@media(max-width:900px){
+  .app.tech main > section:not(.hero),
+  .app.arch main > section:not(.hero){
+    padding-top:58px!important;
+    padding-bottom:58px!important;
+  }
+  .app.tech main > section:not(.hero) .section-title h2,
+  .app.arch main > section:not(.hero) .section-title h2,
+  .app.tech .lab-heading h2,
+  .app.tech .bottleneck-intro h2,
+  .app.tech .proof-heading h2,
+  .app.tech .smart-section h2,
+  .app.arch .smart-section h2{
+    font-size:clamp(1.8rem,8vw,3rem)!important;
+  }
+  .companion-system.companion-tech,
+  .companion-system.companion-arch{
+    left:auto!important;
+    right:10px!important;
+  }
+  .companion-system .companion-character-stage{scale:.68}
+  .companion-system:hover .companion-character-stage,
+  .companion-system.is-performing .companion-character-stage{scale:.74}
+  .app.tech .tech-showroom::before,
+  .app.tech .automation-lab::before,
+  .app.tech .process-section::before,
+  .app.tech .contact::before,
+  .app.arch .arch-showroom::before,
+  .app.arch .services::before,
+  .app.arch .process-section::before,
+  .app.arch .contact::before{
+    top:16px;
+    left:18px;
+    font-size:.53rem;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .companion-system .companion-character-stage,
+  .companion-system .companion-speech,
+  .jym-companion-gesture-layer,
+  .assistant-tool-dock{transition:none!important}
+}
