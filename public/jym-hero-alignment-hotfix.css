@@ -1,0 +1,154 @@
+/* Hotfix final de alineación interna del hero JYM.
+   No altera el 50/50: corrige iconos, mascotas, números y espaciado. */
+
+/* 1) Los iconos superiores vuelven a su flujo normal y nunca pisan los títulos. */
+.hero-portal .portal-layout.portal-split > .portal-world > .portal-visual{
+  position:relative!important;
+  inset:auto!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  left:auto!important;
+  transform:none!important;
+  flex:0 0 88px!important;
+  width:88px!important;
+  height:88px!important;
+  min-height:88px!important;
+  margin:0 0 22px!important;
+  z-index:4!important;
+}
+.hero-portal .portal-layout.portal-split > .portal-tech > .portal-visual{
+  align-self:flex-start!important;
+  margin-left:0!important;
+  margin-right:auto!important;
+}
+.hero-portal .portal-layout.portal-split > .portal-arch > .portal-visual{
+  align-self:flex-end!important;
+  margin-left:auto!important;
+  margin-right:0!important;
+}
+
+/* 2) Encabezado interno y números: espejo limpio. */
+.hero-portal .portal-layout.portal-split > .portal-world > .portal-world-heading{
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  margin:0 0 10px!important;
+  min-height:24px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  z-index:6!important;
+}
+.hero-portal .portal-tech > .portal-world-heading b,
+.hero-portal .portal-arch > .portal-world-heading b{
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  font-size:1.08rem!important;
+  opacity:.45!important;
+}
+.hero-portal .portal-arch > .portal-world-heading{
+  flex-direction:row-reverse!important;
+}
+
+/* 3) Mascotas pegadas visualmente a 01 / 02, no a los títulos. */
+.hero-portal .portal-layout.portal-split > .portal-world > .portal-entry-mascot{
+  position:absolute!important;
+  top:168px!important;
+  bottom:auto!important;
+  width:66px!important;
+  height:66px!important;
+  opacity:.88!important;
+  z-index:5!important;
+  pointer-events:none!important;
+  transform:none!important;
+}
+.hero-portal .portal-layout.portal-split > .portal-tech > .portal-entry-mascot-tech{
+  right:78px!important;
+  left:auto!important;
+}
+.hero-portal .portal-layout.portal-split > .portal-arch > .portal-entry-mascot-arch{
+  left:78px!important;
+  right:auto!important;
+}
+
+/* 4) Compacta el contenido para que ambos mundos tengan la misma lectura vertical. */
+.hero-portal .portal-world h2{
+  margin-top:0!important;
+  margin-bottom:11px!important;
+}
+.hero-portal .portal-world h2 em{
+  margin-top:8px!important;
+}
+.hero-portal .portal-world > p{
+  margin-top:0!important;
+  margin-bottom:16px!important;
+}
+.hero-portal .portal-benefits{
+  margin-top:0!important;
+  margin-bottom:16px!important;
+}
+
+/* 5) CTA espejo más claro. */
+.hero-portal .portal-tech > span,
+.hero-portal .portal-arch > span{
+  min-height:50px!important;
+  padding-top:15px!important;
+}
+.hero-portal .portal-arch > span{
+  justify-content:flex-start!important;
+  gap:12px!important;
+}
+.hero-portal .portal-arch > span svg{
+  order:-1!important;
+  transform:rotate(180deg)!important;
+  margin:0 2px 0 0!important;
+}
+
+/* 6) Estados y wireframe un poco más legibles. */
+.hero-portal .jym-world-status{
+  font-size:.52rem!important;
+  opacity:.72!important;
+}
+.hero-portal .jym-arch-house{
+  left:9%!important;
+  bottom:21%!important;
+  transform:scale(.92)!important;
+  opacity:.68!important;
+}
+
+/* 7) Redes ligeramente más abajo y WhatsApp menos dominante. */
+.hero-portal .portal-social-strip{
+  margin-top:8px!important;
+  transform:translateY(5px)!important;
+}
+.floating-actions .whatsapp-3d{
+  width:46px!important;
+  height:46px!important;
+  right:24px!important;
+  bottom:24px!important;
+}
+
+@media(max-width:1180px){
+  .hero-portal .portal-layout.portal-split > .portal-world > .portal-entry-mascot{
+    top:160px!important;
+    width:58px!important;
+    height:58px!important;
+  }
+  .hero-portal .portal-layout.portal-split > .portal-tech > .portal-entry-mascot-tech{right:58px!important;}
+  .hero-portal .portal-layout.portal-split > .portal-arch > .portal-entry-mascot-arch{left:58px!important;}
+}
+
+@media(max-width:900px){
+  .hero-portal .portal-layout.portal-split > .portal-world > .portal-visual{
+    align-self:flex-start!important;
+    margin-left:0!important;
+    margin-right:auto!important;
+  }
+  .hero-portal .portal-layout.portal-split > .portal-world > .portal-entry-mascot{
+    top:154px!important;
+    right:20px!important;
+    left:auto!important;
+  }
+}
