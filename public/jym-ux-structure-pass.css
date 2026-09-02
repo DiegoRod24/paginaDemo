@@ -9,24 +9,37 @@
 /* SISTEMAS · Problema -> Solución -> Prueba -> Método -> Contacto */
 .app.tech main > .hero{order:10}
 .app.tech main > .tech-showroom{order:20}
+.app.tech main > .jym-tech-story{order:25}
 .app.tech main > .bottleneck-section{order:30}
 .app.tech main > .services{order:40}
 .app.tech main > .automation-lab{order:50}
 .app.tech main > .tech-proof{order:60}
 .app.tech main > .process-section{order:70}
 .app.tech main > .smart-section{order:80}
+.app.tech main > .jym-trust{order:85}
 .app.tech main > .contact{order:90}
 .app.tech main > .footer{order:100}
 
 /* ARQUITECTURA · Inspiración -> Prueba -> Servicios -> Método -> Contacto */
 .app.arch main > .hero{order:10}
 .app.arch main > .arch-showroom{order:20}
+.app.arch main > .jym-arch-story{order:25}
 .app.arch main > .success-section{order:30}
 .app.arch main > .services{order:40}
 .app.arch main > .process-section{order:50}
 .app.arch main > .smart-section{order:60}
+.app.arch main > .jym-trust{order:65}
 .app.arch main > .contact{order:70}
 .app.arch main > .footer{order:80}
+
+/* Protección: cualquier experiencia dinámica JYM debe vivir después del Hero. */
+.app.tech main > .jym-experience-block,
+.app.arch main > .jym-experience-block,
+.app.tech main > .jym-trust,
+.app.arch main > .jym-trust{
+  position:relative;
+  z-index:1;
+}
 
 /* El header fijo no debe ocultar el comienzo de ninguna sección. */
 .app.tech main > section[id],
