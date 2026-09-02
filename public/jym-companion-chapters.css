@@ -1,0 +1,53 @@
+/* JYM · capítulos y gestos reactivos de la mascota */
+.jym-companion-chapter-badge{position:absolute;top:-8px;right:4px;z-index:24;display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid rgba(255,255,255,.11);border-radius:999px;background:rgba(5,9,15,.8);backdrop-filter:blur(10px);box-shadow:0 10px 25px rgba(0,0,0,.24);pointer-events:none}
+.companion-left .jym-companion-chapter-badge{right:auto;left:4px}.jym-companion-chapter-badge small{font:800 .47rem/1 monospace;letter-spacing:.08em;color:#7deeff}.jym-companion-arch .jym-companion-chapter-badge small{color:#e5bd65}.jym-companion-chapter-badge b{font-size:.58rem;letter-spacing:.05em;color:#edf6fb;text-transform:uppercase}
+.jym-companion-gesture-layer{position:absolute;inset:0;z-index:18;pointer-events:none;overflow:visible}.jym-gesture-icon{position:absolute;display:grid;place-items:center;min-width:42px;height:27px;padding:0 8px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:rgba(4,12,20,.82);font:900 .54rem/1 monospace;letter-spacing:.08em;color:#fff;opacity:0;transform:scale(.7);transition:.28s ease}.jym-gesture-line{position:absolute;height:1px;width:60px;opacity:0;transform-origin:left;transition:.28s ease;background:linear-gradient(90deg,transparent,#00d9ff,transparent);box-shadow:0 0 10px rgba(0,217,255,.3)}
+.companion-arch .jym-gesture-line{background:linear-gradient(90deg,transparent,#d9a83d,transparent);box-shadow:0 0 10px rgba(217,168,61,.28)}
+
+/* Sistemas: 5 capítulos */
+.companion-tech[data-jym-chapter="home"] .g-main{right:8%;top:16%;opacity:1;transform:scale(1);color:#8cf4ff}.companion-tech[data-jym-chapter="home"] .g-main:after{content:'HELLO'}
+.companion-tech[data-jym-chapter="home"] .g-secondary{right:13%;top:29%;opacity:.8;transform:scale(.86)}.companion-tech[data-jym-chapter="home"] .g-secondary:after{content:'JYM'}
+
+.companion-tech[data-jym-chapter="solutions"] .g-main{left:2%;top:20%;opacity:1;transform:scale(1)}.companion-tech[data-jym-chapter="solutions"] .g-main:after{content:'API'}
+.companion-tech[data-jym-chapter="solutions"] .g-secondary{right:0;top:33%;opacity:1;transform:scale(.92);color:#71ffbd}.companion-tech[data-jym-chapter="solutions"] .g-secondary:after{content:'BOT'}
+.companion-tech[data-jym-chapter="solutions"] .gl-a{left:18%;top:31%;opacity:.75;transform:rotate(12deg)}.companion-tech[data-jym-chapter="solutions"] .gl-b{left:49%;top:42%;opacity:.65;transform:rotate(-14deg)}
+
+.companion-tech[data-jym-chapter="demos"] .g-main{left:3%;top:18%;opacity:1;transform:scale(1);animation:jymChipPulse 1.1s ease-in-out infinite}.companion-tech[data-jym-chapter="demos"] .g-main:after{content:'RUN'}
+.companion-tech[data-jym-chapter="demos"] .g-secondary{right:0;top:21%;opacity:1;transform:scale(.9);animation:jymChipPulse 1.1s .22s ease-in-out infinite}.companion-tech[data-jym-chapter="demos"] .g-secondary:after{content:'DATA'}
+.companion-tech[data-jym-chapter="demos"] .gl-a{left:15%;top:44%;width:100px;opacity:.88;animation:jymDataFlow 1s linear infinite}.companion-tech[data-jym-chapter="demos"] .gl-b{left:38%;top:52%;width:85px;opacity:.72;animation:jymDataFlow 1.2s .2s linear infinite}
+
+.companion-tech[data-jym-chapter="process"] .g-main{right:1%;top:20%;opacity:1;transform:scale(1)}.companion-tech[data-jym-chapter="process"] .g-main:after{content:'01→05'}
+.companion-tech[data-jym-chapter="process"] .g-secondary{left:0;top:40%;opacity:.9;transform:scale(.9);color:#71ffbd}.companion-tech[data-jym-chapter="process"] .g-secondary:after{content:'FLOW'}
+.companion-tech[data-jym-chapter="process"] .gl-a{left:12%;top:33%;width:130px;opacity:.85;animation:jymRouteScan 1.5s ease-in-out infinite}
+
+.companion-tech[data-jym-chapter="contact"] .g-main{right:0;top:15%;opacity:1;transform:scale(1);color:#71ffbd}.companion-tech[data-jym-chapter="contact"] .g-main:after{content:'CALL'}
+.companion-tech[data-jym-chapter="contact"] .g-secondary{right:7%;top:29%;opacity:.85;transform:scale(.87)}.companion-tech[data-jym-chapter="contact"] .g-secondary:after{content:'993'}
+
+/* Arquitectura: 5 capítulos */
+.companion-arch[data-jym-chapter="home"] .assistant-mascot-image{animation:jymArchHello 2.4s ease-in-out infinite}.companion-arch[data-jym-chapter="home"] .g-main{left:0;top:16%;opacity:1;transform:scale(1);color:#e6bd64}.companion-arch[data-jym-chapter="home"] .g-main:after{content:'HOLA'}
+.companion-arch[data-jym-chapter="projects"] .assistant-mascot-image{transform:translateX(-5px) rotate(-2deg)}.companion-arch[data-jym-chapter="projects"] .g-main{right:0;top:18%;opacity:1;transform:scale(1);color:#e6bd64}.companion-arch[data-jym-chapter="projects"] .g-main:after{content:'PLANO'}
+.companion-arch[data-jym-chapter="projects"] .g-secondary{right:4%;top:31%;opacity:.9;transform:scale(.9)}.companion-arch[data-jym-chapter="projects"] .g-secondary:after{content:'✓ OBRA'}
+.companion-arch[data-jym-chapter="projects"] .gl-a{left:15%;top:43%;width:120px;opacity:.74;transform:rotate(-8deg)}
+
+.companion-arch[data-jym-chapter="services"] .assistant-mascot-image{animation:jymArchMeasure 1.8s ease-in-out infinite}.companion-arch[data-jym-chapter="services"] .g-main{left:0;top:20%;opacity:1;transform:scale(1);color:#e6bd64}.companion-arch[data-jym-chapter="services"] .g-main:after{content:'5.20m'}
+.companion-arch[data-jym-chapter="services"] .g-secondary{right:0;top:32%;opacity:.92;transform:scale(.9)}.companion-arch[data-jym-chapter="services"] .g-secondary:after{content:'📐'}
+
+.companion-arch[data-jym-chapter="process"] .assistant-mascot-image{animation:jymArchBuild 1.35s ease-in-out infinite}.companion-arch[data-jym-chapter="process"] .g-main{right:0;top:17%;opacity:1;transform:scale(1);color:#e6bd64}.companion-arch[data-jym-chapter="process"] .g-main:after{content:'OBRA'}
+.companion-arch[data-jym-chapter="process"] .g-secondary{left:0;top:36%;opacity:.92;transform:scale(.9)}.companion-arch[data-jym-chapter="process"] .g-secondary:after{content:'🔨'}
+.companion-arch[data-jym-chapter="process"] .gl-a{left:15%;top:48%;width:120px;opacity:.8;animation:jymRouteScan 1.5s ease-in-out infinite}
+
+.companion-arch[data-jym-chapter="contact"] .assistant-mascot-image{animation:jymArchContact 2s ease-in-out infinite}.companion-arch[data-jym-chapter="contact"] .g-main{right:0;top:18%;opacity:1;transform:scale(1);color:#e6bd64}.companion-arch[data-jym-chapter="contact"] .g-main:after{content:'COTIZA'}
+.companion-arch[data-jym-chapter="contact"] .g-secondary{right:4%;top:32%;opacity:.9;transform:scale(.9)}.companion-arch[data-jym-chapter="contact"] .g-secondary:after{content:'☎'}
+
+.jym-chapter-enter .companion-character-stage{animation:jymChapterEnter .72s cubic-bezier(.2,.8,.2,1)}
+@keyframes jymChapterEnter{0%{transform:translateY(12px) scale(.92);filter:brightness(.85)}55%{transform:translateY(-5px) scale(1.035);filter:brightness(1.12)}100%{transform:none;filter:none}}
+@keyframes jymChipPulse{0%,100%{box-shadow:0 0 0 rgba(0,217,255,0)}50%{box-shadow:0 0 18px rgba(0,217,255,.28)}}
+@keyframes jymDataFlow{0%{transform:translateX(-12px);opacity:.25}50%{opacity:1}100%{transform:translateX(16px);opacity:.25}}
+@keyframes jymRouteScan{0%,100%{clip-path:inset(0 82% 0 0);opacity:.35}50%{clip-path:inset(0 0 0 0);opacity:1}}
+@keyframes jymArchHello{0%,100%{transform:rotate(0) translateY(0)}25%{transform:rotate(-2deg) translateY(-3px)}55%{transform:rotate(2deg) translateY(0)}}
+@keyframes jymArchMeasure{0%,100%{transform:translateX(0) rotate(0)}50%{transform:translateX(5px) rotate(1.8deg)}}
+@keyframes jymArchBuild{0%,100%{transform:translateY(0)}45%{transform:translateY(5px) rotate(-1.5deg)}65%{transform:translateY(-2px) rotate(1deg)}}
+@keyframes jymArchContact{0%,100%{transform:rotate(0)}35%{transform:rotate(-1.5deg)}70%{transform:rotate(1.5deg)}}
+
+@media(max-width:900px){.jym-companion-chapter-badge{transform:scale(.9);transform-origin:top right}.companion-left .jym-companion-chapter-badge{transform-origin:top left}.jym-gesture-icon{min-width:36px;height:24px;font-size:.48rem}.jym-gesture-line{width:48px}}
+@media(prefers-reduced-motion:reduce){.jym-chapter-enter .companion-character-stage,.assistant-mascot-image,.jym-gesture-icon,.jym-gesture-line{animation:none!important;transition:none!important}}
