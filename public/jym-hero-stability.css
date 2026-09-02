@@ -1,230 +1,356 @@
-/* JYM — hotfix de estabilidad visual del hero */
+/* JYM — estabilidad definitiva del hero. Carga al final y manda sobre capas anteriores. */
 
-/* 1) El bloque principal debe usar todo el ancho real disponible. */
-.hero-portal .portal-layout.portal-split{
-  position:relative!important;
-  width:min(1480px,calc(100% - 36px))!important;
-  margin:0 auto!important;
-  grid-template-columns:minmax(0,1fr) 84px minmax(0,1fr)!important;
-  justify-content:stretch!important;
-  justify-items:stretch!important;
-  column-gap:20px!important;
+.hero-portal{
+  min-height:100svh!important;
+  padding:112px clamp(18px,2.6vw,42px) 26px!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
 }
+
+.hero-portal .portal-layout.portal-split,
+.hero-portal .portal-focus-tech,
+.hero-portal .portal-focus-arch,
+.hero-portal .portal-selection-tech,
+.hero-portal .portal-selection-arch{
+  position:relative!important;
+  width:min(1440px,100%)!important;
+  min-height:calc(100svh - 138px)!important;
+  margin:0 auto!important;
+  padding:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 54px minmax(0,1fr)!important;
+  grid-template-rows:auto minmax(500px,1fr) 40px!important;
+  grid-template-areas:"intro intro intro" "tech core arch" "social social social"!important;
+  gap:18px 14px!important;
+  align-items:stretch!important;
+  justify-items:stretch!important;
+}
+
+/* Título general: forma parte del grid, nunca se monta sobre las tarjetas. */
+.hero-portal .portal-split-intro{
+  grid-area:intro!important;
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0 12px 8px!important;
+  text-align:center!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  z-index:20!important;
+}
+.hero-portal .portal-split-intro>p{
+  margin:0 0 7px!important;
+  font-size:clamp(.63rem,.68vw,.76rem)!important;
+  letter-spacing:.18em!important;
+}
+.hero-portal .portal-split-intro h1{
+  width:100%!important;
+  max-width:900px!important;
+  margin:0 auto 11px!important;
+  font-size:clamp(2.35rem,3.45vw,4rem)!important;
+  line-height:.98!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-wrap:balance!important;
+}
+.hero-portal .portal-split-intro>span{
+  display:block!important;
+  width:100%!important;
+  max-width:760px!important;
+  margin:0 auto!important;
+  font-size:clamp(.83rem,.92vw,.96rem)!important;
+  line-height:1.5!important;
+  white-space:normal!important;
+}
+
+/* Ambas tarjetas ocupan exactamente toda su mitad. */
 .hero-portal .portal-tech,
 .hero-portal .portal-arch{
   width:100%!important;
   max-width:none!important;
   min-width:0!important;
-  justify-self:stretch!important;
-}
-
-/* 2) Encabezado general siempre centrado en la pantalla, nunca dependiente del ancho de una tarjeta. */
-.hero-portal .portal-split-intro{
-  position:absolute!important;
-  top:0!important;
-  left:50%!important;
-  transform:translateX(-50%)!important;
-  width:min(980px,88vw)!important;
-  max-width:none!important;
-  padding:0 18px!important;
+  height:100%!important;
   margin:0!important;
-  overflow:visible!important;
-  text-align:center!important;
-  z-index:20!important;
+  inset:auto!important;
+  left:auto!important;
+  right:auto!important;
+  justify-self:stretch!important;
+  align-self:stretch!important;
 }
-.hero-portal .portal-split-intro>p,
-.hero-portal .portal-split-intro>h1,
-.hero-portal .portal-split-intro>span{
-  width:100%!important;
-  max-width:100%!important;
-  overflow:visible!important;
-  white-space:normal!important;
-  text-overflow:clip!important;
-}
-.hero-portal .portal-split-intro h1{
-  font-size:clamp(2.65rem,4.1vw,4.65rem)!important;
-  line-height:.96!important;
-  margin:0 0 9px!important;
-  text-wrap:balance!important;
-}
-.hero-portal .portal-split-intro>span{
-  font-size:clamp(.86rem,1vw,1rem)!important;
-  line-height:1.5!important;
-}
+.hero-portal .portal-tech{grid-area:tech!important;}
+.hero-portal .portal-arch{grid-area:arch!important;}
 
-/* Reservamos el espacio superior que ocupa el titular absoluto. */
-.hero-portal .portal-layout.portal-split{
-  padding-top:145px!important;
-}
-
-/* 3) Contenido de las dos tarjetas más limpio y proporcionado. */
 .hero-portal .portal-world{
+  position:relative!important;
   min-height:500px!important;
-  padding:30px 34px 26px!important;
+  padding:28px clamp(22px,3cqi,36px) 24px!important;
   overflow:hidden!important;
-}
-.hero-portal .portal-world h2{
-  font-size:clamp(2.4rem,6.8cqi,4.45rem)!important;
-  line-height:.95!important;
-  margin:0 0 10px!important;
-}
-.hero-portal .portal-world h2 em{
-  font-size:clamp(.78rem,1.85cqi,.94rem)!important;
-  max-width:420px!important;
-}
-.hero-portal .portal-world>p{
-  max-width:470px!important;
-  font-size:clamp(.82rem,1.45cqi,.95rem)!important;
-}
-.hero-portal .portal-arch h2,
-.hero-portal .portal-arch h2 em,
-.hero-portal .portal-arch>p{
-  margin-left:auto!important;
+  border-radius:28px!important;
+  display:grid!important;
+  grid-template-rows:100px auto auto auto 1fr auto!important;
+  align-content:stretch!important;
+  transform:none!important;
+  transition:box-shadow .32s ease,border-color .32s ease,filter .32s ease!important;
 }
 
-/* 4) Los efectos ambientales nunca pisan el área principal de lectura. */
-.hero-portal .jym-world-ambient{
-  z-index:0!important;
-  opacity:.28!important;
+/* Hover: profundidad e iluminación, nunca cambia el ancho de las columnas. */
+.hero-portal .portal-focus-tech .portal-tech,
+.hero-portal .portal-tech:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:0 24px 70px rgba(0,217,255,.12)!important;
 }
+.hero-portal .portal-focus-arch .portal-arch,
+.hero-portal .portal-arch:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:0 24px 70px rgba(217,168,61,.13)!important;
+}
+.hero-portal .portal-focus-tech .portal-arch,
+.hero-portal .portal-focus-arch .portal-tech{
+  transform:none!important;
+  opacity:.9!important;
+  filter:saturate(.9) brightness(.92)!important;
+}
+
+/* Lectura interna protegida. */
 .hero-portal .portal-world>*:not(.jym-world-ambient){
   position:relative!important;
-  z-index:4!important;
+  z-index:5!important;
 }
-.hero-portal .portal-tech .jym-world-ambient{
-  clip-path:inset(0 0 0 44%)!important;
+.hero-portal .portal-world-heading{
+  width:100%!important;
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
 }
-.hero-portal .portal-arch .jym-world-ambient{
-  clip-path:inset(0 44% 0 0)!important;
+.hero-portal .portal-arch .portal-world-heading{flex-direction:row-reverse!important;}
+.hero-portal .portal-world h2{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0 0 9px!important;
+  font-size:clamp(2.15rem,6.8cqi,3.65rem)!important;
+  line-height:.96!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:normal!important;
 }
+.hero-portal .portal-world h2 em{
+  display:block!important;
+  max-width:430px!important;
+  margin-top:8px!important;
+  font-size:clamp(.75rem,1.9cqi,.9rem)!important;
+  line-height:1.32!important;
+  white-space:normal!important;
+}
+.hero-portal .portal-arch h2 em{margin-left:auto!important;}
+.hero-portal .portal-world>p{
+  width:min(100%,445px)!important;
+  max-width:445px!important;
+  margin:0 0 15px!important;
+  font-size:clamp(.79rem,1.55cqi,.92rem)!important;
+  line-height:1.52!important;
+  white-space:normal!important;
+  overflow:visible!important;
+}
+.hero-portal .portal-arch>p{margin-left:auto!important;}
+.hero-portal .portal-benefits{
+  width:100%!important;
+  max-width:455px!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  margin:0 0 14px!important;
+}
+.hero-portal .portal-arch .portal-benefits{margin-left:auto!important;justify-content:flex-end!important;}
+.hero-portal .portal-benefits b{
+  min-height:31px!important;
+  padding:6px 9px!important;
+  font-size:clamp(.63rem,1.25cqi,.72rem)!important;
+  white-space:nowrap!important;
+}
+.hero-portal .portal-world>span{
+  width:100%!important;
+  min-width:0!important;
+  min-height:46px!important;
+  margin:0!important;
+  padding-top:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  font-size:.79rem!important;
+  white-space:normal!important;
+}
+.hero-portal .portal-arch>span{flex-direction:row-reverse!important;}
+
+/* Centro JYM: línea fina, sin franja ni fondo ancho. */
+.hero-portal .portal-versus{
+  grid-area:core!important;
+  width:54px!important;
+  min-width:54px!important;
+  max-width:54px!important;
+  min-height:100%!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  justify-self:center!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.hero-portal .portal-versus:before{
+  left:50%!important;
+  top:2%!important;
+  bottom:2%!important;
+  width:1px!important;
+  transform:translateX(-50%)!important;
+  box-shadow:-4px 0 13px rgba(0,217,255,.16),4px 0 13px rgba(217,168,61,.16)!important;
+}
+.hero-portal .portal-versus small{
+  width:48px!important;
+  height:48px!important;
+  font-size:.62rem!important;
+  box-shadow:0 0 0 4px rgba(255,255,255,.02),-8px 0 20px rgba(0,217,255,.1),8px 0 20px rgba(217,168,61,.1)!important;
+}
+.hero-portal .portal-versus small:after{
+  top:58px!important;
+  font-size:.47rem!important;
+}
+
+/* Mascotas simétricas y discretas. */
+.hero-portal .portal-entry-mascot{
+  top:26px!important;
+  bottom:auto!important;
+  width:78px!important;
+  height:78px!important;
+  opacity:.78!important;
+  z-index:3!important;
+}
+.hero-portal .portal-entry-mascot-tech{right:26px!important;left:auto!important;}
+.hero-portal .portal-entry-mascot-arch{left:26px!important;right:auto!important;}
+
+/* Efectos siempre atrás y solo en zonas libres. */
+.hero-portal .jym-world-ambient{
+  z-index:0!important;
+  opacity:.18!important;
+  transform:none!important;
+  pointer-events:none!important;
+}
+.hero-portal .portal-tech .jym-world-ambient{clip-path:inset(0 0 0 48%)!important;}
+.hero-portal .portal-arch .jym-world-ambient{clip-path:inset(0 48% 0 0)!important;}
 .hero-portal .portal-tech:hover .jym-world-ambient,
 .hero-portal .portal-focus-tech .portal-tech .jym-world-ambient,
 .hero-portal .portal-arch:hover .jym-world-ambient,
 .hero-portal .portal-focus-arch .portal-arch .jym-world-ambient{
-  opacity:.58!important;
-  transform:scale(1.01)!important;
+  opacity:.42!important;
+  transform:none!important;
 }
+.hero-portal .jym-tech-code{font-size:.47rem!important;opacity:.42!important;}
+.hero-portal .jym-tech-hud{width:84px!important;height:84px!important;opacity:.48!important;}
+.hero-portal .jym-world-status{font-size:.46rem!important;opacity:.56!important;}
+.hero-portal .jym-arch-house{left:8%!important;bottom:14%!important;transform:scale(.76)!important;opacity:.58!important;}
+.hero-portal .jym-arch-measure{font-size:.46rem!important;opacity:.45!important;}
+.hero-portal .jym-arch-material{opacity:.28!important;}
 
-/* Tecnología: código reducido y llevado al fondo derecho. */
-.hero-portal .jym-tech-code{
-  right:7%!important;
-  top:13%!important;
-  max-width:180px!important;
-  gap:6px!important;
-  font-size:.5rem!important;
-  line-height:1.25!important;
-  opacity:.6!important;
-}
-.hero-portal .jym-tech-hud{
-  right:8%!important;
-  bottom:16%!important;
-  width:96px!important;
-  height:96px!important;
-  opacity:.72!important;
-}
-.hero-portal .jym-world-ambient-tech .jym-world-status{
-  right:7%!important;
-  bottom:7%!important;
-  font-size:.48rem!important;
-}
-
-/* Arquitectura: medidas, wireframe y materiales solo en la mitad izquierda libre. */
-.hero-portal .jym-arch-house{
-  left:7%!important;
-  bottom:17%!important;
-  transform:scale(.82)!important;
-  transform-origin:left bottom!important;
-  opacity:.72!important;
-}
-.hero-portal .jym-arch-measure{font-size:.48rem!important;opacity:.7!important;}
-.hero-portal .jym-arch-material{opacity:.42!important;}
-.hero-portal .jym-world-ambient-arch .jym-world-status{
-  left:7%!important;
-  bottom:7%!important;
-  font-size:.48rem!important;
-}
-
-/* 5) Mascotas del portal: pequeñas, laterales y sin tocar títulos. */
-.hero-portal .portal-entry-mascot{
-  top:auto!important;
-  bottom:122px!important;
-  width:90px!important;
-  height:90px!important;
-  opacity:.82!important;
-  z-index:3!important;
-}
-.hero-portal .portal-entry-mascot-tech{right:7%!important;}
-.hero-portal .portal-entry-mascot-arch{left:7%!important;}
-
-/* 6) Simetría real del centro y tarjetas. */
-.hero-portal .portal-versus{
-  width:84px!important;
-  min-width:84px!important;
-  justify-self:center!important;
-}
-.hero-portal .portal-versus small{
-  width:70px!important;
-  height:70px!important;
-}
-.hero-portal .portal-benefits{
-  max-width:470px!important;
-}
-.hero-portal .portal-arch .portal-benefits{margin-left:auto!important;}
-.hero-portal .portal-world>span{font-size:.82rem!important;}
-
-/* 7) El hover da protagonismo sin aplastar el lado contrario. */
-.hero-portal .portal-focus-tech{
-  grid-template-columns:minmax(0,1.12fr) 80px minmax(0,.88fr)!important;
-}
-.hero-portal .portal-focus-arch{
-  grid-template-columns:minmax(0,.88fr) 80px minmax(0,1.12fr)!important;
-}
-.hero-portal .portal-focus-tech .portal-arch,
-.hero-portal .portal-focus-arch .portal-tech{
-  opacity:.82!important;
-  filter:saturate(.84) brightness(.88)!important;
-}
-
-/* 8) Redes: cápsula pequeña, no una barra gigante. */
+/* Redes centradas respecto al hero completo. */
 .hero-portal .portal-social-strip{
+  grid-area:social!important;
+  position:relative!important;
   width:max-content!important;
   max-width:100%!important;
   min-height:36px!important;
-  margin:4px auto 0!important;
-  padding:5px 10px!important;
-  border:1px solid rgba(255,255,255,.08)!important;
-  border-radius:999px!important;
-  background:rgba(5,8,12,.65)!important;
+  margin:0 auto!important;
+  padding:4px 9px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
 }
 
-/* 9) Pantallas bajas: priorizamos contenido limpio. */
-@media(max-height:760px) and (min-width:901px){
-  .hero-portal .portal-layout.portal-split{padding-top:118px!important;}
-  .hero-portal .portal-split-intro h1{font-size:clamp(2.25rem,3.45vw,3.7rem)!important;}
-  .hero-portal .portal-world{min-height:430px!important;padding-top:24px!important;padding-bottom:22px!important;}
-  .hero-portal .portal-entry-mascot{width:72px!important;height:72px!important;bottom:104px!important;}
-  .hero-portal .jym-tech-code,.hero-portal .jym-arch-measure,.hero-portal .jym-arch-material{opacity:.3!important;}
+/* WhatsApp menos protagonista y más separado. */
+.floating-actions .whatsapp-3d{
+  right:30px!important;
+  bottom:30px!important;
+  width:50px!important;
+  height:50px!important;
 }
 
-/* 10) Tablet: se eliminan decoraciones secundarias antes de sacrificar texto. */
-@media(max-width:1100px){
-  .hero-portal .portal-layout.portal-split{width:calc(100% - 24px)!important;grid-template-columns:minmax(0,1fr) 66px minmax(0,1fr)!important;column-gap:12px!important;}
-  .hero-portal .portal-world{padding:26px 24px!important;}
-  .hero-portal .portal-entry-mascot{display:none!important;}
-  .hero-portal .jym-tech-code,.hero-portal .jym-arch-material,.hero-portal .jym-arch-measure{display:none!important;}
-}
-
-/* 11) Móvil mantiene flujo vertical y sin clipping. */
-@media(max-width:700px){
-  .hero-portal .portal-layout.portal-split{
-    padding-top:122px!important;
-    width:calc(100% - 18px)!important;
-    grid-template-columns:1fr!important;
-    grid-template-areas:"tech" "core" "arch" "social"!important;
+@media(max-width:1180px){
+  .hero-portal{padding-left:16px!important;padding-right:16px!important;}
+  .hero-portal .portal-layout.portal-split,
+  .hero-portal .portal-focus-tech,
+  .hero-portal .portal-focus-arch,
+  .hero-portal .portal-selection-tech,
+  .hero-portal .portal-selection-arch{
+    grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)!important;
+    column-gap:10px!important;
   }
-  .hero-portal .portal-split-intro{width:calc(100vw - 28px)!important;}
+  .hero-portal .portal-versus{width:44px!important;min-width:44px!important;max-width:44px!important;}
+  .hero-portal .portal-world{padding:24px 20px 20px!important;}
+  .hero-portal .portal-entry-mascot{width:68px!important;height:68px!important;}
+}
+
+@media(max-width:900px){
+  .hero-portal{min-height:auto!important;padding:102px 14px 34px!important;overflow:visible!important;}
+  .hero-portal .portal-layout.portal-split,
+  .hero-portal .portal-focus-tech,
+  .hero-portal .portal-focus-arch,
+  .hero-portal .portal-selection-tech,
+  .hero-portal .portal-selection-arch{
+    min-height:0!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto 54px auto auto!important;
+    grid-template-areas:"intro" "tech" "core" "arch" "social"!important;
+    gap:14px!important;
+  }
+  .hero-portal .portal-world{min-height:420px!important;text-align:left!important;}
+  .hero-portal .portal-arch .portal-world-heading{flex-direction:row!important;}
+  .hero-portal .portal-arch h2 em,
+  .hero-portal .portal-arch>p,
+  .hero-portal .portal-arch .portal-benefits{margin-left:0!important;justify-content:flex-start!important;}
+  .hero-portal .portal-arch>span{flex-direction:row!important;}
+  .hero-portal .portal-entry-mascot-tech,
+  .hero-portal .portal-entry-mascot-arch{right:20px!important;left:auto!important;}
+  .hero-portal .portal-versus{width:100%!important;min-width:0!important;max-width:none!important;min-height:54px!important;}
+  .hero-portal .portal-versus:before{left:4%!important;right:4%!important;top:50%!important;bottom:auto!important;width:auto!important;height:1px!important;transform:none!important;}
+  .hero-portal .portal-versus small:after{display:none!important;}
   .hero-portal .portal-tech .jym-world-ambient,
-  .hero-portal .portal-arch .jym-world-ambient{clip-path:none!important;opacity:.16!important;}
-  .hero-portal .portal-world{min-height:390px!important;}
-  .hero-portal .portal-versus{width:100%!important;min-width:0!important;}
+  .hero-portal .portal-arch .jym-world-ambient{clip-path:none!important;opacity:.12!important;}
+}
+
+@media(max-width:560px){
+  .hero-portal .portal-split-intro h1{font-size:clamp(2.05rem,10.5vw,2.9rem)!important;}
+  .hero-portal .portal-world{min-height:390px!important;padding:21px 17px 18px!important;}
+  .hero-portal .portal-entry-mascot{width:62px!important;height:62px!important;}
+  .floating-actions .whatsapp-3d{right:16px!important;bottom:16px!important;width:48px!important;height:48px!important;}
+}
+
+@media(max-height:760px) and (min-width:901px){
+  .hero-portal{padding-top:100px!important;padding-bottom:16px!important;}
+  .hero-portal .portal-layout.portal-split,
+  .hero-portal .portal-focus-tech,
+  .hero-portal .portal-focus-arch,
+  .hero-portal .portal-selection-tech,
+  .hero-portal .portal-selection-arch{
+    min-height:calc(100svh - 116px)!important;
+    grid-template-rows:auto minmax(410px,1fr) 34px!important;
+    gap:9px 12px!important;
+  }
+  .hero-portal .portal-split-intro h1{font-size:clamp(2.2rem,3.05vw,3.45rem)!important;margin-bottom:7px!important;}
+  .hero-portal .portal-world{min-height:410px!important;padding-top:20px!important;}
+  .hero-portal .portal-entry-mascot{width:58px!important;height:58px!important;top:20px!important;}
+  .hero-portal .portal-world>p{font-size:.78rem!important;line-height:1.42!important;}
+  .hero-portal .jym-tech-code,.hero-portal .jym-arch-measure,.hero-portal .jym-arch-material{display:none!important;}
 }
