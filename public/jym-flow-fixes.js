@@ -138,11 +138,52 @@
     refreshArrowState(menu, up, down);
   };
 
-  document.addEventListener('click', goToPortal, true);
-  document.addEventListener('DOMContentLoaded', enhanceRoomCarousel);
-  window.addEventListener('load', enhanceRoomCarousel);
-  window.addEventListener('resize', enhanceRoomCarousel);
+  const normalizeText = (value = '') => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
-  const observer = new MutationObserver(() => window.requestAnimationFrame(enhanceRoomCarousel));
+  const enhanceWorldDirections = () => {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    const isTech = hero.classList.contains('hero-tech');
+    const isArch = hero.classList.contains('hero-arch');
+    if (!isTech && !isArch) return;
+
+    const candidates = hero.querySelectorAll('.world-actions .btn, .world-switch, .portal-world > span');
+    candidates.forEach((node) => {
+      const text = normalizeText(node.textContent);
+      const svg = node.querySelector('svg');
+      if (!svg) return;
+
+      if (isTech && text.includes('arquitectura')) {
+        node.dataset.worldDirection = 'left';
+        node.style.display = 'inline-flex';
+        node.style.alignItems = 'center';
+        node.style.flexDirection = 'row-reverse';
+        node.style.gap = '10px';
+        svg.style.transform = 'rotate(180deg)';
+        svg.style.flex = '0 0 auto';
+      } else if (isArch && (text.includes('sistemas') || text.includes('tecnolog'))) {
+        node.dataset.worldDirection = 'right';
+        node.style.display = 'inline-flex';
+        node.style.alignItems = 'center';
+        node.style.flexDirection = 'row';
+        node.style.gap = '10px';
+        svg.style.transform = 'none';
+        svg.style.flex = '0 0 auto';
+      }
+    });
+  };
+
+  const enhanceAll = () => {
+    enhanceRoomCarousel();
+    enhanceWorldDirections();
+  };
+
+  document.addEventListener('click', goToPortal, true);
+  document.addEventListener('DOMContentLoaded', enhanceAll);
+  window.addEventListener('load', enhanceAll);
+  window.addEventListener('resize', enhanceAll);
+
+  const observer = new MutationObserver(() => window.requestAnimationFrame(enhanceAll));
   observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
