@@ -4,23 +4,31 @@
   position:relative;
 }
 .arch-showroom .cinema-frame{
-  min-height:610px!important;
+  min-height:0!important;
   border-radius:30px!important;
   border:1px solid rgba(255,255,255,.13)!important;
   background:
     radial-gradient(circle at 50% 15%,rgba(217,168,61,.08),transparent 42%),
     #050607!important;
   box-shadow:0 30px 70px rgba(0,0,0,.36),inset 0 1px rgba(255,255,255,.04)!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
 }
 .arch-showroom .media-transition{
-  min-height:470px!important;
-  height:470px!important;
-  padding:16px 18px 6px!important;
+  min-height:0!important;
+  height:clamp(420px,58vh,620px)!important;
+  padding:18px!important;
   background:
     linear-gradient(180deg,rgba(255,255,255,.018),transparent 22%),
     radial-gradient(circle at 50% 48%,rgba(217,168,61,.035),transparent 60%)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
 }
 .arch-showroom .media-transition img{
+  display:block!important;
   width:100%!important;
   height:100%!important;
   object-fit:contain!important;
@@ -29,31 +37,36 @@
   background:#030405!important;
   box-shadow:0 12px 38px rgba(0,0,0,.28)!important;
 }
-/* Video: se respeta siempre el encuadre completo; nada de zoom ni recorte. */
 .arch-showroom .media-transition video{
   display:block!important;
   width:auto!important;
   height:auto!important;
-  max-width:94%!important;
-  max-height:94%!important;
-  aspect-ratio:auto!important;
+  max-width:100%!important;
+  max-height:100%!important;
   object-fit:contain!important;
-  object-position:center center!important;
-  margin:auto!important;
+  object-position:center!important;
   border-radius:18px!important;
   background:#000!important;
   box-shadow:0 12px 38px rgba(0,0,0,.32)!important;
 }
+.arch-showroom .media-transition video::-webkit-media-controls{
+  opacity:1!important;
+}
+.arch-showroom .media-transition video::-webkit-media-controls-panel{
+  display:flex!important;
+}
 .arch-showroom .cinema-label{
   position:relative!important;
+  inset:auto!important;
   z-index:3!important;
-  margin:12px!important;
-  padding:16px 18px!important;
-  border-radius:20px!important;
-  border:1px solid rgba(255,255,255,.1)!important;
-  background:linear-gradient(140deg,rgba(12,13,15,.94),rgba(5,6,7,.86))!important;
+  margin:0!important;
+  padding:18px 22px 20px!important;
+  border-radius:0!important;
+  border:0!important;
+  border-top:1px solid rgba(255,255,255,.09)!important;
+  background:linear-gradient(140deg,rgba(12,13,15,.98),rgba(5,6,7,.96))!important;
   backdrop-filter:blur(18px)!important;
-  box-shadow:0 10px 28px rgba(0,0,0,.26)!important;
+  box-shadow:none!important;
 }
 .arch-showroom .cinema-label small{
   display:inline-flex!important;
@@ -74,17 +87,19 @@
   line-height:1.12!important;
 }
 .arch-showroom .cinema-label p{
-  max-width:850px!important;
+  max-width:900px!important;
   color:#b8c0cb!important;
   font-size:.88rem!important;
   line-height:1.55!important;
+  margin:0!important;
 }
 .arch-showroom .nav-arrow{
-  top:39%!important;
-  width:52px!important;height:52px!important;
+  top:calc(clamp(420px,58vh,620px)/2)!important;
+  transform:translateY(-50%)!important;
+  width:50px!important;height:50px!important;
   display:grid!important;place-items:center!important;
   border:1px solid rgba(255,255,255,.18)!important;
-  background:rgba(5,7,9,.76)!important;
+  background:rgba(5,7,9,.82)!important;
   backdrop-filter:blur(14px)!important;
   box-shadow:0 12px 28px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.07)!important;
   cursor:pointer!important;
@@ -92,13 +107,13 @@
 }
 .arch-showroom .nav-arrow:hover,
 .arch-showroom .nav-arrow:focus-visible{
-  transform:translateY(-2px) scale(1.06)!important;
+  transform:translateY(-50%) scale(1.06)!important;
   border-color:rgba(232,195,105,.74)!important;
   background:rgba(34,28,15,.88)!important;
   box-shadow:0 15px 34px rgba(0,0,0,.4),0 0 24px rgba(217,168,61,.14)!important;
 }
-.arch-showroom .nav-arrow.left{left:18px!important;}
-.arch-showroom .nav-arrow.right{right:18px!important;}
+.arch-showroom .nav-arrow.left{left:20px!important;}
+.arch-showroom .nav-arrow.right{right:20px!important;}
 .arch-showroom .filmstrip{
   position:relative!important;
   gap:10px!important;
@@ -122,12 +137,12 @@
   border:1px solid rgba(255,255,255,.11)!important;
   background:#070809!important;
   cursor:pointer!important;
-  opacity:.62!important;
-  transform:scale(.96)!important;
+  opacity:.72!important;
+  transform:scale(.97)!important;
   transition:opacity .22s ease,transform .22s ease,border-color .22s ease,box-shadow .22s ease!important;
 }
 .arch-showroom .filmstrip button:hover{
-  opacity:.88!important;
+  opacity:.92!important;
   transform:translateY(-2px) scale(.99)!important;
   border-color:rgba(217,168,61,.38)!important;
 }
@@ -147,7 +162,7 @@
 .arch-showroom .video-thumb-overlay{
   position:absolute!important;inset:0!important;
   display:grid!important;place-items:center!important;align-content:center!important;gap:3px!important;
-  background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.72))!important;
+  background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.66))!important;
   color:white!important;
 }
 .arch-showroom .video-thumb-overlay b{
@@ -158,30 +173,43 @@
   font-size:.58rem!important;
 }
 
+/* El carrusel lateral reserva espacio real para sus flechas. */
+.arch-showroom .room-menu-carousel{
+  padding-top:58px!important;
+  padding-bottom:58px!important;
+}
+.room-menu-arrow-up{top:0!important;}
+.room-menu-arrow-down{bottom:0!important;top:auto!important;}
+
+/* La mascota no invade el reproductor. */
+.app.arch .companion-showroom{
+  transform:scale(.82)!important;
+  transform-origin:bottom right!important;
+}
+.app.arch .companion-showroom.companion-right{right:6px!important;}
+
 @media(max-width:1100px){
-  .arch-showroom .cinema-frame{min-height:560px!important;}
-  .arch-showroom .media-transition{height:420px!important;min-height:420px!important;}
-  .arch-showroom .media-transition video{max-width:93%!important;max-height:93%!important;}
+  .arch-showroom .media-transition{height:clamp(390px,52vh,540px)!important;}
+  .arch-showroom .nav-arrow{top:calc(clamp(390px,52vh,540px)/2)!important;}
 }
 
 @media(max-width:820px){
-  .arch-showroom .cinema-frame{min-height:500px!important;border-radius:24px!important;}
-  .arch-showroom .media-transition{height:360px!important;min-height:360px!important;padding:12px!important;}
-  .arch-showroom .media-transition img{border-radius:17px!important;}
-  .arch-showroom .media-transition video{max-width:96%!important;max-height:94%!important;border-radius:15px!important;}
-  .arch-showroom .nav-arrow{width:46px!important;height:46px!important;top:36%!important;}
-  .arch-showroom .cinema-label{padding:14px!important;margin:9px!important;}
+  .arch-showroom .cinema-frame{border-radius:24px!important;}
+  .arch-showroom .media-transition{height:clamp(330px,48vh,460px)!important;padding:12px!important;}
+  .arch-showroom .media-transition img,
+  .arch-showroom .media-transition video{border-radius:15px!important;}
+  .arch-showroom .nav-arrow{width:44px!important;height:44px!important;top:calc(clamp(330px,48vh,460px)/2)!important;}
+  .arch-showroom .cinema-label{padding:15px 16px 17px!important;}
   .arch-showroom .cinema-label p{font-size:.82rem!important;}
 }
 
 @media(max-width:560px){
-  .arch-showroom .cinema-frame{min-height:420px!important;}
-  .arch-showroom .media-transition{height:292px!important;min-height:292px!important;padding:10px 8px!important;}
-  .arch-showroom .media-transition video{max-width:100%!important;max-height:92%!important;border-radius:12px!important;}
-  .arch-showroom .nav-arrow{width:42px!important;height:42px!important;top:34%!important;}
-  .arch-showroom .nav-arrow.left{left:10px!important;}
-  .arch-showroom .nav-arrow.right{right:10px!important;}
+  .arch-showroom .media-transition{height:clamp(280px,46vh,380px)!important;padding:8px!important;}
+  .arch-showroom .nav-arrow{width:40px!important;height:40px!important;top:calc(clamp(280px,46vh,380px)/2)!important;}
+  .arch-showroom .nav-arrow.left{left:8px!important;}
+  .arch-showroom .nav-arrow.right{right:8px!important;}
   .arch-showroom .filmstrip button{flex-basis:102px!important;height:68px!important;}
   .arch-showroom .cinema-label h3{font-size:1.15rem!important;}
   .arch-showroom .cinema-label p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden!important;}
+  .app.arch .companion-showroom{display:none!important;}
 }
