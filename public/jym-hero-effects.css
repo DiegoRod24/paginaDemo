@@ -1,18 +1,67 @@
 /* HERO JYM — dos mundos interactivos */
-.hero-portal{overflow:hidden!important;}
+.hero-portal{
+  overflow:hidden!important;
+  min-height:100svh!important;
+  height:100svh!important;
+  padding-top:112px!important;
+  padding-bottom:24px!important;
+  display:flex!important;
+  align-items:stretch!important;
+}
 .hero-portal .portal-split{
   position:relative!important;
+  width:min(1540px,calc(100% - 28px))!important;
+  height:calc(100svh - 136px)!important;
+  min-height:590px!important;
+  max-height:790px!important;
+  margin:auto!important;
   display:grid!important;
-  grid-template-columns:minmax(0,1fr) 86px minmax(0,1fr)!important;
+  grid-template-columns:minmax(0,1fr) 82px minmax(0,1fr)!important;
+  grid-template-rows:auto minmax(0,1fr) auto!important;
   grid-template-areas:
     "intro intro intro"
     "tech core arch"
     "social social social"!important;
-  gap:20px 18px!important;
+  gap:14px 16px!important;
   align-items:stretch!important;
   transition:grid-template-columns .52s cubic-bezier(.2,.8,.2,1)!important;
 }
-.hero-portal .portal-split-intro{grid-area:intro!important;text-align:center!important;position:relative!important;z-index:6!important;}
+
+/* El encabezado NO es una tarjeta: evita el gran bloque negro de las capturas. */
+.hero-portal .portal-split-intro{
+  grid-area:intro!important;
+  width:min(780px,92%)!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0 auto!important;
+  padding:0 12px 4px!important;
+  text-align:center!important;
+  position:relative!important;
+  inset:auto!important;
+  z-index:6!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.hero-portal .portal-split-intro p{margin:0 0 6px!important;font-size:.68rem!important;letter-spacing:.18em!important;}
+.hero-portal .portal-split-intro h1{
+  margin:0!important;
+  font-size:clamp(2rem,3.1vw,3.8rem)!important;
+  line-height:.96!important;
+  letter-spacing:-.055em!important;
+  white-space:normal!important;
+}
+.hero-portal .portal-split-intro > span{
+  display:block!important;
+  max-width:690px!important;
+  margin:7px auto 0!important;
+  font-size:clamp(.72rem,.85vw,.9rem)!important;
+  line-height:1.45!important;
+}
+
 .hero-portal .portal-tech{grid-area:tech!important;}
 .hero-portal .portal-arch{grid-area:arch!important;}
 .hero-portal .portal-versus{grid-area:core!important;}
@@ -21,24 +70,68 @@
 .hero-portal .portal-world{
   position:relative!important;
   min-width:0!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:100%!important;
+  padding:clamp(22px,2.2vw,34px)!important;
   isolation:isolate!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
   transition:transform .52s cubic-bezier(.2,.8,.2,1),opacity .4s ease,filter .4s ease,border-color .35s ease,box-shadow .35s ease!important;
 }
 .hero-portal .portal-world:after{
   content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;z-index:-1;
   background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.08),transparent 46%);
 }
+.hero-portal .portal-world-heading{flex:0 0 auto!important;}
+.hero-portal .portal-world h2{
+  margin:8px 0 12px!important;
+  font-size:clamp(2.7rem,4.15vw,5.35rem)!important;
+  line-height:.88!important;
+  letter-spacing:-.065em!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-wrap:balance!important;
+}
+.hero-portal .portal-world h2 em{
+  display:block!important;
+  margin-top:8px!important;
+  font-size:clamp(.72rem,.9vw,1rem)!important;
+  line-height:1.2!important;
+  letter-spacing:0!important;
+}
+.hero-portal .portal-world > p{
+  min-height:0!important;
+  max-width:520px!important;
+  margin:0 0 14px!important;
+  font-size:clamp(.74rem,.82vw,.9rem)!important;
+  line-height:1.5!important;
+}
+.hero-portal .portal-arch > p{margin-left:auto!important;}
+.hero-portal .portal-benefits{margin-top:2px!important;gap:7px!important;}
+.hero-portal .portal-world > span{margin-top:auto!important;padding-top:16px!important;}
+
+/* Reduce el icono superior para ganar espacio vertical sin perder identidad. */
+.hero-portal .portal-visual{
+  height:104px!important;
+  min-height:104px!important;
+  margin-bottom:14px!important;
+}
+.hero-portal .portal-visual svg{width:52px!important;height:52px!important;}
+.hero-portal .portal-entry-mascot{transform:scale(.84)!important;transform-origin:bottom center!important;}
 
 .hero-portal .portal-focus-tech{
-  grid-template-columns:minmax(0,1.32fr) 78px minmax(0,.68fr)!important;
+  grid-template-columns:minmax(0,1.24fr) 76px minmax(0,.76fr)!important;
 }
 .hero-portal .portal-focus-arch{
-  grid-template-columns:minmax(0,.68fr) 78px minmax(0,1.32fr)!important;
+  grid-template-columns:minmax(0,.76fr) 76px minmax(0,1.24fr)!important;
 }
-.hero-portal .portal-focus-tech .portal-tech{transform:translateY(-8px) scale(1.015)!important;box-shadow:0 34px 110px rgba(0,217,255,.18)!important;}
-.hero-portal .portal-focus-tech .portal-arch{transform:scale(.975)!important;opacity:.6!important;filter:saturate(.65) brightness(.72)!important;}
-.hero-portal .portal-focus-arch .portal-arch{transform:translateY(-8px) scale(1.015)!important;box-shadow:0 34px 110px rgba(217,168,61,.2)!important;}
-.hero-portal .portal-focus-arch .portal-tech{transform:scale(.975)!important;opacity:.6!important;filter:saturate(.65) brightness(.72)!important;}
+.hero-portal .portal-focus-tech .portal-tech{transform:translateY(-5px) scale(1.008)!important;box-shadow:0 28px 90px rgba(0,217,255,.18)!important;}
+.hero-portal .portal-focus-tech .portal-arch{transform:scale(.986)!important;opacity:.64!important;filter:saturate(.7) brightness(.76)!important;}
+.hero-portal .portal-focus-arch .portal-arch{transform:translateY(-5px) scale(1.008)!important;box-shadow:0 28px 90px rgba(217,168,61,.2)!important;}
+.hero-portal .portal-focus-arch .portal-tech{transform:scale(.986)!important;opacity:.64!important;filter:saturate(.7) brightness(.76)!important;}
 
 .hero-portal .portal-versus{
   position:relative!important;
@@ -52,24 +145,31 @@
   z-index:8!important;
 }
 .hero-portal .portal-versus:before{
-  content:"";position:absolute;top:3%;bottom:3%;left:50%;width:2px;transform:translateX(-50%);
+  content:"";position:absolute;top:1%;bottom:1%;left:50%;width:2px;transform:translateX(-50%);
   background:linear-gradient(to bottom,transparent,rgba(0,217,255,.8) 25%,#fff 50%,rgba(217,168,61,.9) 75%,transparent);
   box-shadow:-8px 0 30px rgba(0,217,255,.35),8px 0 30px rgba(217,168,61,.35);
   animation:jymCorePulse 2.4s ease-in-out infinite;
 }
 .hero-portal .portal-versus span{display:none!important;}
 .hero-portal .portal-versus small{
-  width:64px!important;height:64px!important;border-radius:50%!important;
+  width:60px!important;height:60px!important;border-radius:50%!important;
   display:grid!important;place-items:center!important;
   position:relative!important;z-index:2!important;
-  font-size:.78rem!important;letter-spacing:.18em!important;font-weight:900!important;
-  color:white!important;background:rgba(5,8,12,.88)!important;
+  font-size:.72rem!important;letter-spacing:.18em!important;font-weight:900!important;
+  color:white!important;background:rgba(5,8,12,.9)!important;
   border:1px solid rgba(255,255,255,.28)!important;
-  box-shadow:0 0 0 8px rgba(255,255,255,.025),0 0 38px rgba(255,255,255,.17)!important;
+  box-shadow:0 0 0 7px rgba(255,255,255,.025),0 0 34px rgba(255,255,255,.17)!important;
   backdrop-filter:blur(16px)!important;
 }
-.hero-portal .portal-versus small:after{content:"TEC × ARQ";position:absolute;top:76px;left:50%;transform:translateX(-50%);white-space:nowrap;color:#97a8b8;font-size:.48rem;letter-spacing:.18em;font-weight:800;}
+.hero-portal .portal-versus small:after{content:"TEC × ARQ";position:absolute;top:71px;left:50%;transform:translateX(-50%);white-space:nowrap;color:#97a8b8;font-size:.46rem;letter-spacing:.18em;font-weight:800;}
 @keyframes jymCorePulse{50%{opacity:.65;filter:brightness(1.65);transform:translateX(-50%) scaleY(1.03)}}
+
+.hero-portal .portal-social-strip{
+  min-height:28px!important;
+  margin:0!important;
+  padding:0!important;
+  align-self:center!important;
+}
 
 /* Capa de transición */
 .jym-world-transition{
@@ -111,23 +211,53 @@
 .jym-hammer-hit{position:absolute;right:18%;bottom:21%;font-size:42px;opacity:0;transform-origin:bottom right;animation:hammerHit .42s .42s ease both;filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));}
 @keyframes hammerHit{0%{opacity:0;transform:rotate(-34deg) scale(.8)}35%{opacity:1}70%{transform:rotate(18deg) scale(1.04)}100%{opacity:.55;transform:rotate(0) scale(1)}}
 
-.hero-portal .portal-selection-tech{grid-template-columns:minmax(0,1.55fr) 60px minmax(0,.45fr)!important;}
-.hero-portal .portal-selection-arch{grid-template-columns:minmax(0,.45fr) 60px minmax(0,1.55fr)!important;}
-.hero-portal .portal-selection-tech .portal-arch,.hero-portal .portal-selection-arch .portal-tech{opacity:.18!important;filter:blur(2px) saturate(.35)!important;}
+/* Durante el click gana el mundo elegido, pero sin aplastar tanto el contrario. */
+.hero-portal .portal-selection-tech{grid-template-columns:minmax(0,1.38fr) 64px minmax(0,.62fr)!important;}
+.hero-portal .portal-selection-arch{grid-template-columns:minmax(0,.62fr) 64px minmax(0,1.38fr)!important;}
+.hero-portal .portal-selection-tech .portal-arch,.hero-portal .portal-selection-arch .portal-tech{opacity:.2!important;filter:blur(1px) saturate(.4)!important;}
+
+@media(max-width:1180px){
+  .hero-portal{height:auto!important;min-height:100svh!important;padding-top:104px!important;}
+  .hero-portal .portal-split{height:auto!important;min-height:650px!important;max-height:none!important;}
+  .hero-portal .portal-world h2{font-size:clamp(2.4rem,4.4vw,4.5rem)!important;}
+}
 
 @media(max-width:900px){
-  .hero-portal .portal-split{grid-template-columns:1fr 56px 1fr!important;gap:14px 8px!important;}
+  .hero-portal .portal-split{grid-template-columns:1fr 56px 1fr!important;gap:12px 8px!important;}
   .hero-portal .portal-focus-tech,.hero-portal .portal-focus-arch,.hero-portal .portal-selection-tech,.hero-portal .portal-selection-arch{grid-template-columns:1fr 56px 1fr!important;}
   .hero-portal .portal-versus small{width:50px!important;height:50px!important;font-size:.62rem!important;}
+  .hero-portal .portal-world{padding:20px!important;}
+  .hero-portal .portal-world h2{font-size:clamp(2.15rem,4.8vw,3.6rem)!important;}
 }
+
 @media(max-width:700px){
-  .hero-portal .portal-split{display:grid!important;grid-template-columns:1fr!important;grid-template-areas:"intro" "tech" "core" "arch" "social"!important;}
+  .hero-portal{height:auto!important;min-height:auto!important;padding:96px 14px 34px!important;overflow:visible!important;}
+  .hero-portal .portal-split{
+    width:100%!important;height:auto!important;min-height:0!important;
+    display:grid!important;grid-template-columns:1fr!important;
+    grid-template-rows:auto!important;
+    grid-template-areas:"intro" "tech" "core" "arch" "social"!important;
+  }
   .hero-portal .portal-focus-tech,.hero-portal .portal-focus-arch,.hero-portal .portal-selection-tech,.hero-portal .portal-selection-arch{grid-template-columns:1fr!important;}
+  .hero-portal .portal-world{min-height:430px!important;height:auto!important;}
+  .hero-portal .portal-world h2{font-size:clamp(2.45rem,12vw,4rem)!important;}
   .hero-portal .portal-versus{min-height:52px!important;}
   .hero-portal .portal-versus:before{left:3%;right:3%;top:50%;bottom:auto;width:auto;height:2px;transform:none;background:linear-gradient(90deg,transparent,#00d9ff,#fff,#d9a83d,transparent);}
   .hero-portal .portal-versus small:after{display:none!important;}
   .jym-transition-title small{font-size:.55rem;}
 }
+
+@media(max-height:760px) and (min-width:901px){
+  .hero-portal{padding-top:96px!important;padding-bottom:14px!important;}
+  .hero-portal .portal-split{height:calc(100svh - 110px)!important;min-height:520px!important;}
+  .hero-portal .portal-split-intro h1{font-size:clamp(1.75rem,2.7vw,3rem)!important;}
+  .hero-portal .portal-split-intro > span{display:none!important;}
+  .hero-portal .portal-visual{height:82px!important;min-height:82px!important;margin-bottom:8px!important;}
+  .hero-portal .portal-world h2{font-size:clamp(2.35rem,3.8vw,4.4rem)!important;}
+  .hero-portal .portal-world > p{font-size:.72rem!important;line-height:1.4!important;margin-bottom:8px!important;}
+  .hero-portal .portal-benefits{display:none!important;}
+}
+
 @media(prefers-reduced-motion:reduce){
   .hero-portal .portal-split,.hero-portal .portal-world,.hero-portal .portal-versus:before{transition:none!important;animation:none!important;}
   .jym-matrix-rain span,.jym-tech-scan,.jym-blueprint,.jym-arch-line,.jym-wood-slab,.jym-hammer-hit{animation-duration:.01ms!important;animation-delay:0ms!important;}
