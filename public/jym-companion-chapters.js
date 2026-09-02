@@ -3,8 +3,8 @@
     tech: [
       { key: 'home', label: 'Inicio', ids: ['inicio'] },
       { key: 'solutions', label: 'Soluciones', ids: ['showroom','cuellos-botella','servicios'] },
-      { key: 'demos', label: 'Demos y casos', ids: ['laboratorio','casos-reales','automatizacion'] },
-      { key: 'process', label: 'Proceso', ids: ['proceso'] },
+      { key: 'demos', label: 'Demos y casos', ids: ['laboratorio','casos-reales'] },
+      { key: 'process', label: 'Proceso', ids: ['proceso','automatizacion'] },
       { key: 'contact', label: 'Contacto', ids: ['contacto'] },
     ],
     arch: [
@@ -27,7 +27,7 @@
   const visibleChapter = mode => {
     const chapters = CHAPTERS[mode];
     if (!chapters) return null;
-    const line = window.innerHeight * .48;
+    const line = window.innerHeight * .46;
     let winner = chapters[0];
     let best = Infinity;
 
@@ -99,7 +99,7 @@
       companion.classList.remove('jym-chapter-enter');
       void companion.offsetWidth;
       companion.classList.add('jym-chapter-enter');
-      window.setTimeout(() => companion.classList.remove('jym-chapter-enter'), 850);
+      window.setTimeout(() => companion.classList.remove('jym-chapter-enter'), 650);
       lastSignature = signature;
     }
   };
