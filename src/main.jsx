@@ -285,8 +285,7 @@ function Header({ mode, setMode, lang, setLang, t }) {
   const navItems = mode === "tech" ? [
     ["#inicio", t.nav.portal],
     ["#showroom", t.nav.solutions],
-    ["#proyectos-tech", t.nav.success],
-    ["#casos-reales", t.nav.realCases],
+    ["#laboratorio", t.nav.lab],
     ["#proceso", t.nav.process],
     ["#contacto", t.nav.contact]
   ] : mode === "arch" ? [
@@ -1115,6 +1114,7 @@ const COMPANION_SECTIONS = {
     { id: "vision-tech", state: "services", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
     { id: "proyectos-tech", state: "projects", side: "right" },
+    { id: "laboratorio", state: "automation", side: "left" },
     { id: "casos-reales", state: "automation", side: "left" },
     { id: "proceso", state: "process", side: "right" },
     { id: "contacto", state: "contact", side: "left" },
@@ -1652,8 +1652,13 @@ function App() {
     );
 
     window.__jymModeTimer = window.setTimeout(() => {
+      if (window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
       setModeState(next);
-      window.scrollTo({ top: 0, behavior: "auto" });
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+      });
     }, 560);
 
     window.__jymOverlayTimer = window.setTimeout(() => {
@@ -1663,7 +1668,12 @@ function App() {
 
   useEffect(() => {
     document.documentElement.dataset.mode = mode;
-    const safety = window.setTimeout(() => overlay.current?.classList.remove("active"), 900);
+    if (mode !== "portal") {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+      });
+    }
+    const safety = window.setTimeout(() => overlay.current?.classList.remove("active"), 1250);
     return () => window.clearTimeout(safety);
   }, [mode]);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
@@ -1683,6 +1693,7 @@ function App() {
         <TechIntro setMode={setMode} t={t} />
         <TechShowroom t={t} />
         <TechShowcase t={t} />
+        <AutomationLab t={t} />
         <TechProof t={t} />
         <ProcessSection t={t} mode={mode} />
         <Contact t={t} mode={mode} />
