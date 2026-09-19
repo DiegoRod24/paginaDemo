@@ -5,12 +5,12 @@ export const translations = {
       "tech": "Tecnología",
       "arch": "Arquitectura",
       "services": "Servicios",
-      "success": "Portafolio",
-      "process": "Proceso",
+      "success": "Proyectos",
+      "process": "Cómo trabajamos",
       "ai": "Automatización IA",
       "quote": "Cotizar",
-      "solutions": "Soluciones",
-      "realCases": "Casos reales",
+      "solutions": "Qué hacemos",
+      "realCases": "Automatizaciones",
       "lab": "Demos IA",
       "projects": "Proyectos",
       "contact": "Contacto",
@@ -24,15 +24,15 @@ export const translations = {
       "neutralTitle": "Transformamos ideas en soluciones digitales y espacios memorables",
       "neutralText": "Elige el servicio que necesitas: tecnología para automatizar tu empresa o arquitectura para diseñar y ejecutar tus espacios.",
       "splitTitle": "Dos mundos. Una sola visión.",
-      "splitText": "Elige cómo quieres transformar: optimizar el trabajo de tu empresa o crear el espacio donde crecerá.",
+      "splitText": "Elige el mundo que quieres explorar. Tecnología para mejorar cómo trabajas o arquitectura para transformar tu espacio.",
       "versus": "VS",
       "techTitle": "Creamos sistemas que automatizan y hacen crecer tu operación",
-      "techText": "Encontramos cuellos de botella, automatizamos tareas repetitivas y aplicamos IA para que tu equipo trabaje más rápido, con menos errores y manteniendo el control.",
-      "techPromise": "Automatiza, integra y decide mejor",
+      "techText": "Diseñamos herramientas digitales, automatizaciones y sistemas alrededor de la forma real en la que trabaja tu equipo.",
+      "techPromise": "Sistemas + automatización",
       "techPoints": ["IA aplicada", "Procesos más rápidos", "Datos bajo control"],
       "archTitle": "Diseñamos y ejecutamos espacios modernos para vivir, vender y crecer",
-      "archText": "Diseño residencial, diseño comercial y corporativo, ejecución de obras y aire acondicionado.",
-      "archPromise": "Diseña, construye y haz crecer tu espacio",
+      "archText": "Diseñamos espacios desde la idea y el plano hasta la visualización, la ejecución y los acabados.",
+      "archPromise": "Diseño + planos + obra",
       "archPoints": ["Diseño a medida", "Ejecución de obra", "Espacios que venden"],
       "techCta": "Ver soluciones tecnológicas",
       "archCta": "Ver arquitectura",
@@ -40,13 +40,40 @@ export const translations = {
       "techSecondary": "Evaluar mi proceso",
       "techWhatsapp": "Hola JYM, quiero evaluar un proceso repetitivo o cuello de botella de mi empresa para automatizarlo."
     },
+    "experience": {
+      "tech": {
+        "kicker": "JYM · TECNOLOGÍA",
+        "title": "Herramientas digitales pensadas para cómo realmente trabajas.",
+        "text": "Antes de hablar de bots o inteligencia artificial, entendemos tu operación. Luego diseñamos el sistema, la app o la automatización que haga el trabajo más simple y controlable.",
+        "points": ["Sistemas a medida", "Automatización útil", "Control humano"],
+        "primary": "Ver qué podemos hacer",
+        "secondary": "Ver proyectos reales",
+        "switch": "Ir a Arquitectura",
+        "visualStatus": "SISTEMA EN LÍNEA",
+        "flow": ["Entrada", "Reglas", "Automatización", "Control"]
+      },
+      "arch": {
+        "kicker": "JYM · ARQUITECTURA",
+        "title": "Diseñamos el espacio primero en el plano. Luego lo hacemos realidad.",
+        "text": "Distribución, proporción, materiales, recorrido y ejecución se piensan como una sola experiencia. El plano no es el final: es el punto donde empieza a construirse bien.",
+        "points": ["Diseño con intención", "Visualización del espacio", "Ejecución cuidada"],
+        "primary": "Explorar proyectos",
+        "secondary": "Ver nuestro proceso",
+        "switch": "Ir a Sistemas",
+        "visualStatus": "PLANO EN DESARROLLO",
+        "planAria": "Plano conceptual animado de arquitectura",
+        "planLabels": ["SALA", "ESTUDIO", "COCINA", "CIRCULACIÓN"],
+        "noteKicker": "DEL TRAZO AL ESPACIO",
+        "noteTitle": "Pensar · dibujar · visualizar · ejecutar"
+      }
+    },
     "showroom": {
       "neutralKicker": "Elige tu servicio",
       "neutralTitle": "Dos líneas profesionales en una sola empresa",
-      "archKicker": "Showroom arquitectura",
-      "archTitle": "Proyectos visuales y recorridos para clientes",
-      "techKicker": "Capacidades JYM",
-      "techTitle": "Esto es lo que podemos construir para ti"
+      "archKicker": "PROYECTOS · ESPACIOS · RECORRIDOS",
+      "archTitle": "Mira el proyecto como si ya estuvieras dentro.",
+      "techKicker": "QUÉ PODEMOS CONSTRUIR",
+      "techTitle": "Capacidades para convertir un proceso en una herramienta"
     },
     "archCatalog": {
       "barberia": [
@@ -123,8 +150,8 @@ export const translations = {
       ]
     },
     "services": {
-      "kicker": "Servicios",
-      "title": "Soluciones claras para cada tipo de cliente",
+      "kicker": "ARQUITECTURA + EJECUCIÓN",
+      "title": "Del concepto, al plano y de ahí a la obra.",
       "arch": [
         "Diseño residencial",
         "Diseño comercial y corporativo",
@@ -475,8 +502,8 @@ export const translations = {
     "contact": {
       "kicker": "Contacto comercial",
       "title": "¿Listo para construir tu proyecto?",
-      "techTitle": "¿Qué proceso quieres agilizar?",
-      "archTitle": "¿Qué espacio quieres transformar?",
+      "techTitle": "Cuéntanos cómo trabajas. Veamos qué podemos simplificar.",
+      "archTitle": "Cuéntanos qué espacio imaginas. Empecemos por el plano.",
       "name": "Tu nombre",
       "message": "Cuéntanos qué necesitas",
       "send": "Enviar por WhatsApp",
@@ -640,12 +667,12 @@ export const translations = {
       "tech": "Technology",
       "arch": "Architecture",
       "services": "Services",
-      "success": "Portfolio",
-      "process": "Process",
+      "success": "Projects",
+      "process": "How we work",
       "ai": "AI Automation",
       "quote": "Get quote",
-      "solutions": "Solutions",
-      "realCases": "Real cases",
+      "solutions": "What we do",
+      "realCases": "Automation",
       "lab": "AI demos",
       "projects": "Projects",
       "contact": "Contact",
@@ -659,15 +686,15 @@ export const translations = {
       "neutralTitle": "We transform ideas into digital solutions and memorable spaces",
       "neutralText": "Choose what you need: technology to automate your company or architecture to design and build your spaces.",
       "splitTitle": "Two worlds. One vision.",
-      "splitText": "Choose how you want to transform: optimize how your company works or create the space where it will grow.",
+      "splitText": "Choose the world you want to explore. Technology to improve how you work or architecture to transform your space.",
       "versus": "VS",
       "techTitle": "We create systems that automate and grow your operation",
-      "techText": "We find bottlenecks, automate repetitive tasks and apply AI so your team works faster, makes fewer mistakes and remains in control.",
-      "techPromise": "Automate, integrate and decide better",
+      "techText": "We design digital tools, automation and systems around the way your team actually works.",
+      "techPromise": "Systems + automation",
       "techPoints": ["Applied AI", "Faster processes", "Data under control"],
       "archTitle": "We design and build modern spaces to live, sell and grow",
-      "archText": "Residential design, commercial and corporate design, construction execution and air conditioning.",
-      "archPromise": "Design, build and grow your space",
+      "archText": "We shape spaces from the first idea and drawing through visualization, construction and finishes.",
+      "archPromise": "Design + plans + build",
       "archPoints": ["Tailored design", "Construction", "Spaces that sell"],
       "techCta": "View technology solutions",
       "archCta": "View architecture",
@@ -675,13 +702,40 @@ export const translations = {
       "techSecondary": "Assess my process",
       "techWhatsapp": "Hello JYM, I want to assess a repetitive process or bottleneck in my company and automate it."
     },
+    "experience": {
+      "tech": {
+        "kicker": "JYM · TECHNOLOGY",
+        "title": "Digital tools designed around how you actually work.",
+        "text": "Before talking about bots or artificial intelligence, we understand your operation. Then we design the system, app or automation that makes the work simpler and easier to control.",
+        "points": ["Tailored systems", "Useful automation", "Human control"],
+        "primary": "See what we can build",
+        "secondary": "View real projects",
+        "switch": "Go to Architecture",
+        "visualStatus": "SYSTEM ONLINE",
+        "flow": ["Input", "Rules", "Automation", "Control"]
+      },
+      "arch": {
+        "kicker": "JYM · ARCHITECTURE",
+        "title": "We design the space on the drawing board first. Then we make it real.",
+        "text": "Layout, proportion, materials, movement and execution are conceived as one experience. The drawing is not the end: it is where good construction begins.",
+        "points": ["Intentional design", "Spatial visualization", "Careful execution"],
+        "primary": "Explore projects",
+        "secondary": "See our process",
+        "switch": "Go to Systems",
+        "visualStatus": "DRAWING IN PROGRESS",
+        "planAria": "Animated conceptual architecture drawing",
+        "planLabels": ["LIVING", "STUDIO", "KITCHEN", "CIRCULATION"],
+        "noteKicker": "FROM LINE TO SPACE",
+        "noteTitle": "Think · draw · visualize · build"
+      }
+    },
     "showroom": {
       "neutralKicker": "Choose your service",
       "neutralTitle": "Two professional lines in one company",
-      "archKicker": "Architecture showroom",
-      "archTitle": "Visual projects and tours for clients",
-      "techKicker": "JYM capabilities",
-      "techTitle": "What we can build for you"
+      "archKicker": "PROJECTS · SPACES · TOURS",
+      "archTitle": "See the project as if you were already inside.",
+      "techKicker": "WHAT WE CAN BUILD",
+      "techTitle": "Capabilities that turn a process into a useful tool"
     },
     "archCatalog": {
       "barberia": [
@@ -758,8 +812,8 @@ export const translations = {
       ]
     },
     "services": {
-      "kicker": "Services",
-      "title": "Clear solutions for each client type",
+      "kicker": "ARCHITECTURE + EXECUTION",
+      "title": "From concept, to drawing, and from drawing to the built space.",
       "arch": [
         "Residential design",
         "Commercial and corporate design",
