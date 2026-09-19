@@ -1643,6 +1643,23 @@ function WorldAmbientBackground({ mode }) {
       <div className="ambient-drafting-cross cross-a"><i/><i/></div>
       <div className="ambient-drafting-cross cross-b"><i/><i/></div>
       <div className="ambient-drafting-cross cross-c"><i/><i/></div>
+
+      <div className="arch-line h l1" />
+      <div className="arch-line h l2" />
+      <div className="arch-line h l3" />
+      <div className="arch-line v l4" />
+      <div className="arch-line v l5" />
+
+      <div className="arch-frame f1" />
+      <div className="arch-frame f2" />
+      <div className="arch-frame f3" />
+
+      <div className="arch-sweep" />
+
+      <div className="arch-note n1">SALA · 24.80 m²</div>
+      <div className="arch-note n2">COCINA · EJE B</div>
+      <div className="arch-note n3">ESTUDIO · 3.40 m</div>
+      <div className="arch-note n4">CIRCULACIÓN</div>
     </>}
   </div>;
 }
