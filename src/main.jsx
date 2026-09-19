@@ -333,7 +333,7 @@ function Header({ mode, setMode, lang, setLang, t }) {
 
 function TechIntro({ setMode, t }) {
   const content = t.experience.tech;
-  return <section className="hero world-intro tech-intro" id="inicio">
+  return <section className="hero world-intro tech-intro secondary-world-intro" id="vision-tech">
     <div className="intro-grid intro-grid-tech" aria-hidden="true" />
     <div className="world-intro-shell">
       <motion.div
@@ -351,7 +351,6 @@ function TechIntro({ setMode, t }) {
         <div className="world-actions intro-actions">
           <a className="btn btn-primary" href="#showroom">{content.primary}<ArrowRight size={18}/></a>
           <a className="btn btn-cold" href="#proyectos-tech">{content.secondary}<ArrowRight size={18}/></a>
-          <button className="intro-switch" type="button" onClick={() => setMode("arch")}>{content.switch}<ArrowRight size={16}/></button>
         </div>
       </motion.div>
 
@@ -427,7 +426,7 @@ function ArchitectureBlueprintVisual({ t }) {
 
 function ArchitectureIntro({ setMode, t }) {
   const content = t.experience.arch;
-  return <section className="hero world-intro arch-intro" id="inicio">
+  return <section className="hero world-intro arch-intro secondary-world-intro" id="plano-arquitectura">
     <div className="intro-grid intro-grid-arch" aria-hidden="true" />
     <div className="world-intro-shell arch-intro-shell">
       <motion.div
@@ -445,7 +444,6 @@ function ArchitectureIntro({ setMode, t }) {
         <div className="world-actions intro-actions">
           <a className="btn btn-primary btn-arch-primary" href="#showroom">{content.primary}<ArrowRight size={18}/></a>
           <a className="btn btn-warm" href="#proceso">{content.secondary}<ArrowRight size={18}/></a>
-          <button className="intro-switch arch-switch" type="button" onClick={() => setMode("tech")}>{content.switch}<ArrowRight size={16}/></button>
         </div>
       </motion.div>
 
@@ -466,11 +464,9 @@ function ArchitectureIntro({ setMode, t }) {
 }
 
 function Hero({ mode, setMode, t }) {
-  if (mode === "tech") return <TechIntro setMode={setMode} t={t} />;
-  if (mode === "arch") return <ArchitectureIntro setMode={setMode} t={t} />;
-  const isTech = false;
-  const isArch = false;
-  const portal = true;
+  const isTech = mode === "tech";
+  const isArch = mode === "arch";
+  const portal = mode === "portal";
   const [portalFocus, setPortalFocus] = useState("none");
   const [portalSelection, setPortalSelection] = useState("none");
   const portalTimer = useRef();
@@ -483,7 +479,7 @@ function Hero({ mode, setMode, t }) {
     setPortalFocus(next);
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     portalTimer.current = window.setTimeout(
-      () => setMode(next, { direct: true }),
+      () => setMode(next),
       reducedMotion ? 80 : 780
     );
   };
@@ -1116,6 +1112,7 @@ ${t.contact.messageLabel}: ${form.message}`;
 const COMPANION_SECTIONS = {
   tech: [
     { id: "inicio", state: "home", side: "right" },
+    { id: "vision-tech", state: "services", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
     { id: "proyectos-tech", state: "projects", side: "right" },
     { id: "casos-reales", state: "automation", side: "left" },
@@ -1124,6 +1121,7 @@ const COMPANION_SECTIONS = {
   ],
   arch: [
     { id: "inicio", state: "home", side: "left" },
+    { id: "plano-arquitectura", state: "services", side: "left" },
     { id: "showroom", state: "showroom", side: "right" },
     { id: "servicios", state: "services", side: "left" },
     { id: "proceso", state: "process", side: "right" },
@@ -1566,9 +1564,65 @@ function ScrollTopButton() {
   </button>;
 }
 
+
+function WorldTransition({ target, overlay, t }) {
+  const tech = target === "tech";
+  const arch = target === "arch";
+
+  return <div className={`transition transition-${target}`} ref={overlay} aria-hidden="true">
+    <div className="transition-theme">
+      {tech && <div className="transition-code-stage">
+        <div className="code-window">
+          <div className="code-window-bar"><i/><i/><i/><span>jym_system.boot</span></div>
+          <div className="code-lines">
+            <span><b>01</b> import &#123; automation, data, ai &#125; from "JYM";</span>
+            <span><b>02</b> const workflow = analyze(process);</span>
+            <span><b>03</b> await connect(workflow.sources);</span>
+            <span><b>04</b> validate(workflow.rules);</span>
+            <span><b>05</b> system.deploy(&#123; control: "human" &#125;);</span>
+          </div>
+          <div className="code-progress"><i/></div>
+        </div>
+        <div className="code-particles">
+          {["API","DATA","BOT","OCR","SYNC","AI"].map((item,index)=><span key={item} style={{"--i":index}}>{item}</span>)}
+        </div>
+      </div>}
+
+      {arch && <div className="transition-plan-stage">
+        <svg viewBox="0 0 760 460" className="transition-plan-svg">
+          <g className="transition-plan-grid">
+            {Array.from({length:12}).map((_,i)=><line key={"tv"+i} x1={40+i*62} y1="25" x2={40+i*62} y2="435"/>)}
+            {Array.from({length:8}).map((_,i)=><line key={"th"+i} x1="30" y1={42+i*54} x2="730" y2={42+i*54}/>)}
+          </g>
+          <g className="transition-plan-drawing">
+            <rect x="130" y="86" width="500" height="286"/>
+            <line x1="350" y1="86" x2="350" y2="372"/>
+            <line x1="130" y1="232" x2="630" y2="232"/>
+            <line x1="500" y1="232" x2="500" y2="372"/>
+            <path d="M350 232c44 0 68 24 68 66"/>
+            <path d="M500 232c0 41-22 64-63 64"/>
+            <line x1="106" y1="86" x2="106" y2="372"/>
+            <line x1="130" y1="402" x2="630" y2="402"/>
+          </g>
+        </svg>
+        <div className="transition-measure measure-a">5.20 m</div>
+        <div className="transition-measure measure-b">3.40 m</div>
+        <div className="transition-plan-status">TRAZANDO · COTANDO · DISEÑANDO</div>
+      </div>}
+    </div>
+
+    <div className="transition-brand">
+      <img className="transition-logo" src="/assets/brand/logo-jym-bg.jpg" alt="" />
+      <small>{tech ? "JYM SYSTEMS" : arch ? "JYM ARCHITECTURE" : "JYM"}</small>
+      <span>{tech ? t.nav.tech : arch ? t.nav.arch : t.nav.portal}</span>
+    </div>
+  </div>;
+}
+
 function App() {
   const [mode, setModeState] = useState("portal");
   const [lang, setLang] = useState("es");
+  const [transitionMode, setTransitionMode] = useState("portal");
   const t = translations[lang];
   const overlay = useRef();
 
@@ -1588,13 +1642,7 @@ function App() {
       return;
     }
 
-    if (options.direct) {
-      overlay.current?.classList.remove("active");
-      setModeState(next);
-      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
-      return;
-    }
-
+    setTransitionMode(next);
     overlay.current?.classList.add("active");
     gsap.killTweensOf(".transition-logo");
     gsap.fromTo(
@@ -1606,11 +1654,11 @@ function App() {
     window.__jymModeTimer = window.setTimeout(() => {
       setModeState(next);
       window.scrollTo({ top: 0, behavior: "auto" });
-    }, 260);
+    }, 560);
 
     window.__jymOverlayTimer = window.setTimeout(() => {
       overlay.current?.classList.remove("active");
-    }, 620);
+    }, 1120);
   };
 
   useEffect(() => {
@@ -1621,7 +1669,7 @@ function App() {
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
 
   return <div className={`app ${mode}`}>
-    <div className="transition" ref={overlay}><img className="transition-logo" src="/assets/brand/logo-jym-bg.jpg" alt="JYM" /><span>{mode === "arch" ? t.nav.arch : mode === "tech" ? t.nav.tech : t.nav.portal}</span></div>
+    <WorldTransition target={transitionMode} overlay={overlay} t={t} />
     <Header mode={mode} setMode={setMode} lang={lang} setLang={setLang} t={t} />
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
@@ -1632,6 +1680,7 @@ function App() {
       </>}
 
       {mode === "tech" && <>
+        <TechIntro setMode={setMode} t={t} />
         <TechShowroom t={t} />
         <TechShowcase t={t} />
         <TechProof t={t} />
@@ -1640,6 +1689,7 @@ function App() {
       </>}
 
       {mode === "arch" && <>
+        <ArchitectureIntro setMode={setMode} t={t} />
         <ArchitectureShowroom t={t} />
         <Services mode={mode} t={t} />
         <ProcessSection t={t} mode={mode} />
