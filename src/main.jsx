@@ -10,7 +10,7 @@ import {
   MessageCircle, Monitor, MousePointerClick, Phone, Play, RotateCw, Scale, ShieldCheck, Snowflake, Sparkles,
   Timer, Workflow, X
 } from "lucide-react";
-import { archCatalog, techCatalog } from "./catalog.js";
+import { archCatalog, techCatalog, techPortfolio } from "./catalog.js";
 import { translations } from "./i18n.js";
 import AnimatedTechAssistant from "./AnimatedTechAssistant.jsx";
 import "./styles.css";
@@ -775,6 +775,39 @@ function Showroom({ mode, t }) {
   return <PortalShowroom t={t} />;
 }
 
+function TechPortfolioCatalog({ t }) {
+  const copy = t.services.catalog;
+  return <div className="services-catalog">
+    <div className="services-catalog-head">
+      <div>
+        <small>{copy.kicker}</small>
+        <h3>{copy.title}</h3>
+      </div>
+      <p>{copy.text}</p>
+    </div>
+
+    <div className="services-catalog-grid">
+      {techPortfolio.map((project, index) => {
+        const item = copy.projects[project.id];
+        return <article className="services-project-card" key={project.id}>
+          <div className="services-project-top">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <small>{project.category}</small>
+          </div>
+          <h4>{project.title}</h4>
+          <p>{item}</p>
+          <div className="services-project-tags">
+            {project.tags.map(tag => <b key={tag}>{tag}</b>)}
+          </div>
+          <a href={project.demo} target="_blank" rel="noreferrer">
+            {copy.open}<ArrowRight size={15}/>
+          </a>
+        </article>;
+      })}
+    </div>
+  </div>;
+}
+
 function Services({ mode, t }) {
   const selected = mode === "arch" ? t.services.arch : mode === "tech" ? t.services.tech : t.services.neutral;
   const icons = mode === "arch" ? [Building2, Building2, Hammer, Snowflake] :
@@ -789,6 +822,7 @@ function Services({ mode, t }) {
         return <article key={text}><Icon /><b>{text}</b></article>;
       })}
     </div>
+    {mode === "tech" && <TechPortfolioCatalog t={t} />}
   </section>;
 }
 
