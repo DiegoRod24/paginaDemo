@@ -6347,3 +6347,220 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
     transition:none!important;
   }
 }
+
+
+/* =========================================================
+   V31 — ARCH SHOWROOM SPACE USE
+   Cambio 2: mejor uso del espacio sin tocar fondos globales.
+========================================================= */
+.app.arch .arch-showroom {
+  scroll-margin-top:146px;
+  padding-top:104px !important;
+}
+.app.arch .arch-showroom .section-title {
+  margin-bottom:26px;
+}
+.app.arch .showroom-shell {
+  grid-template-columns:310px minmax(0,1fr);
+  gap:18px;
+}
+.app.arch .showroom-sidebar {
+  position:sticky;
+  top:112px;
+  min-width:0;
+}
+.app.arch .showroom-sidebar .room-menu {
+  position:relative;
+  top:auto;
+  max-height:54vh;
+  overflow-y:auto;
+  padding-right:5px;
+}
+.app.arch .arch-side-card {
+  margin-top:14px;
+  padding:18px;
+  overflow:hidden;
+  border:1px solid rgba(217,168,61,.16);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 85% 10%,rgba(217,168,61,.11),transparent 34%),
+    linear-gradient(145deg,rgba(217,168,61,.045),rgba(255,255,255,.018));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+.app.arch .arch-side-card > small {
+  display:block;
+  color:#d6b66f;
+  font-size:.58rem;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+.app.arch .arch-side-card h3 {
+  margin:8px 0 7px;
+  font-size:1.05rem;
+  line-height:1.14;
+}
+.app.arch .arch-side-card > p {
+  margin:0;
+  color:rgba(255,255,255,.64);
+  font-size:.78rem;
+  line-height:1.5;
+}
+.app.arch .arch-side-meta {
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:.7fr 1.3fr;
+  gap:8px;
+}
+.app.arch .arch-side-meta > span {
+  min-width:0;
+  padding:10px;
+  display:grid;
+  gap:2px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  background:rgba(0,0,0,.22);
+}
+.app.arch .arch-side-meta b {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#f3d897;
+  font-size:.72rem;
+}
+.app.arch .arch-side-meta em {
+  color:rgba(255,255,255,.38);
+  font-size:.56rem;
+  font-style:normal;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.app.arch .arch-side-card > a {
+  margin-top:14px;
+  min-height:40px;
+  padding:0 12px;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid rgba(217,168,61,.28);
+  border-radius:999px;
+  color:#f1d38b;
+  background:rgba(217,168,61,.055);
+  font-size:.69rem;
+  font-weight:900;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.app.arch .arch-side-card > a:hover {
+  transform:translateY(-2px);
+  border-color:rgba(217,168,61,.54);
+  background:rgba(217,168,61,.09);
+}
+
+/* Visor un poco más compacto y con los laterales realmente aprovechados */
+.app.arch .media-transition {
+  height:clamp(390px,51vh,545px);
+  padding:16px 60px;
+}
+.app.arch .cinema-backdrop {
+  inset:-10%;
+  filter:blur(28px) saturate(.86) brightness(.47);
+  transform:scale(1.16);
+  opacity:.82;
+}
+.app.arch .cinema-backdrop::after {
+  background:
+    linear-gradient(90deg,rgba(5,5,5,.52),rgba(5,5,5,.10) 28%,rgba(5,5,5,.10) 72%,rgba(5,5,5,.52)),
+    linear-gradient(180deg,rgba(5,5,5,.08),rgba(5,5,5,.22));
+}
+.app.arch .media-transition::after {
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,transparent 36%,rgba(0,0,0,.10) 67%,rgba(0,0,0,.33) 100%);
+}
+.app.arch .media-transition img,
+.app.arch .media-transition video {
+  z-index:2;
+  max-width:92%;
+  max-height:100%;
+}
+
+/* Ficha principal: mejor lectura y opciones útiles */
+.app.arch .cinema-label {
+  padding:18px 20px 16px;
+}
+.app.arch .cinema-label p {
+  max-width:980px;
+}
+.app.arch .project-tags {
+  margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.app.arch .project-tags span {
+  padding:6px 9px;
+  border:1px solid rgba(217,168,61,.16);
+  border-radius:999px;
+  color:#dfc17c;
+  background:rgba(217,168,61,.045);
+  font-size:.57rem;
+  font-weight:850;
+  letter-spacing:.035em;
+}
+
+/* Filmstrip más compacto: ayuda a que el proyecto completo entre mejor en pantalla */
+.app.arch .filmstrip {
+  margin-top:8px;
+}
+.app.arch .filmstrip button {
+  flex-basis:100px;
+  height:66px;
+}
+
+/* En pantallas grandes, dar un poco más de presencia a la galería y menos al vacío */
+@media(min-width:1350px) {
+  .app.arch .showroom-shell {
+    grid-template-columns:320px minmax(0,1fr);
+  }
+  .app.arch .media-transition {
+    height:clamp(410px,52vh,560px);
+  }
+}
+@media(max-width:1100px) {
+  .app.arch .showroom-sidebar {
+    position:relative;
+    top:auto;
+  }
+  .app.arch .showroom-sidebar .room-menu {
+    max-height:none;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .app.arch .arch-side-card {
+    margin-top:12px;
+  }
+}
+@media(max-width:700px) {
+  .app.arch .arch-showroom {
+    scroll-margin-top:112px;
+    padding-top:78px !important;
+  }
+  .app.arch .showroom-sidebar .room-menu {
+    grid-template-columns:1fr;
+  }
+  .app.arch .arch-side-meta {
+    grid-template-columns:1fr 1fr;
+  }
+  .app.arch .media-transition {
+    height:340px;
+    padding:12px 44px;
+  }
+  .app.arch .project-tags {
+    gap:5px;
+  }
+  .app.arch .project-tags span {
+    font-size:.54rem;
+  }
+}
