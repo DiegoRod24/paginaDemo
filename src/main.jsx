@@ -1484,6 +1484,151 @@ function ScrollTopButton() {
   </button>;
 }
 
+function WorldAmbientBackground({ mode }) {
+  const layerRef = useRef(null);
+
+  useEffect(() => {
+    const layer = layerRef.current;
+    if (!layer || mode === "portal") return undefined;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const y = window.scrollY || 0;
+      const progress = Math.min(1, Math.max(0, y / maxScroll));
+
+      layer.style.setProperty("--ambient-progress", progress.toFixed(4));
+      layer.style.setProperty("--ambient-shift-slow", `${(-y * 0.026).toFixed(2)}px`);
+      layer.style.setProperty("--ambient-shift-fast", `${(-y * 0.055).toFixed(2)}px`);
+      layer.style.setProperty("--ambient-shift-side", `${(Math.sin(y / 520) * 22).toFixed(2)}px`);
+      layer.style.setProperty("--ambient-draw", String(Math.max(0, 1450 - progress * 1450)));
+      layer.style.setProperty("--ambient-data-offset", String(-(y % 240)));
+    };
+
+    const schedule = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [mode]);
+
+  if (mode === "portal") return null;
+
+  const techSignals = [
+    ["API CONNECTED", "200 OK"],
+    ["BOT ONLINE", "RUNNING"],
+    ["DATA PIPELINE", "SYNC 100%"],
+    ["VALIDATION", "PASS"],
+    ["OCR NODE", "READY"],
+    ["QUEUE", "12 TASKS"],
+    ["RETRY", "0 ERRORS"],
+    ["EXPORT", "READY"]
+  ];
+
+  return <div ref={layerRef} className={`world-ambient world-ambient-${mode}`} aria-hidden="true">
+    {mode === "tech" ? <>
+      <div className="ambient-tech-grid" />
+      <svg className="ambient-network ambient-network-back" viewBox="0 0 1600 1000" preserveAspectRatio="none">
+        <g className="ambient-network-links">
+          <path d="M70 180 C330 70 430 270 690 190 S1110 80 1510 220" />
+          <path d="M40 520 C280 410 430 680 760 500 S1210 360 1570 560" />
+          <path d="M160 850 C410 690 610 930 900 760 S1290 650 1540 840" />
+          <path d="M280 70 C420 310 300 500 520 710 S930 820 1100 980" />
+          <path d="M1150 30 C1020 250 1240 390 1050 590 S760 760 690 970" />
+        </g>
+        <g className="ambient-network-nodes">
+          {[
+            [120,170],[380,130],[675,200],[980,135],[1320,180],[1510,220],
+            [160,520],[480,590],[760,500],[1120,450],[1450,545],
+            [250,835],[610,850],[920,755],[1270,730],[1510,835]
+          ].map(([cx,cy],index)=><circle key={index} cx={cx} cy={cy} r={index % 3 === 0 ? 6 : 3.5} />)}
+        </g>
+      </svg>
+
+      <div className="ambient-code-cloud">
+        {techSignals.map(([label,status],index)=><div
+          className={`ambient-code-card ambient-code-${index + 1}`}
+          key={label}
+        >
+          <small>{label}</small>
+          <b>{status}</b>
+          <i />
+        </div>)}
+      </div>
+
+      <div className="ambient-code-lines">
+        <span>const flow = await JYM.connect(source);</span>
+        <span>validate(data) → classify() → export();</span>
+        <span>if (error) retry({"{ attempts: 3 }"});</span>
+        <span>pipeline.status = "READY";</span>
+        <span>humanReview(exceptionsOnly);</span>
+      </div>
+
+      <div className="ambient-data-packets">
+        {Array.from({length:12}).map((_,index)=><i key={index} style={{"--ambient-packet":index}} />)}
+      </div>
+    </> : <>
+      <div className="ambient-blueprint-grid" />
+      <svg className="ambient-plan" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+        <g className="ambient-plan-main">
+          <rect x="170" y="125" width="1260" height="720" />
+          <line x1="520" y1="125" x2="520" y2="845" />
+          <line x1="1010" y1="125" x2="1010" y2="845" />
+          <line x1="170" y1="410" x2="1430" y2="410" />
+          <line x1="170" y1="665" x2="1010" y2="665" />
+          <path d="M520 410 C590 410 630 450 630 520" />
+          <path d="M1010 410 C940 410 900 450 900 520" />
+          <path d="M520 665 C590 665 625 700 625 770" />
+          <path d="M1010 665 H1180 V845" />
+        </g>
+
+        <g className="ambient-plan-furniture">
+          <rect x="245" y="210" width="185" height="88" rx="8" />
+          <rect x="275" y="322" width="130" height="48" rx="5" />
+          <circle cx="760" cy="250" r="70" />
+          <line x1="690" y1="250" x2="830" y2="250" />
+          <line x1="760" y1="180" x2="760" y2="320" />
+          <rect x="1100" y="205" width="210" height="110" rx="6" />
+          <rect x="1110" y="505" width="215" height="88" rx="6" />
+          <circle cx="770" cy="740" r="58" />
+        </g>
+
+        <g className="ambient-plan-dimensions">
+          <line x1="130" y1="125" x2="130" y2="845" />
+          <line x1="170" y1="890" x2="1430" y2="890" />
+          <line x1="115" y1="125" x2="145" y2="125" />
+          <line x1="115" y1="845" x2="145" y2="845" />
+          <line x1="170" y1="875" x2="170" y2="905" />
+          <line x1="1430" y1="875" x2="1430" y2="905" />
+        </g>
+      </svg>
+
+      <div className="ambient-plan-labels">
+        <span className="plan-label plan-label-1">SALA · 24.80 m²</span>
+        <span className="plan-label plan-label-2">COCINA · EJE B</span>
+        <span className="plan-label plan-label-3">ESTUDIO · 3.40 m</span>
+        <span className="plan-label plan-label-4">CIRCULACIÓN</span>
+        <span className="plan-label plan-label-5">NPT +0.15</span>
+        <span className="plan-label plan-label-6">ESC 1:50 · A-01</span>
+      </div>
+
+      <div className="ambient-drafting-cross cross-a"><i/><i/></div>
+      <div className="ambient-drafting-cross cross-b"><i/><i/></div>
+      <div className="ambient-drafting-cross cross-c"><i/><i/></div>
+    </>}
+  </div>;
+}
+
 function App() {
   const [mode, setModeState] = useState("portal");
   const [lang, setLang] = useState("es");
@@ -1539,6 +1684,7 @@ function App() {
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
 
   return <div className={`app ${mode}`}>
+    <WorldAmbientBackground mode={mode} />
     <div className="transition" ref={overlay}><img className="transition-logo" src="/assets/brand/logo-jym-bg.jpg" alt="JYM" /><span>{mode === "arch" ? t.nav.arch : mode === "tech" ? t.nav.tech : t.nav.portal}</span></div>
     <Header mode={mode} setMode={setMode} lang={lang} setLang={setLang} t={t} />
     <main>
