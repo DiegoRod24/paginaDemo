@@ -1111,8 +1111,8 @@ ${t.contact.messageLabel}: ${form.message}`;
 const COMPANION_SECTIONS = {
   tech: [
     { id: "inicio", state: "home", side: "right" },
-    { id: "vision-tech", state: "services", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
+    { id: "vision-tech", state: "services", side: "right" },
     { id: "proyectos-tech", state: "projects", side: "right" },
     { id: "laboratorio", state: "automation", side: "left" },
     { id: "casos-reales", state: "automation", side: "left" },
@@ -1620,7 +1620,7 @@ function WorldTransition({ target, overlay, t }) {
 }
 
 function App() {
-  const [mode, setModeState] = useState("portal");
+  const [mode, setModeState] = useState("tech");
   const [lang, setLang] = useState("es");
   const [transitionMode, setTransitionMode] = useState("portal");
   const t = translations[lang];
@@ -1677,6 +1677,12 @@ function App() {
     return () => window.clearTimeout(safety);
   }, [mode]);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  useEffect(() => {
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+  }, []);
 
   return <div className={`app ${mode}`}>
     <WorldTransition target={transitionMode} overlay={overlay} t={t} />
@@ -1690,8 +1696,8 @@ function App() {
       </>}
 
       {mode === "tech" && <>
-        <TechIntro setMode={setMode} t={t} />
         <TechShowroom t={t} />
+        <TechIntro setMode={setMode} t={t} />
         <TechShowcase t={t} />
         <AutomationLab t={t} />
         <TechProof t={t} />
