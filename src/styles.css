@@ -5158,3 +5158,551 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
   .showcase-list-copy em { white-space:normal;line-height:1.3; }
   .showcase-list button { grid-template-columns:38px minmax(0,1fr) 20px; }
 }
+
+
+/* =========================================================
+   V28 — REMODELACIÓN DE EXPERIENCIA JYM
+   Menos secciones, más claridad. Sistemas = laboratorio.
+   Arquitectura = mesa de planos.
+========================================================= */
+
+.app.tech,
+.app.arch {
+  background:#030507;
+}
+.app.arch {
+  --arch-paper:#d9bc84;
+  --arch-ink:#f5e5bd;
+  --arch-grid:rgba(217,188,132,.11);
+  background:
+    radial-gradient(circle at 78% 8%,rgba(217,168,61,.09),transparent 26%),
+    #060604;
+}
+
+/* Entradas de cada mundo */
+.world-intro {
+  min-height:100svh;
+  padding:132px clamp(22px,4vw,70px) 76px;
+  display:flex;
+  align-items:center;
+  isolation:isolate;
+  overflow:hidden;
+}
+.world-intro::after {
+  content:"";
+  position:absolute;
+  inset:auto 6% 4%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
+}
+.world-intro-shell {
+  width:min(1440px,100%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0,.84fr) minmax(520px,1.16fr);
+  gap:clamp(38px,6vw,92px);
+  align-items:center;
+}
+.intro-grid {
+  position:absolute;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+}
+.intro-grid-tech {
+  background:
+    linear-gradient(rgba(0,217,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,217,255,.035) 1px,transparent 1px),
+    radial-gradient(circle at 74% 50%,rgba(0,217,255,.13),transparent 32%),
+    linear-gradient(135deg,#06111a,#020609 58%);
+  background-size:46px 46px,46px 46px,auto,auto;
+}
+.intro-grid-arch {
+  background:
+    linear-gradient(var(--arch-grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--arch-grid) 1px,transparent 1px),
+    radial-gradient(circle at 76% 46%,rgba(217,168,61,.13),transparent 34%),
+    linear-gradient(135deg,#11100b,#050504 62%);
+  background-size:34px 34px,34px 34px,auto,auto;
+}
+.intro-copy {
+  position:relative;
+  z-index:2;
+  max-width:680px;
+}
+.intro-copy > p {
+  margin:0 0 16px;
+  color:var(--cyan);
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.18em;
+}
+.arch-intro-copy > p { color:var(--arch-paper); }
+.intro-copy h1 {
+  margin:0;
+  max-width:720px;
+  font-size:clamp(3.1rem,5.4vw,6.8rem);
+  line-height:.9;
+  letter-spacing:-.065em;
+  text-wrap:balance;
+}
+.intro-copy > span {
+  display:block;
+  max-width:650px;
+  margin-top:24px;
+  color:#9cabbc;
+  font-size:clamp(.96rem,1.25vw,1.12rem);
+  line-height:1.78;
+}
+.arch-intro-copy > span { color:#b6aa92; }
+.intro-points {
+  margin-top:26px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.intro-points b {
+  min-height:36px;
+  padding:0 12px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid rgba(0,217,255,.15);
+  border-radius:999px;
+  color:#cae8ed;
+  background:rgba(0,217,255,.045);
+  font-size:.7rem;
+  font-weight:800;
+}
+.intro-points b i {
+  width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 12px rgba(0,217,255,.7);
+}
+.arch-points b {
+  border-color:rgba(217,188,132,.18);
+  color:#eadab4;
+  background:rgba(217,188,132,.045);
+}
+.arch-points b i {
+  background:var(--arch-paper);
+  box-shadow:0 0 12px rgba(217,188,132,.5);
+}
+.intro-actions {
+  margin-top:34px;
+  align-items:center;
+}
+.intro-switch {
+  min-height:46px;
+  padding:0 4px;
+  border:0;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:#7f92a5;
+  background:transparent;
+  cursor:pointer;
+  font-size:.74rem;
+  font-weight:850;
+}
+.intro-switch:hover { color:white; }
+.arch-switch { color:#aa9a79; }
+.btn-arch-primary {
+  background:linear-gradient(110deg,#c99b50,#f1d49a);
+  color:#181208;
+}
+
+/* Systems: workbench calm instead of giant sales hero */
+.tech-workbench {
+  position:relative;
+  min-height:610px;
+  overflow:hidden;
+  border:1px solid rgba(0,217,255,.16);
+  border-radius:34px;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(0,217,255,.11),transparent 38%),
+    linear-gradient(150deg,rgba(7,18,28,.96),rgba(3,7,11,.98));
+  box-shadow:0 45px 120px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.04);
+}
+.workbench-head {
+  position:absolute;
+  z-index:4;
+  top:0;left:0;right:0;
+  min-height:54px;
+  padding:0 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(3,8,13,.74);
+  backdrop-filter:blur(12px);
+}
+.workbench-head span,
+.workbench-head b {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:.64rem;
+  letter-spacing:.12em;
+}
+.workbench-head span { color:#a8c6d1;font-weight:900; }
+.workbench-head b { color:#79efbf;font-weight:900; }
+.workbench-head i {
+  width:8px;height:8px;border-radius:50%;background:#5cf0b0;
+  box-shadow:0 0 14px rgba(92,240,176,.8);
+}
+.workbench-scene {
+  position:absolute;
+  inset:56px 0 66px;
+}
+.workbench-scene .scene3d {
+  width:100%!important;
+  height:100%!important;
+}
+.workbench-scene .chip3d {
+  opacity:.74;
+  transform:scale(.88);
+}
+.workbench-flow {
+  position:absolute;
+  z-index:4;
+  left:18px;right:18px;bottom:16px;
+  min-height:44px;
+  padding:0 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  background:rgba(4,9,14,.8);
+  backdrop-filter:blur(12px);
+}
+.workbench-flow span {
+  color:#9cb6c7;
+  font-size:.66rem;
+  font-weight:850;
+  white-space:nowrap;
+}
+.workbench-flow svg { color:var(--cyan);opacity:.6; }
+
+/* Architecture: animated drafting desk */
+.arch-intro-shell { grid-template-columns:minmax(0,.82fr) minmax(560px,1.18fr); }
+.architecture-desk {
+  position:relative;
+  min-height:625px;
+  padding:22px;
+  border:1px solid rgba(217,188,132,.18);
+  border-radius:34px;
+  background:
+    linear-gradient(145deg,rgba(23,20,14,.94),rgba(7,7,5,.98));
+  box-shadow:0 48px 120px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.045);
+}
+.blueprint-board {
+  position:relative;
+  height:100%;
+  min-height:570px;
+  overflow:hidden;
+  border:1px solid rgba(217,188,132,.22);
+  border-radius:22px;
+  background:
+    linear-gradient(rgba(217,188,132,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(217,188,132,.06) 1px,transparent 1px),
+    #0e0f0c;
+  background-size:22px 22px;
+}
+.blueprint-toolbar {
+  position:absolute;
+  z-index:5;
+  top:0;left:0;right:0;
+  min-height:48px;
+  padding:0 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(217,188,132,.14);
+  background:rgba(7,8,6,.72);
+  backdrop-filter:blur(10px);
+}
+.blueprint-toolbar span,
+.blueprint-toolbar b {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:.61rem;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.blueprint-toolbar span { color:#c8b68f; }
+.blueprint-toolbar b { color:#e8c989; }
+.blueprint-toolbar i {
+  width:7px;height:7px;border-radius:50%;background:#e7c274;
+  box-shadow:0 0 12px rgba(231,194,116,.55);
+}
+.blueprint-svg {
+  position:absolute;
+  inset:46px 0 0;
+  width:100%;
+  height:calc(100% - 46px);
+}
+.blueprint-svg line,
+.blueprint-svg rect,
+.blueprint-svg path,
+.blueprint-svg circle {
+  fill:none;
+  stroke:#dfc58d;
+  stroke-width:2;
+  vector-effect:non-scaling-stroke;
+}
+.bp-grid-lines line {
+  stroke:rgba(217,188,132,.075);
+  stroke-width:1;
+}
+.bp-plan > * {
+  stroke-dasharray:1600;
+  stroke-dashoffset:1600;
+  animation:blueprintDraw 2.8s cubic-bezier(.55,.05,.22,1) forwards;
+}
+.bp-plan > *:nth-child(2n) { animation-delay:.14s; }
+.bp-plan > *:nth-child(3n) { animation-delay:.28s; }
+.bp-furniture > * {
+  stroke:rgba(223,197,141,.62);
+  stroke-dasharray:600;
+  stroke-dashoffset:600;
+  animation:blueprintDraw 2s ease forwards 1.35s;
+}
+.bp-door { stroke:rgba(121,219,235,.75)!important; }
+.bp-dimension { stroke:rgba(223,197,141,.42)!important;stroke-width:1!important; }
+.blueprint-label {
+  position:absolute;
+  z-index:4;
+  padding:5px 7px;
+  border:1px solid rgba(217,188,132,.12);
+  border-radius:6px;
+  color:#d7c093;
+  background:rgba(7,8,6,.72);
+  font-size:.54rem;
+  font-weight:900;
+  letter-spacing:.11em;
+  opacity:0;
+  animation:bpLabelIn .45s ease forwards 2.1s;
+}
+.bp-label-a { left:17%;top:28%; }
+.bp-label-b { left:51%;top:22%;animation-delay:2.25s; }
+.bp-label-c { right:13%;bottom:23%;animation-delay:2.4s; }
+.bp-label-d { left:46%;bottom:33%;animation-delay:2.55s; }
+.blueprint-scale {
+  position:absolute;
+  right:15px;
+  bottom:13px;
+  color:rgba(222,198,145,.58);
+  font-size:.53rem;
+  letter-spacing:.12em;
+  font-weight:900;
+}
+.desk-note {
+  position:absolute;
+  z-index:5;
+  right:4px;
+  bottom:28px;
+  width:min(280px,50%);
+  padding:13px 15px;
+  border:1px solid rgba(217,188,132,.16);
+  border-radius:12px;
+  transform:rotate(-2deg);
+  background:#19160f;
+  box-shadow:0 14px 35px rgba(0,0,0,.3);
+}
+.desk-note span {
+  display:block;
+  color:#a99163;
+  font-size:.52rem;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+.desk-note b {
+  display:block;
+  margin-top:4px;
+  color:#eadab8;
+  font-size:.72rem;
+  line-height:1.35;
+}
+@keyframes blueprintDraw { to{stroke-dashoffset:0} }
+@keyframes bpLabelIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+
+/* Curated route: sections breathe more and do not compete */
+.app.tech .tech-showroom,
+.app.tech .tech-showcase,
+.app.tech .tech-proof,
+.app.tech .process-section,
+.app.arch .arch-showroom,
+.app.arch .services,
+.app.arch .process-section {
+  padding-top:104px;
+  padding-bottom:104px;
+}
+.app.tech .tech-showroom + .tech-showcase,
+.app.tech .tech-showcase + .tech-proof,
+.app.tech .tech-proof + .process-section,
+.app.arch .arch-showroom + .services,
+.app.arch .services + .process-section {
+  border-top:1px solid rgba(255,255,255,.055);
+}
+.app.arch .arch-showroom,
+.app.arch .services,
+.app.arch .process-section {
+  position:relative;
+}
+.app.arch .arch-showroom::before,
+.app.arch .services::before,
+.app.arch .process-section::before {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0 calc(50% - 50vw);
+  background:
+    linear-gradient(rgba(217,188,132,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(217,188,132,.022) 1px,transparent 1px);
+  background-size:42px 42px;
+  pointer-events:none;
+}
+
+/* Architecture showroom gets drafting-table language */
+.app.arch .showroom-shell {
+  padding:16px;
+  border:1px solid rgba(217,188,132,.15);
+  border-radius:28px;
+  background:linear-gradient(145deg,rgba(18,16,11,.8),rgba(7,7,5,.78));
+  box-shadow:0 30px 80px rgba(0,0,0,.3);
+}
+.app.arch .room-menu {
+  border-color:rgba(217,188,132,.12);
+}
+.app.arch .room-menu button {
+  border-color:rgba(217,188,132,.10);
+  background:rgba(217,188,132,.025);
+}
+.app.arch .room-menu button:hover,
+.app.arch .room-menu button.active {
+  border-color:rgba(217,188,132,.38);
+  background:rgba(217,188,132,.075);
+}
+.app.arch .room-menu button span,
+.app.arch .cinema-label small {
+  color:#d4b77a;
+}
+.app.arch .cinema-card {
+  border-color:rgba(217,188,132,.14);
+  background:#080806;
+}
+.app.arch .section-title > p {
+  color:#c6a768;
+}
+.app.arch .service-grid article {
+  border-color:rgba(217,188,132,.13);
+  background:linear-gradient(145deg,rgba(217,188,132,.045),rgba(255,255,255,.012));
+}
+.app.arch .service-grid article svg { color:#d5b675; }
+.app.arch .process-grid article > span { color:#d1af6b; }
+
+/* Automation cards are a catalogue, not another hero */
+.tech-proof-curated .proof-grid {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.tech-proof-curated .proof-card {
+  min-height:0;
+  padding:24px;
+}
+.tech-proof-curated .proof-card h3 {
+  font-size:clamp(1.25rem,2vw,1.75rem);
+}
+.tech-proof-curated .proof-flow {
+  flex-wrap:wrap;
+}
+.tech-proof-curated .automation-audit {
+  margin-top:22px;
+}
+
+/* Portal no longer becomes a long landing page. */
+.app.portal .portal-showroom {
+  padding-top:90px;
+  padding-bottom:100px;
+}
+.app.portal .contact {
+  border-top:1px solid rgba(255,255,255,.055);
+}
+
+/* Header clarity */
+.top-tabs { overflow-x:auto; scrollbar-width:none; }
+.top-tabs::-webkit-scrollbar { display:none; }
+.top-choice { white-space:nowrap; }
+
+/* Responsive */
+@media(max-width:1150px) {
+  .world-intro-shell,
+  .arch-intro-shell {
+    grid-template-columns:1fr;
+    gap:36px;
+  }
+  .intro-copy { max-width:900px; }
+  .intro-copy h1 { max-width:1000px; }
+  .tech-workbench,
+  .architecture-desk { min-height:560px; }
+}
+@media(max-width:900px) {
+  .world-intro { padding-top:118px; }
+  .tech-proof-curated .proof-grid { grid-template-columns:1fr; }
+  .top-tabs { justify-content:flex-start; }
+}
+@media(max-width:720px) {
+  .world-intro {
+    min-height:auto;
+    padding:110px 16px 58px;
+  }
+  .world-intro-shell { gap:28px; }
+  .intro-copy h1 { font-size:clamp(2.6rem,13vw,4.2rem); }
+  .intro-copy > span { margin-top:18px;font-size:.93rem; }
+  .intro-points { margin-top:20px; }
+  .intro-actions { margin-top:26px;display:grid;grid-template-columns:1fr; }
+  .intro-actions .btn { width:100%; }
+  .intro-switch { justify-content:center; }
+  .tech-workbench { min-height:470px;border-radius:24px; }
+  .workbench-flow { overflow-x:auto;justify-content:flex-start; }
+  .architecture-desk { min-height:500px;padding:12px;border-radius:24px; }
+  .blueprint-board { min-height:474px;border-radius:17px; }
+  .desk-note { width:58%;right:1px;bottom:18px; }
+  .tech-proof-curated .proof-card { padding:19px; }
+}
+@media(max-width:520px) {
+  .intro-copy h1 { font-size:clamp(2.35rem,14vw,3.6rem); }
+  .intro-points b { width:100%;justify-content:flex-start; }
+  .tech-workbench { min-height:420px; }
+  .workbench-head b { display:none; }
+  .workbench-scene { inset:48px 0 64px; }
+  .architecture-desk { min-height:440px; }
+  .blueprint-board { min-height:414px; }
+  .blueprint-label { font-size:.46rem; }
+  .bp-label-a { left:12%;top:29%; }
+  .bp-label-b { left:49%;top:24%; }
+  .bp-label-c { right:8%;bottom:25%; }
+  .bp-label-d { left:42%;bottom:34%; }
+  .desk-note { display:none; }
+  .app.tech .tech-showroom,
+  .app.tech .tech-showcase,
+  .app.tech .tech-proof,
+  .app.tech .process-section,
+  .app.arch .arch-showroom,
+  .app.arch .services,
+  .app.arch .process-section {
+    padding-top:76px;
+    padding-bottom:76px;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .bp-plan > *,
+  .bp-furniture > *,
+  .blueprint-label {
+    animation:none!important;
+    stroke-dashoffset:0!important;
+    opacity:1!important;
+  }
+}
