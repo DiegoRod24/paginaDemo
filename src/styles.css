@@ -6564,3 +6564,99 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
     font-size:.54rem;
   }
 }
+
+
+/* =========================================================
+   V31.1 — ARCH SHOWROOM FINAL TUNING
+========================================================= */
+.app.arch .showroom-sidebar .room-menu {
+  max-height:43vh;
+}
+.app.arch .arch-side-card {
+  margin-top:10px;
+  padding:15px;
+}
+.app.arch .arch-side-card h3 {
+  margin:6px 0 6px;
+  font-size:.98rem;
+}
+.app.arch .arch-side-card > p {
+  font-size:.74rem;
+  line-height:1.42;
+}
+.app.arch .arch-side-meta {
+  margin-top:10px;
+}
+.app.arch .arch-side-meta > span {
+  padding:8px;
+}
+.app.arch .arch-side-card > a {
+  margin-top:10px;
+  min-height:36px;
+  font-size:.65rem;
+}
+
+/* El visor debe caber mejor dentro de una sola pantalla */
+.app.arch .media-transition {
+  height:clamp(350px,44vh,475px);
+  padding:14px 54px;
+}
+.app.arch .cinema-label {
+  padding:16px 18px 14px;
+}
+.app.arch .cinema-label h3 {
+  font-size:clamp(1.45rem,1.8vw,1.95rem);
+}
+.app.arch .cinema-label p {
+  font-size:.86rem;
+}
+
+/* Separar visualmente descripción y miniaturas */
+.app.arch .filmstrip {
+  position:relative;
+  z-index:4;
+  margin-top:12px;
+  padding:10px 2px 12px;
+  border-top:1px solid rgba(255,255,255,.055);
+  background:linear-gradient(180deg,rgba(4,4,4,.52),rgba(4,4,4,0));
+}
+.app.arch .filmstrip button {
+  flex-basis:96px;
+  height:64px;
+}
+
+/* Si el menú necesita scroll, el CTA sigue visible debajo */
+@media(min-height:760px) {
+  .app.arch .showroom-sidebar {
+    display:flex;
+    flex-direction:column;
+    max-height:calc(100vh - 132px);
+  }
+  .app.arch .showroom-sidebar .room-menu {
+    flex:1 1 auto;
+    min-height:0;
+    max-height:none;
+  }
+  .app.arch .arch-side-card {
+    flex:0 0 auto;
+  }
+}
+@media(max-width:1100px) {
+  .app.arch .showroom-sidebar {
+    display:block;
+    max-height:none;
+  }
+  .app.arch .showroom-sidebar .room-menu {
+    max-height:none;
+  }
+}
+@media(max-width:700px) {
+  .app.arch .media-transition {
+    height:320px;
+    padding:10px 40px;
+  }
+  .app.arch .filmstrip button {
+    flex-basis:90px;
+    height:60px;
+  }
+}
