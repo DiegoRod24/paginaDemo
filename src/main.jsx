@@ -681,9 +681,25 @@ function ArchitectureShowroom({ t }) {
 function TechShowroom({ t }) {
   return <section className="tech-showroom" id="showroom">
     <div className="section-title compact-title"><p>{t.showroom.techKicker}</p><h2>{t.showroom.techTitle}</h2></div>
-    <div className="tech-grid">{techCatalog.map((item, idx) => { const Icon = iconMap[item.icon] || Monitor; const c = t.techCatalog[item.id] || [item.title,item.tag,item.description]; return <motion.article key={item.id} className="tech-card" whileHover={{ y: -12, rotateX: 2 }}>
-      <div className="tech-visual"><img src={item.image} alt={c[0]} /></div><div className="tech-card-body"><span>{String(idx + 1).padStart(2, "0")}</span><Icon size={36}/><small>{c[1]}</small><h3>{c[0]}</h3><p>{c[2]}</p><a href={wa(`Hola JYM, quiero cotizar: ${c[0]}`)} target="_blank" rel="noreferrer">{t.labels.cotizar} <ArrowRight size={16}/></a></div>
-    </motion.article>})}</div>
+    <div className="tech-grid">{techCatalog.map((item, idx) => {
+      const Icon = iconMap[item.icon] || Monitor;
+      const c = t.techCatalog[item.id] || [item.title,item.tag,item.description];
+      return <motion.article key={item.id} className="tech-card capability-card" whileHover={{ y: -8 }}>
+        <div className="tech-visual capability-visual" aria-hidden="true">
+          <span>JYM / {String(idx + 1).padStart(2, "0")}</span>
+          <div className="capability-core"><Icon size={42}/></div>
+          <i className="cap-line line-a"/><i className="cap-line line-b"/><i className="cap-line line-c"/>
+          <b>{c[1]}</b>
+        </div>
+        <div className="tech-card-body">
+          <span>{String(idx + 1).padStart(2, "0")}</span>
+          <small>{c[1]}</small>
+          <h3>{c[0]}</h3>
+          <p>{c[2]}</p>
+          <a href={wa(`Hola JYM, quiero conversar sobre: ${c[0]}`)} target="_blank" rel="noreferrer">{t.labels.cotizar} <ArrowRight size={16}/></a>
+        </div>
+      </motion.article>;
+    })}</div>
   </section>;
 }
 
