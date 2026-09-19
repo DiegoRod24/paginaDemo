@@ -284,7 +284,7 @@ function Header({ mode, setMode, lang, setLang, t }) {
   const [open, setOpen] = useState(false);
   const navItems = mode === "tech" ? [
     ["#inicio", t.nav.portal],
-    ["#showroom", t.nav.solutions],
+    ["#cuellos-botella", t.nav.solutions],
     ["#laboratorio", t.nav.lab],
     ["#proceso", t.nav.process],
     ["#contacto", t.nav.contact]
@@ -811,29 +811,95 @@ function AutomationLab({ t }) {
 
 function BottleneckSection({ t }) {
   const content = t.bottleneck;
-  if (!content) return null;
-  const icons = [MousePointerClick, Workflow, BarChart3, Bot];
-  return <section className="bottleneck-section" id="cuellos-botella">
-    <div className="bottleneck-intro">
+  const [status, setStatus] = useState("idle");
+  const timerRef = useRef();
+
+  useEffect(() => () => window.clearTimeout(timerRef.current), []);
+
+  const runFlow = () => {
+    window.clearTimeout(timerRef.current);
+    setStatus("running");
+    timerRef.current = window.setTimeout(() => setStatus("done"), 2500);
+  };
+
+  const inputIcons = [FileSpreadsheet, Database, Monitor, FileSpreadsheet, ShieldCheck, Download];
+  const outputIcons = [CheckCircle2, ShieldCheck, FileSpreadsheet, BarChart3, Download];
+
+  return <section className="bottleneck-section one-click-section" id="cuellos-botella">
+    <div className="one-click-heading">
       <div>
         <p>{content.kicker}</p>
         <h2>{content.title}</h2>
       </div>
       <span>{content.text}</span>
     </div>
-    <div className="bottleneck-grid">
-      {content.steps.map((step, index) => {
-        const Icon = icons[index] || Sparkles;
-        return <article key={step.title}>
-          <div><Icon size={25}/><span>{String(index + 1).padStart(2, "0")}</span></div>
-          <h3>{step.title}</h3>
-          <p>{step.text}</p>
-        </article>;
-      })}
+
+    <div className={`one-click-machine one-click-${status}`}>
+      <div className="one-click-column input-column">
+        <small>{content.inputLabel}</small>
+        <div className="one-click-stack">
+          {content.inputs.map((item, index) => {
+            const Icon = inputIcons[index] || FileSpreadsheet;
+            return <article key={item}>
+              <span><Icon size={18}/></span>
+              <b>{item}</b>
+              <i />
+            </article>;
+          })}
+        </div>
+      </div>
+
+      <div className="one-click-center">
+        <div className="flow-wire flow-wire-left"><i/><i/><i/><i/></div>
+        <div className="automation-engine">
+          <span className="engine-ring ring-a"/>
+          <span className="engine-ring ring-b"/>
+          <div className="engine-core">
+            <Bot size={42}/>
+            <small>JYM</small>
+          </div>
+          <b>{content.engineTitle}</b>
+          <em>{status === "running" ? content.processing : status === "done" ? content.completed : content.ready}</em>
+        </div>
+        <div className="flow-wire flow-wire-right"><i/><i/><i/><i/></div>
+
+        <button type="button" className="one-click-button" onClick={runFlow} disabled={status === "running"}>
+          {status === "running" ? <RotateCw className="spin"/> : status === "done" ? <CheckCircle2/> : <MousePointerClick/>}
+          {status === "running" ? content.processingButton : status === "done" ? content.runAgain : content.button}
+        </button>
+      </div>
+
+      <div className="one-click-column output-column">
+        <small>{content.outputLabel}</small>
+        <div className="one-click-stack">
+          {content.outputs.map((item, index) => {
+            const Icon = outputIcons[index] || CheckCircle2;
+            return <article key={item}>
+              <span><Icon size={18}/></span>
+              <b>{item}</b>
+              <i />
+            </article>;
+          })}
+        </div>
+      </div>
+
+      <div className="automation-packets" aria-hidden="true">
+        {Array.from({length:8}).map((_,index)=><i key={index} style={{"--packet":index}} />)}
+      </div>
     </div>
-    <div className="bottleneck-result">
-      <strong>{content.resultTitle}</strong>
-      <span>{content.resultText}</span>
+
+    <div className="one-click-benefits">
+      {content.benefits.map((item, index) => <article key={item.title}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <div><b>{item.title}</b><small>{item.text}</small></div>
+      </article>)}
+    </div>
+
+    <div className="bottleneck-result one-click-result">
+      <div>
+        <strong>{content.resultTitle}</strong>
+        <span>{content.resultText}</span>
+      </div>
       <a href={wa(content.whatsapp)} target="_blank" rel="noreferrer">{content.cta}<ArrowRight size={17}/></a>
     </div>
   </section>;
@@ -855,7 +921,7 @@ function PortalShowroom({ t }) {
 
 function Showroom({ mode, t }) {
   if (mode === "arch") return <ArchitectureShowroom t={t} />;
-  if (mode === "tech") return <TechShowroom t={t} />;
+  if (mode === "tech") return null;
   return <PortalShowroom t={t} />;
 }
 
@@ -865,8 +931,10 @@ function Services({ mode, t }) {
     mode === "tech" ? [Code2, Workflow, Bot, Database] :
     [Monitor, Building2, Sparkles, Snowflake];
 
-  return <section className="services" id="servicios">
-    <div className="section-title"><p>{t.services.kicker}</p><h2>{t.services.title}</h2></div>
+  return <section className={`services ${mode === "tech" ? "services-tech" : ""}`} id="servicios">
+    {mode === "tech"
+      ? <div className="services-tech-label"><p>{t.services.techSectionKicker}</p></div>
+      : <div className="section-title"><p>{t.services.kicker}</p><h2>{t.services.title}</h2></div>}
     <div className="service-grid">
       {selected.map((text, idx) => {
         const Icon = icons[idx] || Sparkles;
