@@ -873,6 +873,8 @@ function Services({ mode, t }) {
         return <article key={text}><Icon /><b>{text}</b></article>;
       })}
     </div>
+
+    {mode === "tech" && <TechShowcase t={t} />}
   </section>;
 }
 
@@ -1474,7 +1476,6 @@ function App() {
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
       <Showroom mode={mode} t={t} />
-      {mode === "tech" && <TechShowcase t={t} />}
       {mode === "tech" && <BottleneckSection t={t} />}
       {mode === "tech" && <AutomationLab t={t} />}
       {mode === "tech" && <TechProof t={t} />}
