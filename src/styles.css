@@ -5993,3 +5993,357 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
     stroke-dashoffset:0!important;
   }
 }
+
+
+/* =========================================================
+   V30 — ARCH SHOWROOM REBALANCE + AMBIENT FX BOOST
+   Corrige vacíos, proporción del visor y refuerza fondos vivos.
+========================================================= */
+
+/* ---------- Showroom Arquitectura: mejor proporción ---------- */
+.app.arch .arch-showroom {
+  width:min(1480px,calc(100% - 44px));
+  padding-top:84px !important;
+  padding-bottom:84px !important;
+  scroll-margin-top:118px;
+}
+.app.arch .arch-showroom .section-title {
+  max-width:1040px;
+  margin:0 auto 30px;
+}
+.app.arch .arch-showroom .section-title p {
+  margin-bottom:10px;
+}
+.app.arch .arch-showroom .section-title h2 {
+  max-width:980px;
+  margin:0 auto;
+  font-size:clamp(2.4rem,4.35vw,4.9rem);
+  line-height:.94;
+  letter-spacing:-.055em;
+}
+.app.arch .showroom-shell {
+  grid-template-columns:300px minmax(0,1fr);
+  gap:20px;
+  align-items:start;
+}
+.app.arch .room-menu {
+  position:sticky;
+  top:112px;
+  max-height:72vh;
+  overflow-y:auto;
+  padding-right:6px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(217,168,61,.38) transparent;
+}
+.app.arch .room-menu::-webkit-scrollbar { width:5px; }
+.app.arch .room-menu::-webkit-scrollbar-thumb {
+  background:rgba(217,168,61,.36);
+  border-radius:999px;
+}
+.app.arch .room-menu button {
+  min-height:84px;
+  padding:14px 16px;
+  border-color:rgba(255,255,255,.08);
+  background:linear-gradient(145deg,rgba(255,255,255,.028),rgba(255,255,255,.012));
+  transition:transform .22s ease,border-color .22s ease,background .22s ease,box-shadow .22s ease;
+}
+.app.arch .room-menu button:hover {
+  transform:translateX(4px);
+  border-color:rgba(217,168,61,.28);
+}
+.app.arch .room-menu button.active {
+  border-color:rgba(217,168,61,.66);
+  background:
+    radial-gradient(circle at 90% 18%,rgba(217,168,61,.14),transparent 42%),
+    rgba(217,168,61,.07);
+  box-shadow:inset 3px 0 0 rgba(217,168,61,.7),0 14px 34px rgba(0,0,0,.2);
+}
+.app.arch .room-menu button.active b { color:#fff1cb; }
+
+/* El visor deja de ser una caja negra enorme */
+.app.arch .cinema-card {
+  min-width:0;
+}
+.app.arch .cinema-frame {
+  min-height:0;
+  overflow:hidden;
+  border-radius:24px;
+  border-color:rgba(217,168,61,.13);
+  background:#060606;
+  box-shadow:0 30px 80px rgba(0,0,0,.32);
+}
+.app.arch .media-transition {
+  position:relative;
+  z-index:2;
+  height:clamp(430px,58vh,620px);
+  min-height:0;
+  display:grid;
+  place-items:center;
+  padding:18px 74px;
+  overflow:hidden;
+}
+.app.arch .media-transition img,
+.app.arch .media-transition video {
+  position:relative;
+  z-index:2;
+  width:auto;
+  height:auto;
+  max-width:94%;
+  max-height:100%;
+  object-fit:contain;
+  border-radius:8px;
+  background:transparent;
+  box-shadow:0 18px 52px rgba(0,0,0,.34);
+}
+
+/* Usa la propia imagen como ambiente para llenar laterales sin deformarla */
+.app.arch .cinema-backdrop {
+  position:absolute;
+  z-index:0;
+  inset:-6%;
+  background-position:center;
+  background-size:cover;
+  filter:blur(34px) saturate(.75) brightness(.34);
+  transform:scale(1.08);
+  opacity:.58;
+}
+.app.arch .cinema-backdrop::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(3,3,3,.74),rgba(3,3,3,.22) 28%,rgba(3,3,3,.22) 72%,rgba(3,3,3,.74)),
+    linear-gradient(180deg,rgba(3,3,3,.18),rgba(3,3,3,.38));
+}
+.app.arch .cinema-counter {
+  position:absolute;
+  z-index:5;
+  top:16px;
+  right:18px;
+  padding:7px 10px;
+  border:1px solid rgba(217,168,61,.2);
+  border-radius:999px;
+  color:#f1d18a;
+  background:rgba(5,5,5,.58);
+  backdrop-filter:blur(10px);
+  font:900 .61rem/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.09em;
+}
+.app.arch .cinema-counter span { color:rgba(255,255,255,.3); }
+
+.app.arch .nav-arrow {
+  top:50%;
+  width:46px;
+  height:46px;
+  transform:translateY(-50%);
+  border-color:rgba(217,168,61,.2);
+  background:rgba(7,7,7,.72);
+  backdrop-filter:blur(10px);
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.app.arch .nav-arrow:hover {
+  transform:translateY(-50%) scale(1.07);
+  border-color:rgba(217,168,61,.65);
+  background:rgba(28,21,10,.78);
+}
+.app.arch .nav-arrow.left { left:16px; }
+.app.arch .nav-arrow.right { right:16px; }
+
+.app.arch .cinema-label {
+  position:relative;
+  z-index:3;
+  margin:0;
+  padding:20px 22px 18px;
+  border:0;
+  border-top:1px solid rgba(255,255,255,.07);
+  border-radius:0;
+  background:linear-gradient(180deg,rgba(7,7,7,.95),rgba(4,4,4,.98));
+}
+.app.arch .cinema-label h3 {
+  margin:5px 0 6px;
+  font-size:clamp(1.55rem,2vw,2.15rem);
+}
+.app.arch .cinema-label p {
+  max-width:900px;
+  line-height:1.55;
+}
+
+/* Miniaturas más limpias, sin barra amarilla/nativa visible */
+.app.arch .filmstrip {
+  position:relative;
+  margin-top:10px;
+  padding:4px 2px 8px;
+  gap:9px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  scroll-snap-type:x proximity;
+}
+.app.arch .filmstrip::-webkit-scrollbar { display:none; }
+.app.arch .filmstrip button {
+  flex:0 0 108px;
+  height:72px;
+  border-radius:13px;
+  border-color:rgba(255,255,255,.08);
+  opacity:.72;
+  scroll-snap-align:start;
+  transition:transform .2s ease,opacity .2s ease,border-color .2s ease;
+}
+.app.arch .filmstrip button:hover {
+  transform:translateY(-3px);
+  opacity:1;
+  border-color:rgba(217,168,61,.34);
+}
+.app.arch .filmstrip button.active {
+  opacity:1;
+  border-color:rgba(217,168,61,.78);
+  box-shadow:0 0 0 2px rgba(217,168,61,.12);
+}
+
+/* ---------- Fondos vivos: hacerlos realmente apreciables ---------- */
+.world-ambient::after {
+  background:
+    radial-gradient(circle at 50% 42%,transparent 0 34%,rgba(2,5,8,.03) 64%,rgba(2,5,8,.22) 100%),
+    linear-gradient(180deg,rgba(2,5,8,.02),rgba(2,5,8,.09));
+}
+.world-ambient-tech::before,
+.world-ambient-arch::before {
+  background:
+    linear-gradient(90deg,rgba(2,5,8,.22),transparent 13%,transparent 87%,rgba(2,5,8,.22)),
+    linear-gradient(180deg,rgba(2,5,8,.10),transparent 16%,transparent 84%,rgba(2,5,8,.12));
+}
+
+/* Tecnología: código, conexiones y estados con mayor presencia */
+.app.tech .ambient-tech-grid { opacity:.62; }
+.app.tech .ambient-network { opacity:.52; }
+.app.tech .ambient-network-links path {
+  stroke:rgba(62,220,244,.45);
+  stroke-width:1.45;
+}
+.app.tech .ambient-network-nodes circle {
+  fill:rgba(103,234,251,.86);
+  stroke:rgba(103,234,251,.32);
+}
+.app.tech .ambient-code-card {
+  opacity:.58;
+  border-color:rgba(0,217,255,.18);
+  background:rgba(2,12,18,.42);
+  box-shadow:0 12px 34px rgba(0,0,0,.16),0 0 18px rgba(0,217,255,.025);
+}
+.app.tech .ambient-code-card b { color:#8dd8e4; }
+.app.tech .ambient-code-lines { opacity:.30; }
+.app.tech .ambient-code-lines span { color:#76bfce; }
+.app.tech .ambient-data-packets { opacity:.52; }
+
+/* Arquitectura: plano y cotas claramente visibles durante el scroll */
+.app.arch .ambient-blueprint-grid {
+  opacity:.64;
+  background:
+    linear-gradient(rgba(216,184,115,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,184,115,.055) 1px,transparent 1px),
+    linear-gradient(rgba(216,184,115,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,184,115,.022) 1px,transparent 1px);
+  background-size:48px 48px,48px 48px,12px 12px,12px 12px;
+}
+.app.arch .ambient-plan {
+  opacity:.46;
+}
+.app.arch .ambient-plan-main > * {
+  stroke:rgba(238,205,137,.92);
+  stroke-width:1.45;
+}
+.app.arch .ambient-plan-furniture > * {
+  stroke:rgba(238,205,137,.70);
+  stroke-width:1.05;
+}
+.app.arch .ambient-plan-dimensions > * {
+  stroke:rgba(238,205,137,.58);
+  stroke-width:.9;
+}
+.app.arch .ambient-plan-labels { opacity:.68; }
+.app.arch .plan-label {
+  border-color:rgba(215,182,111,.17);
+  color:#d0ad69;
+  background:rgba(18,14,8,.30);
+  text-shadow:0 0 12px rgba(217,168,61,.12);
+}
+.app.arch .ambient-drafting-cross { opacity:.45; }
+.app.arch .ambient-drafting-cross i {
+  background:rgba(235,202,133,.86);
+}
+
+/* Un leve resplandor técnico ayuda a llenar los costados sin agregar ruido */
+.app.arch .world-ambient::before,
+.app.tech .world-ambient::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+.app.arch .world-ambient::before {
+  background:
+    radial-gradient(circle at 8% 35%,rgba(217,168,61,.095),transparent 22%),
+    radial-gradient(circle at 92% 62%,rgba(217,168,61,.075),transparent 24%);
+}
+.app.tech .world-ambient::before {
+  background:
+    radial-gradient(circle at 8% 35%,rgba(0,217,255,.08),transparent 22%),
+    radial-gradient(circle at 92% 64%,rgba(84,81,255,.07),transparent 24%);
+}
+
+@media(max-width:1100px) {
+  .app.arch .showroom-shell {
+    grid-template-columns:1fr;
+  }
+  .app.arch .room-menu {
+    position:relative;
+    top:auto;
+    max-height:none;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .app.arch .media-transition {
+    height:clamp(400px,54vh,560px);
+  }
+}
+@media(max-width:700px) {
+  .app.arch .arch-showroom {
+    width:calc(100% - 24px);
+    padding-top:70px !important;
+  }
+  .app.arch .arch-showroom .section-title h2 {
+    font-size:clamp(2.2rem,10vw,3.6rem);
+  }
+  .app.arch .room-menu {
+    grid-template-columns:1fr;
+  }
+  .app.arch .media-transition {
+    height:360px;
+    padding:12px 52px;
+  }
+  .app.arch .media-transition img,
+  .app.arch .media-transition video {
+    max-width:100%;
+  }
+  .app.arch .filmstrip button {
+    flex-basis:94px;
+    height:64px;
+  }
+  .app.arch .cinema-counter {
+    top:10px;
+    right:10px;
+  }
+
+  /* En móvil siguen presentes, pero sin sobrecargar. */
+  .app.arch .ambient-blueprint-grid { opacity:.42; }
+  .app.arch .ambient-plan { opacity:.30; }
+  .app.arch .ambient-plan-labels { opacity:.48; }
+  .app.tech .ambient-network { opacity:.34; }
+  .app.tech .ambient-code-card { opacity:.42; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .app.arch .room-menu button,
+  .app.arch .filmstrip button,
+  .app.arch .nav-arrow {
+    transition:none!important;
+  }
+}
