@@ -214,3 +214,55 @@ export const techCatalog = [
     "image": "/assets/tecnologia/dashboards.svg"
   }
 ];
+
+
+export const techProjects = [
+  {
+    "id": "one-shot",
+    "demo": "https://one-shop.pages.dev/",
+    "github": "https://github.com/DiegoRod24/evidencia-calle-pro",
+    "tags": ["PWA", "ANDROID", "GPS", "OFFLINE", "REPORTES"]
+  },
+  {
+    "id": "vital-food",
+    "demo": "https://vital-food.pages.dev/",
+    "github": "https://github.com/DiegoRod24/vital_food",
+    "tags": ["INVENTARIO", "VOICE", "CLOUD", "OFFLINE", "SYNC"]
+  },
+  {
+    "id": "reto-fiscal",
+    "demo": "https://reto-fiscal-ai-pro.pages.dev/",
+    "github": "https://github.com/DiegoRod24/reto-fiscal-ai-pro",
+    "tags": ["EDTECH", "PWA", "VOICE", "SIMULADOR"]
+  },
+  {
+    "id": "oriente",
+    "demo": "https://oriente-alianza.pages.dev/",
+    "github": "https://github.com/DiegoRod24/ORIENTE-ALIANZA",
+    "tags": ["PWA", "MAPAS", "PEDIDOS", "STOCK", "ADMIN"]
+  },
+  {
+    "id": "mila",
+    "demo": "https://mila-5lg.pages.dev/",
+    "github": null,
+    "tags": ["ASISTENTE", "RECETAS", "VOICE", "UX"]
+  },
+  {
+    "id": "velora",
+    "demo": "https://private-shop-30j.pages.dev/",
+    "github": "https://github.com/DiegoRod24/Private-Shop",
+    "tags": ["E-COMMERCE", "MOBILE", "QR", "CATÁLOGO"]
+  },
+  {
+    "id": "math",
+    "demo": "https://diegorod24-github-io.pages.dev/",
+    "github": "https://github.com/DiegoRod24/diegorod24.github.io",
+    "tags": ["EDUCACIÓN", "JUEGOS", "WEB", "INTERACTIVO"]
+  },
+  {
+    "id": "alianza",
+    "demo": "https://alianza-lima.pages.dev/",
+    "github": "https://github.com/DiegoRod24/alianza_lima",
+    "tags": ["TIENDA", "CATÁLOGO", "RESERVAS", "MOBILE"]
+  }
+];
