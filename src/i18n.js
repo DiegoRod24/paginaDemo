@@ -46,7 +46,23 @@ export const translations = {
       "archKicker": "Showroom arquitectura",
       "archTitle": "Proyectos visuales y recorridos para clientes",
       "techKicker": "Soluciones tecnológicas",
-      "techTitle": "Sistemas, automatizaciones y productos digitales para empresas"
+      "techTitle": "Sistemas, automatizaciones y productos digitales para empresas",
+      "archSideKicker": "JYM ARQUITECTURA",
+      "archSideTitle": "¿Tienes un espacio en mente?",
+      "archSideText": "Diseñamos, visualizamos y ejecutamos espacios pensados para funcionar mejor y verse mejor.",
+      "archMediaLabel": "evidencias",
+      "archTypeLabel": "tipo",
+      "archSideCta": "Cotizar un proyecto similar",
+      "archTags": {
+        "barberia": ["Diseño comercial", "Iluminación", "Circulación", "Mobiliario"],
+        "estilismo": ["Salón", "Marca visual", "Circulación", "Atención"],
+        "lash": ["Studio", "Imagen", "Iluminación", "Confort"],
+        "manicure": ["Ergonomía", "Detalle", "Orden", "Confort"],
+        "spa": ["Bienestar", "Atmósfera", "Iluminación", "Descanso"],
+        "terraza": ["Exterior", "Iluminación", "Social", "Paisajismo"],
+        "ejecucion": ["Obra", "Acabados", "Implementación", "Entrega"],
+        "departamento": ["Recorrido 3D", "Distribución", "Acabados", "Visualización"]
+      }
     },
     "archCatalog": {
       "barberia": [
@@ -677,7 +693,23 @@ export const translations = {
       "archKicker": "Architecture showroom",
       "archTitle": "Visual projects and tours for clients",
       "techKicker": "Technology solutions",
-      "techTitle": "Systems, automation and digital products for companies"
+      "techTitle": "Systems, automation and digital products for companies",
+      "archSideKicker": "JYM ARCHITECTURE",
+      "archSideTitle": "Do you have a space in mind?",
+      "archSideText": "We design, visualize and build spaces created to work better and look better.",
+      "archMediaLabel": "evidence",
+      "archTypeLabel": "type",
+      "archSideCta": "Quote a similar project",
+      "archTags": {
+        "barberia": ["Commercial design", "Lighting", "Circulation", "Furniture"],
+        "estilismo": ["Salon", "Visual brand", "Circulation", "Customer care"],
+        "lash": ["Studio", "Image", "Lighting", "Comfort"],
+        "manicure": ["Ergonomics", "Detail", "Order", "Comfort"],
+        "spa": ["Wellness", "Atmosphere", "Lighting", "Rest"],
+        "terraza": ["Outdoor", "Lighting", "Social", "Landscaping"],
+        "ejecucion": ["Construction", "Finishes", "Implementation", "Delivery"],
+        "departamento": ["3D tour", "Layout", "Finishes", "Visualization"]
+      }
     },
     "archCatalog": {
       "barberia": [
