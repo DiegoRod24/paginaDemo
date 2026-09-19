@@ -6660,3 +6660,209 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
     height:60px;
   }
 }
+
+
+/* =========================================================
+   V32 — ARCHITECTURE PREMIUM AMBIENT BACKGROUND
+   Menos grid repetitivo, más blueprint premium.
+========================================================= */
+.app.arch .world-ambient {
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+}
+.app.arch .world-ambient::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 14% 24%,rgba(217,168,61,.08),transparent 20%),
+    radial-gradient(circle at 82% 38%,rgba(217,168,61,.06),transparent 24%),
+    radial-gradient(circle at 62% 78%,rgba(217,168,61,.05),transparent 20%);
+}
+.app.arch .world-ambient::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(4,4,4,.02),rgba(4,4,4,.08)),
+    radial-gradient(circle at center,transparent 0 34%,rgba(0,0,0,.06) 70%,rgba(0,0,0,.18) 100%);
+}
+
+/* Grid más espacioso y discreto */
+.app.arch .ambient-blueprint-grid {
+  opacity:.28;
+  background:
+    linear-gradient(rgba(216,184,115,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,184,115,.028) 1px,transparent 1px),
+    linear-gradient(rgba(216,184,115,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,184,115,.012) 1px,transparent 1px);
+  background-size:72px 72px,72px 72px,18px 18px,18px 18px;
+  mask-image:radial-gradient(circle at center,#000 18%,rgba(0,0,0,.92) 68%,transparent 100%);
+}
+
+/* Plano técnico */
+.app.arch .ambient-plan {
+  opacity:.34;
+  filter:drop-shadow(0 0 10px rgba(217,168,61,.06));
+}
+.app.arch .ambient-plan-main > * {
+  stroke:rgba(238,205,137,.72);
+  stroke-width:1.18;
+}
+.app.arch .ambient-plan-furniture > * {
+  stroke:rgba(238,205,137,.46);
+  stroke-width:.96;
+}
+.app.arch .ambient-plan-dimensions > * {
+  stroke:rgba(238,205,137,.30);
+  stroke-width:.82;
+  stroke-dasharray:7 10;
+}
+.app.arch .ambient-plan-labels {
+  opacity:.58;
+}
+.app.arch .plan-label {
+  padding:4px 7px;
+  border:1px solid rgba(215,182,111,.13);
+  border-radius:6px;
+  color:rgba(224,194,126,.78);
+  background:rgba(18,14,8,.24);
+  font-size:.47rem;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  box-shadow:0 0 12px rgba(217,168,61,.05);
+}
+.app.arch .ambient-drafting-cross {
+  opacity:.24;
+}
+.app.arch .ambient-drafting-cross i {
+  background:rgba(235,202,133,.70);
+}
+
+/* Líneas largas de blueprint */
+.app.arch .arch-line {
+  position:absolute;
+  z-index:1;
+  background:rgba(220,188,120,.16);
+  border-radius:999px;
+  transform-origin:center;
+  animation:archLineFloat 18s ease-in-out infinite alternate;
+}
+.app.arch .arch-line.h { height:1px; }
+.app.arch .arch-line.v { width:1px; }
+.app.arch .arch-line.l1 { top:14%;left:8%;width:280px; }
+.app.arch .arch-line.l2 { top:31%;right:9%;width:190px;animation-delay:1.8s; }
+.app.arch .arch-line.l3 { bottom:22%;left:11%;width:220px;animation-delay:3.2s; }
+.app.arch .arch-line.l4 { top:12%;left:30%;height:190px; }
+.app.arch .arch-line.l5 { bottom:16%;right:12%;height:160px;animation-delay:2.1s; }
+
+/* Marcos sutiles como notas de plano */
+.app.arch .arch-frame {
+  position:absolute;
+  z-index:1;
+  border:1px solid rgba(218,184,110,.10);
+  border-radius:16px;
+  background:linear-gradient(145deg,rgba(217,168,61,.01),transparent 65%);
+  animation:archFramePulse 12s ease-in-out infinite;
+}
+.app.arch .arch-frame.f1 { top:18%;left:6%;width:180px;height:92px; }
+.app.arch .arch-frame.f2 { top:48%;right:10%;width:220px;height:110px;animation-delay:1.6s; }
+.app.arch .arch-frame.f3 { bottom:12%;left:72%;width:150px;height:74px;animation-delay:3s; }
+
+/* Barrido cálido */
+.app.arch .arch-sweep {
+  position:absolute;
+  z-index:1;
+  top:0;
+  bottom:0;
+  width:20%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(217,179,91,.04),
+    rgba(255,233,179,.06),
+    rgba(217,179,91,.04),
+    transparent
+  );
+  filter:blur(10px);
+  animation:archSweepPremium 16s ease-in-out infinite;
+  opacity:.75;
+}
+
+/* Notas técnicas flotantes */
+.app.arch .arch-note {
+  position:absolute;
+  z-index:2;
+  padding:4px 7px;
+  border:1px solid rgba(217,168,61,.12);
+  border-radius:999px;
+  color:rgba(223,192,122,.56);
+  background:rgba(15,11,7,.18);
+  font:800 .44rem/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  animation:archNoteFloat 9s ease-in-out infinite alternate;
+}
+.app.arch .arch-note.n1 { top:10%;left:12%; }
+.app.arch .arch-note.n2 { top:24%;right:16%;animation-delay:1.4s; }
+.app.arch .arch-note.n3 { bottom:18%;left:22%;animation-delay:2.4s; }
+.app.arch .arch-note.n4 { bottom:10%;right:12%;animation-delay:3.2s; }
+
+@keyframes archLineFloat {
+  from { transform:translateY(-2px);opacity:.55; }
+  to { transform:translateY(7px);opacity:.95; }
+}
+@keyframes archFramePulse {
+  0%,100% { opacity:.38;transform:scale(1); }
+  50% { opacity:.68;transform:scale(1.012); }
+}
+@keyframes archSweepPremium {
+  0%,10% { left:-24%;opacity:0; }
+  22% { opacity:.72; }
+  68% { opacity:.52; }
+  86%,100% { left:108%;opacity:0; }
+}
+@keyframes archNoteFloat {
+  from { transform:translateY(-4px);opacity:.38; }
+  to { transform:translateY(7px);opacity:.72; }
+}
+
+@media(max-width:1100px) {
+  .app.arch .ambient-blueprint-grid { opacity:.22; }
+  .app.arch .ambient-plan { opacity:.26; }
+  .app.arch .arch-frame.f2,
+  .app.arch .arch-note.n4 { display:none; }
+}
+@media(max-width:700px) {
+  .app.arch .ambient-blueprint-grid {
+    opacity:.16;
+    background-size:56px 56px,56px 56px,14px 14px,14px 14px;
+  }
+  .app.arch .ambient-plan { opacity:.18; }
+  .app.arch .arch-frame,
+  .app.arch .arch-line.l2,
+  .app.arch .arch-line.l5,
+  .app.arch .arch-note.n2,
+  .app.arch .arch-note.n3,
+  .app.arch .arch-note.n4 {
+    display:none;
+  }
+  .app.arch .arch-sweep {
+    width:28%;
+    opacity:.48;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .app.arch .arch-line,
+  .app.arch .arch-frame,
+  .app.arch .arch-sweep,
+  .app.arch .arch-note {
+    animation:none!important;
+  }
+}
