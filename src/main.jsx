@@ -1112,8 +1112,8 @@ const COMPANION_SECTIONS = {
   tech: [
     { id: "inicio", state: "home", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
-    { id: "vision-tech", state: "services", side: "right" },
     { id: "proyectos-tech", state: "projects", side: "right" },
+    { id: "vision-tech", state: "services", side: "right" },
     { id: "laboratorio", state: "automation", side: "left" },
     { id: "casos-reales", state: "automation", side: "left" },
     { id: "proceso", state: "process", side: "right" },
@@ -1697,8 +1697,8 @@ function App() {
 
       {mode === "tech" && <>
         <TechShowroom t={t} />
-        <TechIntro setMode={setMode} t={t} />
         <TechShowcase t={t} />
+        <TechIntro setMode={setMode} t={t} />
         <AutomationLab t={t} />
         <TechProof t={t} />
         <ProcessSection t={t} mode={mode} />
