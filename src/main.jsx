@@ -772,8 +772,9 @@ function TechProof({ t }) {
   const proof = t.techProof;
   if (!proof) return null;
 
-  const proofIcons = [Database, Workflow, Monitor, Bot];
-  return <section className="tech-proof" id="casos-reales">
+  const proofIcons = [Database, Workflow, BarChart3, Monitor];
+  const visibleCases = proof.cases.filter((_, index) => [0, 1, 3, 4].includes(index));
+  return <section className="tech-proof tech-proof-curated" id="casos-reales">
     <div className="section-title proof-heading">
       <p>{proof.kicker}</p>
       <h2>{proof.title}</h2>
@@ -781,7 +782,7 @@ function TechProof({ t }) {
     </div>
 
     <div className="proof-grid">
-      {proof.cases.map((item, index) => {
+      {visibleCases.map((item, index) => {
         const Icon = proofIcons[index] || Sparkles;
         return <article className="proof-card" key={item.title}>
           <div className="proof-card-top">
