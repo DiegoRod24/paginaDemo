@@ -8,9 +8,9 @@ import {
   ArrowRight, BarChart3, Bot, Building2, CheckCircle2, ChevronLeft, ChevronRight, Code2,
   Database, Download, FileSpreadsheet, Hammer, Home, IdCard, LockKeyhole, Mail, Menu,
   MessageCircle, Monitor, MousePointerClick, Phone, Play, RotateCw, Scale, ShieldCheck, Snowflake, Sparkles,
-  Timer, Workflow, X
+  Timer, Workflow, X, Smartphone, ShoppingBag, ExternalLink, Github
 } from "lucide-react";
-import { archCatalog, techCatalog } from "./catalog.js";
+import { archCatalog, techCatalog, techProjects } from "./catalog.js";
 import { translations } from "./i18n.js";
 import AnimatedTechAssistant from "./AnimatedTechAssistant.jsx";
 import "./styles.css";
@@ -21,7 +21,7 @@ const EMAIL = "jmproyectoarquitectura@gmail.com";
 const TIKTOK_URL = "https://www.tiktok.com/@jymdisenoyarquitectura?_r=1&_t=ZS-97jUtwXlYcp.";
 const INSTAGRAM_URL = "https://www.instagram.com/jymdisenoyarquitectura?igsh=dmlyZmdoOXVqcmpx&utm_source=qr.";
 const wa = (msg = "Hola JYM, quiero cotizar un proyecto.") => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-const iconMap = { Monitor, Scale, Database, IdCard, Bot, BarChart3 };
+const iconMap = { Monitor, Scale, Database, IdCard, Bot, BarChart3, Smartphone, ShoppingBag };
 
 
 
@@ -285,6 +285,7 @@ function Header({ mode, setMode, lang, setLang, t }) {
   const navItems = mode === "tech" ? [
     ["#inicio", t.nav.portal],
     ["#showroom", t.nav.solutions],
+    ["#proyectos-tech", t.nav.success],
     ["#laboratorio", t.nav.lab],
     ["#proceso", t.nav.process],
     ["#contacto", t.nav.contact]
@@ -546,6 +547,87 @@ function TechShowroom({ t }) {
     <div className="tech-grid">{techCatalog.map((item, idx) => { const Icon = iconMap[item.icon] || Monitor; const c = t.techCatalog[item.id] || [item.title,item.tag,item.description]; return <motion.article key={item.id} className="tech-card" whileHover={{ y: -12, rotateX: 2 }}>
       <div className="tech-visual"><img src={item.image} alt={c[0]} /></div><div className="tech-card-body"><span>{String(idx + 1).padStart(2, "0")}</span><Icon size={36}/><small>{c[1]}</small><h3>{c[0]}</h3><p>{c[2]}</p><a href={wa(`Hola JYM, quiero cotizar: ${c[0]}`)} target="_blank" rel="noreferrer">{t.labels.cotizar} <ArrowRight size={16}/></a></div>
     </motion.article>})}</div>
+  </section>;
+}
+
+function TechShowcase({ t }) {
+  const [active, setActive] = useState(0);
+  const selected = techProjects[active] || techProjects[0];
+  const copy = t.techShowcase;
+  const projectCopy = copy.projects[selected.id];
+
+  return <section className="tech-showcase" id="proyectos-tech">
+    <div className="showcase-heading">
+      <div>
+        <p>{copy.kicker}</p>
+        <h2>{copy.title}</h2>
+      </div>
+      <span>{copy.intro}</span>
+    </div>
+
+    <div className="showcase-stage">
+      <div className="showcase-browser">
+        <div className="browser-bar">
+          <div className="browser-dots"><i/><i/><i/></div>
+          <div className="browser-address"><ShieldCheck size={14}/><span>{selected.demo.replace(/^https?:\/\//, "")}</span></div>
+          <span className="browser-live"><i/>{copy.live}</span>
+        </div>
+        <div className="browser-screen">
+          <iframe
+            key={selected.demo}
+            src={selected.demo}
+            title={projectCopy.title}
+            loading="lazy"
+            tabIndex="-1"
+            aria-hidden="true"
+          />
+          <div className="browser-shield" aria-hidden="true" />
+        </div>
+        <div className="showcase-browser-copy">
+          <div>
+            <small>{projectCopy.category}</small>
+            <h3>{projectCopy.title}</h3>
+            <p>{projectCopy.description}</p>
+          </div>
+          <div className="showcase-actions">
+            <a className="showcase-primary" href={selected.demo} target="_blank" rel="noreferrer">
+              {copy.openDemo}<ExternalLink size={16}/>
+            </a>
+            {selected.github && <a className="showcase-secondary" href={selected.github} target="_blank" rel="noreferrer">
+              <Github size={17}/>{copy.github}
+            </a>}
+          </div>
+        </div>
+        <div className="showcase-tags">
+          {selected.tags.map(tag => <span key={tag}>{tag}</span>)}
+        </div>
+      </div>
+
+      <div className="showcase-list">
+        {techProjects.map((project, index) => {
+          const item = copy.projects[project.id];
+          return <button
+            type="button"
+            key={project.id}
+            className={active === index ? "active" : ""}
+            onClick={() => setActive(index)}
+          >
+            <span className="showcase-index">{String(index + 1).padStart(2, "0")}</span>
+            <span className="showcase-list-copy">
+              <small>{item.category}</small>
+              <b>{item.title}</b>
+              <em>{item.short}</em>
+            </span>
+            <ArrowRight size={18}/>
+          </button>;
+        })}
+      </div>
+    </div>
+
+    <div className="showcase-capability-strip">
+      <span>{copy.stripLabel}</span>
+      {copy.capabilities.map(item => <b key={item}>{item}</b>)}
+    </div>
   </section>;
 }
 
@@ -881,6 +963,7 @@ const COMPANION_SECTIONS = {
   tech: [
     { id: "inicio", state: "home", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
+    { id: "proyectos-tech", state: "projects", side: "right" },
     { id: "cuellos-botella", state: "process", side: "right" },
     { id: "laboratorio", state: "automation", side: "left" },
     { id: "casos-reales", state: "projects", side: "right" },
@@ -1390,6 +1473,7 @@ function App() {
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
       <Showroom mode={mode} t={t} />
+      {mode === "tech" && <TechShowcase t={t} />}
       {mode === "tech" && <BottleneckSection t={t} />}
       {mode === "tech" && <AutomationLab t={t} />}
       {mode === "tech" && <TechProof t={t} />}
