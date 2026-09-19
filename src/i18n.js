@@ -128,7 +128,6 @@ export const translations = {
       "intro": "No queremos decirte solamente que hacemos sistemas. Queremos que veas productos, herramientas y experiencias que ya hemos construido.",
       "live": "DEMO EN VIVO",
       "openDemo": "Abrir proyecto",
-      "github": "Ver GitHub",
       "stripLabel": "CAPACIDADES",
       "capabilities": ["WEB", "APPS", "IA", "OCR", "VISION", "VOICE", "BOTS", "DATA", "EXCEL", "PDF", "CLOUD", "OFFLINE", "PWA", "ANDROID"],
       "projects": {
@@ -760,7 +759,6 @@ export const translations = {
       "intro": "We do not want to simply tell you we build systems. We want you to see products, tools and experiences we have already created.",
       "live": "LIVE DEMO",
       "openDemo": "Open project",
-      "github": "View GitHub",
       "stripLabel": "CAPABILITIES",
       "capabilities": ["WEB", "APPS", "AI", "OCR", "VISION", "VOICE", "BOTS", "DATA", "EXCEL", "PDF", "CLOUD", "OFFLINE", "PWA", "ANDROID"],
       "projects": {
