@@ -5622,3 +5622,374 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
     opacity:1!important;
   }
 }
+
+
+/* =========================================================
+   WORLD AMBIENT BACKGROUNDS · SCROLL REACTIVE
+   Tecnología = código / data / conexiones
+   Arquitectura = planos / cotas / trazos
+========================================================= */
+.app {
+  isolation:isolate;
+}
+.app > main {
+  position:relative;
+  z-index:1;
+}
+.world-ambient {
+  --ambient-progress:0;
+  --ambient-shift-slow:0px;
+  --ambient-shift-fast:0px;
+  --ambient-shift-side:0px;
+  --ambient-draw:1450;
+  --ambient-data-offset:0;
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  contain:paint;
+  opacity:1;
+}
+.world-ambient::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:20;
+  background:
+    radial-gradient(circle at 50% 42%,transparent 0 28%,rgba(2,5,8,.08) 58%,rgba(2,5,8,.46) 100%),
+    linear-gradient(180deg,rgba(2,5,8,.08),rgba(2,5,8,.22));
+}
+.app.tech .world-ambient {
+  background:
+    radial-gradient(circle at 76% 28%,rgba(0,217,255,.055),transparent 28%),
+    radial-gradient(circle at 18% 74%,rgba(80,63,255,.035),transparent 30%);
+}
+.app.arch .world-ambient {
+  background:
+    radial-gradient(circle at 72% 26%,rgba(207,164,77,.055),transparent 28%),
+    radial-gradient(circle at 18% 72%,rgba(255,215,132,.028),transparent 31%);
+}
+
+/* ---------- TECNOLOGÍA ---------- */
+.ambient-tech-grid {
+  position:absolute;
+  inset:-12%;
+  z-index:0;
+  opacity:.34;
+  transform:translate3d(var(--ambient-shift-side),var(--ambient-shift-slow),0);
+  background:
+    linear-gradient(rgba(0,217,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,217,255,.025) 1px,transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(circle at 50% 50%,black 0 66%,transparent 94%);
+}
+.ambient-network {
+  position:absolute;
+  inset:-6%;
+  z-index:1;
+  width:112%;
+  height:112%;
+  overflow:visible;
+  opacity:.31;
+  transform:translate3d(var(--ambient-shift-side),var(--ambient-shift-slow),0) scale(1.02);
+}
+.ambient-network-links path {
+  fill:none;
+  stroke:rgba(62,220,244,.29);
+  stroke-width:1.15;
+  stroke-dasharray:12 23;
+  stroke-dashoffset:var(--ambient-data-offset);
+  vector-effect:non-scaling-stroke;
+}
+.ambient-network-nodes circle {
+  fill:rgba(103,234,251,.68);
+  stroke:rgba(103,234,251,.24);
+  stroke-width:10;
+  vector-effect:non-scaling-stroke;
+  animation:ambientNodePulse 3.5s ease-in-out infinite alternate;
+}
+.ambient-network-nodes circle:nth-child(3n) { animation-delay:.7s; }
+.ambient-network-nodes circle:nth-child(4n) { animation-delay:1.3s; }
+
+.ambient-code-cloud {
+  position:absolute;
+  inset:-4% -2%;
+  z-index:3;
+  transform:translate3d(0,var(--ambient-shift-fast),0);
+}
+.ambient-code-card {
+  position:absolute;
+  min-width:118px;
+  padding:9px 11px 9px 13px;
+  display:grid;
+  gap:3px;
+  border:1px solid rgba(0,217,255,.10);
+  border-radius:9px;
+  color:#5b8c99;
+  background:rgba(2,12,18,.26);
+  box-shadow:0 12px 32px rgba(0,0,0,.08);
+  backdrop-filter:blur(3px);
+  opacity:.34;
+  transform:translateX(var(--ambient-shift-side));
+}
+.ambient-code-card small {
+  font:800 .49rem/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.10em;
+}
+.ambient-code-card b {
+  color:#74bac7;
+  font:900 .57rem/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.07em;
+}
+.ambient-code-card i {
+  position:absolute;
+  right:8px;
+  top:9px;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#55e4b2;
+  box-shadow:0 0 9px rgba(85,228,178,.6);
+}
+.ambient-code-1 { left:7%;top:12%; }
+.ambient-code-2 { right:8%;top:17%; }
+.ambient-code-3 { right:18%;top:39%; }
+.ambient-code-4 { left:14%;top:44%; }
+.ambient-code-5 { left:4%;top:70%; }
+.ambient-code-6 { right:6%;top:66%; }
+.ambient-code-7 { left:29%;top:82%; }
+.ambient-code-8 { right:31%;top:80%; }
+
+.ambient-code-lines {
+  position:absolute;
+  z-index:2;
+  left:3%;
+  right:3%;
+  top:8%;
+  bottom:8%;
+  transform:translateY(var(--ambient-shift-slow));
+  opacity:.16;
+}
+.ambient-code-lines span {
+  position:absolute;
+  color:#4fa4b4;
+  font:500 .56rem/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.035em;
+  white-space:nowrap;
+}
+.ambient-code-lines span:nth-child(1){left:23%;top:9%}
+.ambient-code-lines span:nth-child(2){right:23%;top:31%}
+.ambient-code-lines span:nth-child(3){left:8%;top:55%}
+.ambient-code-lines span:nth-child(4){right:9%;top:71%}
+.ambient-code-lines span:nth-child(5){left:37%;top:89%}
+
+.ambient-data-packets {
+  position:absolute;
+  inset:0;
+  z-index:4;
+  opacity:.28;
+}
+.ambient-data-packets i {
+  position:absolute;
+  left:-24px;
+  top:calc(8% + (var(--ambient-packet) * 7.4%));
+  width:5px;
+  height:5px;
+  border-radius:2px;
+  background:#55e8ff;
+  box-shadow:0 0 9px rgba(85,232,255,.65);
+  animation:ambientPacket 13s linear infinite;
+  animation-delay:calc(var(--ambient-packet) * -.9s);
+}
+.ambient-data-packets i:nth-child(3n) {
+  width:3px;
+  height:3px;
+  opacity:.6;
+  animation-duration:17s;
+}
+
+/* ---------- ARQUITECTURA ---------- */
+.ambient-blueprint-grid {
+  position:absolute;
+  inset:-10%;
+  z-index:0;
+  opacity:.34;
+  transform:translate3d(var(--ambient-shift-side),var(--ambient-shift-slow),0);
+  background:
+    linear-gradient(rgba(216,184,115,.026) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,184,115,.026) 1px,transparent 1px),
+    linear-gradient(rgba(216,184,115,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,184,115,.012) 1px,transparent 1px);
+  background-size:48px 48px,48px 48px,12px 12px,12px 12px;
+  mask-image:radial-gradient(circle at 50% 48%,black 0 66%,transparent 94%);
+}
+.ambient-plan {
+  position:absolute;
+  z-index:2;
+  left:-5%;
+  top:-4%;
+  width:110%;
+  height:108%;
+  opacity:.23;
+  transform:translate3d(var(--ambient-shift-side),var(--ambient-shift-slow),0) scale(1.01);
+}
+.ambient-plan-main > *,
+.ambient-plan-furniture > * {
+  fill:none;
+  stroke:rgba(224,194,132,.74);
+  stroke-width:1.15;
+  stroke-dasharray:1450;
+  stroke-dashoffset:var(--ambient-draw);
+  vector-effect:non-scaling-stroke;
+}
+.ambient-plan-furniture > * {
+  stroke:rgba(224,194,132,.48);
+  stroke-width:.85;
+}
+.ambient-plan-dimensions > * {
+  fill:none;
+  stroke:rgba(224,194,132,.38);
+  stroke-width:.72;
+  stroke-dasharray:1450;
+  stroke-dashoffset:var(--ambient-draw);
+  vector-effect:non-scaling-stroke;
+}
+.ambient-plan-labels {
+  position:absolute;
+  inset:0;
+  z-index:3;
+  transform:translateY(var(--ambient-shift-fast));
+  opacity:.36;
+}
+.plan-label {
+  position:absolute;
+  padding:5px 7px;
+  border:1px solid rgba(215,182,111,.08);
+  border-radius:5px;
+  color:#a98e5b;
+  background:rgba(18,14,8,.17);
+  font:800 .48rem/1.15 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.09em;
+  white-space:nowrap;
+}
+.plan-label-1 { left:10%;top:16%; }
+.plan-label-2 { right:14%;top:24%; }
+.plan-label-3 { left:18%;top:52%; }
+.plan-label-4 { right:9%;top:59%; }
+.plan-label-5 { left:34%;top:78%; }
+.plan-label-6 { right:27%;top:85%; }
+
+.ambient-drafting-cross {
+  position:absolute;
+  z-index:4;
+  width:28px;
+  height:28px;
+  opacity:.22;
+  transform:translate3d(var(--ambient-shift-side),var(--ambient-shift-fast),0);
+}
+.ambient-drafting-cross i {
+  position:absolute;
+  left:50%;
+  top:50%;
+  background:rgba(225,192,124,.64);
+}
+.ambient-drafting-cross i:first-child {
+  width:100%;
+  height:1px;
+  transform:translate(-50%,-50%);
+}
+.ambient-drafting-cross i:last-child {
+  width:1px;
+  height:100%;
+  transform:translate(-50%,-50%);
+}
+.cross-a { left:8%;top:34%; }
+.cross-b { right:13%;top:47%; }
+.cross-c { left:72%;top:82%; }
+
+/* Mantener la lectura por encima del ambiente. */
+.world-ambient + .transition {
+  z-index:9999;
+}
+.world-ambient-tech::before,
+.world-ambient-arch::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:15;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(2,5,8,.50),transparent 18%,transparent 82%,rgba(2,5,8,.50)),
+    linear-gradient(180deg,rgba(2,5,8,.26),transparent 22%,transparent 78%,rgba(2,5,8,.28));
+}
+
+@keyframes ambientNodePulse {
+  from{opacity:.28;transform:scale(.75)}
+  to{opacity:.85;transform:scale(1.22)}
+}
+@keyframes ambientPacket {
+  0%{transform:translateX(-4vw);opacity:0}
+  8%{opacity:.75}
+  88%{opacity:.55}
+  100%{transform:translateX(108vw);opacity:0}
+}
+
+@media(max-width:900px) {
+  .world-ambient {
+    opacity:.72;
+  }
+  .ambient-code-card:nth-child(n+5),
+  .ambient-code-lines span:nth-child(n+4),
+  .plan-label:nth-child(n+5) {
+    display:none;
+  }
+  .ambient-network {
+    opacity:.20;
+  }
+  .ambient-plan {
+    opacity:.16;
+    width:128%;
+    left:-14%;
+  }
+  .ambient-data-packets i:nth-child(2n) {
+    display:none;
+  }
+}
+@media(max-width:600px) {
+  .world-ambient {
+    opacity:.46;
+  }
+  .ambient-code-card:nth-child(n+4),
+  .ambient-code-lines,
+  .ambient-drafting-cross,
+  .ambient-plan-labels .plan-label:nth-child(n+4) {
+    display:none;
+  }
+  .ambient-tech-grid,
+  .ambient-blueprint-grid {
+    opacity:.20;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .world-ambient,
+  .ambient-tech-grid,
+  .ambient-network,
+  .ambient-code-cloud,
+  .ambient-code-lines,
+  .ambient-blueprint-grid,
+  .ambient-plan,
+  .ambient-plan-labels,
+  .ambient-drafting-cross {
+    transform:none!important;
+  }
+  .ambient-network-nodes circle,
+  .ambient-data-packets i {
+    animation:none!important;
+  }
+  .ambient-plan-main > *,
+  .ambient-plan-furniture > *,
+  .ambient-plan-dimensions > * {
+    stroke-dashoffset:0!important;
+  }
+}
