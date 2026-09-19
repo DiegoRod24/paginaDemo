@@ -45,8 +45,8 @@ export const translations = {
       "neutralTitle": "Dos líneas profesionales en una sola empresa",
       "archKicker": "Showroom arquitectura",
       "archTitle": "Proyectos visuales y recorridos para clientes",
-      "techKicker": "Soluciones tecnológicas",
-      "techTitle": "Sistemas, automatizaciones y productos digitales para empresas"
+      "techKicker": "Capacidades JYM",
+      "techTitle": "Esto es lo que podemos construir para ti"
     },
     "archCatalog": {
       "barberia": [
@@ -91,35 +91,35 @@ export const translations = {
       ]
     },
     "techCatalog": {
-      "redes": [
-        "Sistema web de redes sociales",
-        "Monitoreo y evidencias",
-        "Panel para analizar publicaciones, perfilar redes, generar evidencias y reportes para clientes."
+      "systems": [
+        "Apps y sistemas a medida",
+        "Producto digital",
+        "Plataformas web, sistemas internos y herramientas construidas alrededor de la operación real del cliente."
       ],
-      "pj": [
-        "Consulta y verificación masiva",
-        "Automatización de fuentes",
-        "Búsqueda por lotes, control de resultados, trazabilidad y exportación ordenada."
-      ],
-      "sunat": [
-        "Validación empresarial por lotes",
-        "Datos y consistencia",
-        "Consolidación de fuentes autorizadas, filtros y reportes para control empresarial."
-      ],
-      "dni": [
-        "Control masivo de registros",
-        "Calidad de datos",
-        "Comparación, observaciones, errores y reportes para grandes volúmenes de registros."
-      ],
-      "bots": [
-        "Bots de automatización",
+      "automation": [
+        "Automatización y bots",
         "Procesos inteligentes",
-        "Flujos que reducen tareas repetitivas, conectan fuentes y aceleran operaciones."
+        "Flujos que leen, consultan, validan, registran, descargan y continúan tareas repetitivas con trazabilidad."
       ],
-      "dashboard": [
-        "Dashboards ejecutivos",
-        "Indicadores visuales",
-        "Paneles para tomar decisiones con métricas, filtros, alertas y reportes."
+      "ai": [
+        "IA, OCR y visión artificial",
+        "Inteligencia aplicada",
+        "Lectura de documentos, clasificación, asistentes, voz, análisis visual y apoyo inteligente a decisiones."
+      ],
+      "dashboards": [
+        "Dashboards y control operativo",
+        "Datos bajo control",
+        "Paneles con filtros, alertas, estados, evidencias, métricas y reportes para convertir datos en decisiones."
+      ],
+      "mobile": [
+        "Apps móviles, PWA y offline",
+        "Operación en campo",
+        "Experiencias instalables para celular y tablet, capaces de trabajar aun con conectividad limitada."
+      ],
+      "commerce": [
+        "E-commerce y experiencias digitales",
+        "Experiencia de usuario",
+        "Tiendas, catálogos, pedidos, reservas, educación interactiva y experiencias digitales personalizadas."
       ]
     },
     "services": {
@@ -132,10 +132,10 @@ export const translations = {
         "Aire acondicionado"
       ],
       "tech": [
-        "Desarrollo web a medida",
-        "Automatización de procesos",
-        "Bots empresariales",
-        "Dashboards y reportes"
+        "Apps y sistemas a medida",
+        "Automatización y bots",
+        "IA, OCR y visión artificial",
+        "Dashboards y operación digital"
       ],
       "neutral": [
         "Tecnología empresarial",
@@ -144,48 +144,122 @@ export const translations = {
         "Climatización"
       ]
     },
+    "techShowcase": {
+      "kicker": "CONSTRUIDO POR JYM",
+      "title": "Proyectos reales que puedes abrir y probar",
+      "intro": "No queremos decirte solamente que hacemos sistemas. Queremos que veas productos, herramientas y experiencias que ya hemos construido.",
+      "live": "DEMO EN VIVO",
+      "openDemo": "Abrir proyecto",
+      "github": "Ver GitHub",
+      "stripLabel": "CAPACIDADES",
+      "capabilities": ["WEB", "APPS", "IA", "OCR", "VISION", "VOICE", "BOTS", "DATA", "EXCEL", "PDF", "CLOUD", "OFFLINE", "PWA", "ANDROID"],
+      "projects": {
+        "one-shot": {
+          "title": "ONE SHOT",
+          "category": "EVIDENCIA + OPERACIÓN EN CAMPO",
+          "description": "Plataforma Web/PWA y Android para captura de evidencia con GPS, operación offline, trazabilidad y generación de reportes.",
+          "short": "Cámara, GPS, offline y reportes."
+        },
+        "vital-food": {
+          "title": "Vital Foods Control",
+          "category": "OPERACIÓN + INVENTARIO",
+          "description": "Sistema para inventario, pedidos, mermas y trabajo colaborativo, con ingreso por voz y sincronización entre dispositivos.",
+          "short": "Inventario, voz y sincronización."
+        },
+        "reto-fiscal": {
+          "title": "Reto Fiscal AI Pro",
+          "category": "EDTECH + SIMULACIÓN",
+          "description": "Plataforma de preparación y aprendizaje mobile-first con banco de preguntas, modos de estudio, progreso y experiencia por voz.",
+          "short": "Estudio, voz, progreso y PWA."
+        },
+        "oriente": {
+          "title": "Oriente Alianza",
+          "category": "COMUNIDAD + EXPERIENCIA MÓVIL",
+          "description": "PWA para organizar información, mapa, actividades, pedidos, stock y operación administrativa desde el celular.",
+          "short": "Mapa, pedidos, stock y comunidad."
+        },
+        "mila": {
+          "title": "MILA",
+          "category": "ASISTENTE DIGITAL",
+          "description": "Asistente de cocina en evolución que acompaña recetas, pasos, tiempos e interacción durante la preparación.",
+          "short": "Asistente, recetas y experiencia conversacional."
+        },
+        "velora": {
+          "title": "VELORA",
+          "category": "E-COMMERCE",
+          "description": "Experiencia de compra mobile-first con catálogo, filtros, favoritos, carrito, QR, recojo y asistente virtual.",
+          "short": "Catálogo, carrito, QR y mobile."
+        },
+        "math": {
+          "title": "Aprende Matemáticas",
+          "category": "EDUCACIÓN + GAMIFICACIÓN",
+          "description": "Experiencia educativa para reforzar matemáticas mediante retos, juegos y actividades interactivas.",
+          "short": "Aprendizaje mediante juego."
+        },
+        "alianza": {
+          "title": "Rincón del Hincha Grone",
+          "category": "TIENDA + EXPERIENCIA DIGITAL",
+          "description": "Catálogo y experiencia digital independiente con productos personalizados, reservas y recorrido visual orientado al hincha.",
+          "short": "Catálogo, reservas y personalización."
+        }
+      }
+    },
     "techProof": {
-      "kicker": "Experiencia aplicada",
-      "title": "Automatizaciones que ya resolvimos en escenarios reales",
-      "intro": "No vendemos una herramienta genérica. Analizamos el trabajo repetitivo, construimos el flujo y entregamos una solución que tu equipo puede usar y controlar.",
-      "status": "Caso desarrollado",
+      "kicker": "AUTOMATIZACIONES JYM",
+      "title": "Procesos que podemos convertir en flujo automático",
+      "intro": "Nuestros proyectos no se quedan en una interfaz bonita. También automatizamos lectura, validación, navegación, clasificación, generación de evidencia y salida de resultados.",
+      "status": "Flujo implementable",
       "flowLabel": "Flujo de la solución",
-      "cta": "Quiero una solución similar",
-      "whatsapp": "Hola JYM, quiero conversar sobre una solución similar a",
+      "cta": "Quiero automatizar algo similar",
+      "whatsapp": "Hola JYM, quiero conversar sobre una automatización similar a",
       "cases": [
         {
-          "category": "DATOS + VALIDACIÓN",
-          "title": "Consultas masivas y control de inconsistencias",
-          "description": "Automatización para leer lotes desde Excel, consultar fuentes autorizadas, comparar resultados y separar válidos, observados y errores.",
-          "flow": ["Excel", "Validación", "Reporte"],
-          "outputs": ["Procesamiento por lotes", "Reintentos y trazabilidad", "Exportación Excel, CSV y evidencias"]
+          "category": "DOCUMENTOS + OCR",
+          "title": "Procesamiento inteligente de documentos",
+          "description": "Lectura, clasificación y validación de PDFs, Excel e imágenes para preparar expedientes y detectar excepciones.",
+          "flow": ["Archivos", "OCR", "Clasificar", "Validar", "Resultado"],
+          "outputs": ["Identificación de documentos", "Alertas e inconsistencias", "Expediente y reporte final"]
         },
         {
-          "category": "DOCUMENTOS + OPERACIÓN",
-          "title": "Bots para registro y gestión documental",
-          "description": "Flujos asistidos que revisan archivos, completan formularios, controlan confirmaciones y continúan sin perder el avance del operador.",
-          "flow": ["Archivos", "Bot asistido", "Resultado"],
-          "outputs": ["Validación previa de documentos", "Pausa, reanudación y registro", "Reporte de pendientes y errores"]
+          "category": "WEB + OPERACIÓN",
+          "title": "Automatización de plataformas",
+          "description": "Bots asistidos que navegan sistemas web, completan pasos, cargan información y controlan confirmaciones sin perder trazabilidad.",
+          "flow": ["Datos", "Bot", "Sistema", "Verificar", "Registrar"],
+          "outputs": ["Pausa y reanudación", "Reintentos controlados", "Logs, pendientes y resultado"]
         },
         {
-          "category": "MONITOREO + EVIDENCIA",
-          "title": "Plataformas de monitoreo digital",
-          "description": "Sistemas para organizar publicaciones, evidencias y multimedia por proyecto, con revisión, filtros y reportes para la toma de decisiones.",
-          "flow": ["Fuentes", "Clasificación", "Dashboard"],
-          "outputs": ["Panel por cliente o proyecto", "Evidencias y archivos centralizados", "Filtros, métricas y exportación"]
+          "category": "RECOLECCIÓN DIGITAL",
+          "title": "Captura y consolidación de información",
+          "description": "Recorrido de fuentes digitales para obtener enlaces, fechas, contenido y evidencia y convertirlos en una base ordenada.",
+          "flow": ["Fuentes", "Recolectar", "Clasificar", "Evidencia", "Dashboard"],
+          "outputs": ["Recolección por lotes", "Filtros por fecha o perfil", "Consolidado y evidencia"]
         },
         {
-          "category": "IA + ASISTENCIA HUMANA",
-          "title": "Asistentes inteligentes para equipos",
-          "description": "IA aplicada para leer, sugerir, clasificar y guiar tareas mediante texto, voz u OCR, manteniendo confirmación humana en acciones sensibles.",
-          "flow": ["Entrada", "Asistente IA", "Revisión"],
-          "outputs": ["Ayuda contextual y conversacional", "OCR y sugerencias de clasificación", "Control humano y trazabilidad"]
+          "category": "DATOS + REGLAS",
+          "title": "Procesamiento masivo y validaciones",
+          "description": "Flujos para recibir grandes volúmenes de registros, aplicar reglas, realizar cruces y entregar solo excepciones para revisión.",
+          "flow": ["Excel", "Reglas", "Cruces", "Excepciones", "Reporte"],
+          "outputs": ["Procesamiento por lotes", "Separación de válidos y observados", "Excel, CSV y trazabilidad"]
+        },
+        {
+          "category": "AUDIO + VIDEO",
+          "title": "Inteligencia audiovisual",
+          "description": "Procesamiento de video y audio para transcribir, detectar coincidencias y generar clips o evidencias de forma automatizada.",
+          "flow": ["Video", "Audio", "Transcribir", "Match", "Clip"],
+          "outputs": ["Transcripción", "Detección por reglas y señales", "Clips y evidencia"]
+        },
+        {
+          "category": "DOCUMENTOS + PLANTILLAS",
+          "title": "Generación documental",
+          "description": "Creación masiva de documentos personalizados a partir de bases de datos y plantillas listas para entregar o imprimir.",
+          "flow": ["Base", "Plantilla", "Personalizar", "Documento", "PDF / Word"],
+          "outputs": ["Numeración automática", "Documentos personalizados", "Salida ordenada por lote"]
         }
       ],
       "auditKicker": "DIAGNÓSTICO DE AUTOMATIZACIÓN",
       "auditTitle": "Muéstranos la tarea que repites cada día",
-      "auditText": "Evaluamos tu proceso y te explicamos qué parte puede automatizarse, qué información necesita y cómo mantener el control humano.",
-      "auditPoints": ["Sin compromiso", "Enfoque práctico", "Propuesta a medida"],
+      "auditText": "Evaluamos tu proceso y te explicamos qué parte puede automatizarse, qué información necesita y dónde conviene mantener control humano.",
+      "auditPoints": ["Proceso real", "Propuesta a medida", "Control y trazabilidad"],
       "auditCta": "Evaluar mi proceso",
       "auditWhatsapp": "Hola JYM, quiero evaluar una tarea repetitiva de mi negocio para saber si puede automatizarse."
     },
@@ -606,8 +680,8 @@ export const translations = {
       "neutralTitle": "Two professional lines in one company",
       "archKicker": "Architecture showroom",
       "archTitle": "Visual projects and tours for clients",
-      "techKicker": "Technology solutions",
-      "techTitle": "Systems, automation and digital products for companies"
+      "techKicker": "JYM capabilities",
+      "techTitle": "What we can build for you"
     },
     "archCatalog": {
       "barberia": [
@@ -652,35 +726,35 @@ export const translations = {
       ]
     },
     "techCatalog": {
-      "redes": [
-        "Social media web system",
-        "Monitoring and evidence",
-        "Panel to analyze posts, profile networks, generate evidence and client reports."
+      "systems": [
+        "Custom apps and systems",
+        "Digital product",
+        "Web platforms, internal systems and tools built around the client's real operation."
       ],
-      "pj": [
-        "Batch search and verification",
-        "Source automation",
-        "Batch searches, result control, traceability and organized export."
-      ],
-      "sunat": [
-        "Batch business validation",
-        "Data and consistency",
-        "Authorized-source consolidation, filters and reports for business control."
-      ],
-      "dni": [
-        "Mass record control",
-        "Data quality",
-        "Comparison, observations, errors and reports for large record volumes."
-      ],
-      "bots": [
-        "Automation bots",
+      "automation": [
+        "Automation and bots",
         "Smart processes",
-        "Flows that reduce repetitive tasks, connect sources and speed up operations."
+        "Workflows that read, query, validate, register, download and continue repetitive tasks with traceability."
       ],
-      "dashboard": [
-        "Executive dashboards",
-        "Visual indicators",
-        "Panels for decision-making with metrics, filters, alerts and reports."
+      "ai": [
+        "AI, OCR and computer vision",
+        "Applied intelligence",
+        "Document reading, classification, assistants, voice, visual analysis and intelligent decision support."
+      ],
+      "dashboards": [
+        "Dashboards and operational control",
+        "Data under control",
+        "Panels with filters, alerts, statuses, evidence, metrics and reports that turn data into decisions."
+      ],
+      "mobile": [
+        "Mobile apps, PWA and offline",
+        "Field operations",
+        "Installable experiences for phones and tablets that can continue working with limited connectivity."
+      ],
+      "commerce": [
+        "E-commerce and digital experiences",
+        "User experience",
+        "Stores, catalogs, orders, bookings, interactive learning and personalized digital experiences."
       ]
     },
     "services": {
@@ -693,10 +767,10 @@ export const translations = {
         "Air conditioning"
       ],
       "tech": [
-        "Custom web development",
-        "Process automation",
-        "Business bots",
-        "Dashboards and reports"
+        "Custom apps and systems",
+        "Automation and bots",
+        "AI, OCR and computer vision",
+        "Dashboards and digital operations"
       ],
       "neutral": [
         "Business technology",
@@ -705,50 +779,124 @@ export const translations = {
         "HVAC solutions"
       ]
     },
+    "techShowcase": {
+      "kicker": "BUILT BY JYM",
+      "title": "Real projects you can open and try",
+      "intro": "We do not want to simply tell you we build systems. We want you to see products, tools and experiences we have already created.",
+      "live": "LIVE DEMO",
+      "openDemo": "Open project",
+      "github": "View GitHub",
+      "stripLabel": "CAPABILITIES",
+      "capabilities": ["WEB", "APPS", "AI", "OCR", "VISION", "VOICE", "BOTS", "DATA", "EXCEL", "PDF", "CLOUD", "OFFLINE", "PWA", "ANDROID"],
+      "projects": {
+        "one-shot": {
+          "title": "ONE SHOT",
+          "category": "EVIDENCE + FIELD OPERATIONS",
+          "description": "Web/PWA and Android platform for field evidence capture with GPS, offline operation, traceability and automated reports.",
+          "short": "Camera, GPS, offline and reports."
+        },
+        "vital-food": {
+          "title": "Vital Foods Control",
+          "category": "OPERATIONS + INVENTORY",
+          "description": "Inventory, ordering, waste and collaborative operations system with voice input and multi-device synchronization.",
+          "short": "Inventory, voice and synchronization."
+        },
+        "reto-fiscal": {
+          "title": "Reto Fiscal AI Pro",
+          "category": "EDTECH + SIMULATION",
+          "description": "Mobile-first learning and preparation platform with question bank, study modes, progress tracking and voice experience.",
+          "short": "Learning, voice, progress and PWA."
+        },
+        "oriente": {
+          "title": "Oriente Alianza",
+          "category": "COMMUNITY + MOBILE EXPERIENCE",
+          "description": "PWA for information, maps, activities, orders, stock and administrative operations from a phone.",
+          "short": "Maps, orders, stock and community."
+        },
+        "mila": {
+          "title": "MILA",
+          "category": "DIGITAL ASSISTANT",
+          "description": "Cooking assistant in development that supports recipes, steps, timing and interaction during preparation.",
+          "short": "Assistant, recipes and conversational UX."
+        },
+        "velora": {
+          "title": "VELORA",
+          "category": "E-COMMERCE",
+          "description": "Mobile-first shopping experience with catalog, filters, favorites, cart, QR, pickup and virtual assistant.",
+          "short": "Catalog, cart, QR and mobile."
+        },
+        "math": {
+          "title": "Learn Mathematics",
+          "category": "EDUCATION + GAMIFICATION",
+          "description": "Educational experience that reinforces mathematics through challenges, games and interactive activities.",
+          "short": "Learning through play."
+        },
+        "alianza": {
+          "title": "Rincón del Hincha Grone",
+          "category": "STORE + DIGITAL EXPERIENCE",
+          "description": "Independent digital catalog and fan experience with customized products, reservations and visual storytelling.",
+          "short": "Catalog, reservations and customization."
+        }
+      }
+    },
     "techProof": {
-      "kicker": "Applied experience",
-      "title": "Automation built for real-world scenarios",
-      "intro": "We do not sell a generic tool. We study repetitive work, build the workflow and deliver a solution your team can use and control.",
-      "status": "Completed case",
+      "kicker": "JYM AUTOMATION",
+      "title": "Processes we can turn into automated workflows",
+      "intro": "Our work does not stop at a polished interface. We also automate reading, validation, navigation, classification, evidence generation and result delivery.",
+      "status": "Automatable workflow",
       "flowLabel": "Solution workflow",
-      "cta": "I need a similar solution",
-      "whatsapp": "Hello JYM, I would like to discuss a solution similar to",
+      "cta": "I want to automate something similar",
+      "whatsapp": "Hello JYM, I would like to discuss an automation similar to",
       "cases": [
         {
-          "category": "DATA + VALIDATION",
-          "title": "Batch queries and inconsistency control",
-          "description": "Automation that reads Excel batches, checks authorized sources, compares results and separates valid, observed and failed records.",
-          "flow": ["Excel", "Validation", "Report"],
-          "outputs": ["Batch processing", "Retries and traceability", "Excel, CSV and evidence exports"]
+          "category": "DOCUMENTS + OCR",
+          "title": "Intelligent document processing",
+          "description": "Reading, classification and validation of PDFs, spreadsheets and images to prepare files and surface exceptions.",
+          "flow": ["Files", "OCR", "Classify", "Validate", "Result"],
+          "outputs": ["Document identification", "Alerts and inconsistencies", "Final file and report"]
         },
         {
-          "category": "DOCUMENTS + OPERATIONS",
-          "title": "Document registration and management bots",
-          "description": "Assisted flows that review files, complete forms, handle confirmations and continue without losing the operator's progress.",
-          "flow": ["Files", "Assisted bot", "Result"],
-          "outputs": ["Document pre-validation", "Pause, resume and activity log", "Pending items and error report"]
+          "category": "WEB + OPERATIONS",
+          "title": "Platform automation",
+          "description": "Assisted bots that navigate web systems, complete steps, upload information and control confirmations with traceability.",
+          "flow": ["Data", "Bot", "System", "Verify", "Register"],
+          "outputs": ["Pause and resume", "Controlled retries", "Logs, pending items and result"]
         },
         {
-          "category": "MONITORING + EVIDENCE",
-          "title": "Digital monitoring platforms",
-          "description": "Systems that organize publications, evidence and media by project, with review tools, filters and decision-ready reports.",
-          "flow": ["Sources", "Classification", "Dashboard"],
-          "outputs": ["Client or project dashboard", "Centralized evidence and files", "Filters, metrics and exports"]
+          "category": "DIGITAL COLLECTION",
+          "title": "Information collection and consolidation",
+          "description": "Digital-source collection to obtain links, dates, content and evidence and turn them into an organized dataset.",
+          "flow": ["Sources", "Collect", "Classify", "Evidence", "Dashboard"],
+          "outputs": ["Batch collection", "Date or profile filters", "Consolidated data and evidence"]
         },
         {
-          "category": "AI + HUMAN OVERSIGHT",
-          "title": "Smart assistants for teams",
-          "description": "AI that reads, suggests, classifies and guides tasks through text, voice or OCR while keeping human confirmation for sensitive actions.",
-          "flow": ["Input", "AI assistant", "Review"],
-          "outputs": ["Contextual conversational help", "OCR and classification suggestions", "Human control and traceability"]
+          "category": "DATA + RULES",
+          "title": "Batch processing and validation",
+          "description": "Workflows for large volumes of records, applying rules and cross-checks so people only review the exceptions.",
+          "flow": ["Excel", "Rules", "Cross-check", "Exceptions", "Report"],
+          "outputs": ["Batch processing", "Valid vs. observed separation", "Excel, CSV and traceability"]
+        },
+        {
+          "category": "AUDIO + VIDEO",
+          "title": "Audiovisual intelligence",
+          "description": "Video and audio processing to transcribe, detect matches and produce clips or evidence automatically.",
+          "flow": ["Video", "Audio", "Transcribe", "Match", "Clip"],
+          "outputs": ["Transcription", "Rule and signal detection", "Clips and evidence"]
+        },
+        {
+          "category": "DOCUMENTS + TEMPLATES",
+          "title": "Document generation",
+          "description": "Mass creation of personalized documents from databases and templates, ready for delivery or printing.",
+          "flow": ["Database", "Template", "Personalize", "Document", "PDF / Word"],
+          "outputs": ["Automatic numbering", "Personalized documents", "Organized batch output"]
         }
       ],
-      "auditKicker": "AUTOMATION ASSESSMENT",
-      "auditTitle": "Show us the task you repeat every day",
-      "auditText": "We assess your process and explain what can be automated, what information it requires and how to preserve human oversight.",
-      "auditPoints": ["No commitment", "Practical approach", "Tailored proposal"],
-      "auditCta": "Assess my process",
-      "auditWhatsapp": "Hello JYM, I want to assess a repetitive business task and find out whether it can be automated."
+      "auditKicker": "AUTOMATION DIAGNOSTIC",
+      "auditTitle": "Show us the task your team repeats every day",
+      "auditText": "We review the process and explain what can be automated, what information it needs and where human control should remain.",
+      "auditPoints": ["Real process", "Tailored proposal", "Control and traceability"],
+      "auditCta": "Evaluate my process",
+      "auditWhatsapp": "Hello JYM, I want to evaluate a repetitive task in my business and see whether it can be automated."
     },
     "aiLab": {
       "kicker": "AI IN ACTION · JYM LAB",
