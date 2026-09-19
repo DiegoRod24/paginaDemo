@@ -507,7 +507,9 @@ function ArchitectureShowroom({ t }) {
         </button>})}
       </aside>
       <div className="cinema-card">
-        <div className="cinema-frame">
+        <div className={`cinema-frame cinema-frame-${current?.type || "empty"}`}>
+          {current?.type === "image" && <div className="cinema-backdrop" style={{ backgroundImage: `url(${current.src})` }} />}
+          <div className="cinema-counter">{String(mediaIndex + 1).padStart(2, "0")} <span>/</span> {String(media.length).padStart(2, "0")}</div>
           <AnimatePresence mode="wait">
             <motion.div key={current?.src || "empty-media"} className="media-transition" initial={{ opacity: 0, scale: 1.04, filter: "blur(8px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} exit={{ opacity: 0, scale: .98, filter: "blur(8px)" }} transition={{ duration: .45 }}>
               {current?.type === "video" ? (
