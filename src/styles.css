@@ -6184,3 +6184,5 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
   .code-progress i { width:100%!important; }
   .transition-plan-drawing > * { stroke-dashoffset:0!important; }
 }
+
+/* V29.2 — sync catálogo: hero → catálogo → visión */
