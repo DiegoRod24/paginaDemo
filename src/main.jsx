@@ -8,9 +8,9 @@ import {
   ArrowRight, BarChart3, Bot, Building2, CheckCircle2, ChevronLeft, ChevronRight, Code2,
   Database, Download, FileSpreadsheet, Hammer, Home, IdCard, LockKeyhole, Mail, Menu,
   MessageCircle, Monitor, MousePointerClick, Phone, Play, RotateCw, Scale, ShieldCheck, Snowflake, Sparkles,
-  Timer, Workflow, X
+  Timer, Workflow, X, Smartphone, ShoppingBag, ExternalLink, Github
 } from "lucide-react";
-import { archCatalog, techCatalog } from "./catalog.js";
+import { archCatalog, techCatalog, techProjects } from "./catalog.js";
 import { translations } from "./i18n.js";
 import AnimatedTechAssistant from "./AnimatedTechAssistant.jsx";
 import "./styles.css";
@@ -21,7 +21,7 @@ const EMAIL = "jmproyectoarquitectura@gmail.com";
 const TIKTOK_URL = "https://www.tiktok.com/@jymdisenoyarquitectura?_r=1&_t=ZS-97jUtwXlYcp.";
 const INSTAGRAM_URL = "https://www.instagram.com/jymdisenoyarquitectura?igsh=dmlyZmdoOXVqcmpx&utm_source=qr.";
 const wa = (msg = "Hola JYM, quiero cotizar un proyecto.") => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-const iconMap = { Monitor, Scale, Database, IdCard, Bot, BarChart3 };
+const iconMap = { Monitor, Scale, Database, IdCard, Bot, BarChart3, Smartphone, ShoppingBag };
 
 
 
@@ -329,6 +329,139 @@ function Header({ mode, setMode, lang, setLang, t }) {
   </header>;
 }
 
+
+function TechIntro({ setMode, t }) {
+  const content = t.experience.tech;
+  return <section className="hero world-intro tech-intro secondary-world-intro" id="vision-tech">
+    <div className="intro-grid intro-grid-tech" aria-hidden="true" />
+    <div className="world-intro-shell">
+      <motion.div
+        className="intro-copy"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: .55 }}
+      >
+        <p>{content.kicker}</p>
+        <h1>{content.title}</h1>
+        <span>{content.text}</span>
+        <div className="intro-points">
+          {content.points.map(item => <b key={item}><i />{item}</b>)}
+        </div>
+        <div className="world-actions intro-actions">
+          <a className="btn btn-primary" href="#showroom">{content.primary}<ArrowRight size={18}/></a>
+          <a className="btn btn-cold" href="#proyectos-tech">{content.secondary}<ArrowRight size={18}/></a>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="tech-workbench"
+        initial={{ opacity: 0, scale: .96, x: 30 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ duration: .65, delay: .08 }}
+      >
+        <div className="workbench-head">
+          <span><i />JYM SYSTEM LAB</span>
+          <b>{content.visualStatus}</b>
+        </div>
+        <div className="workbench-scene">
+          <SafeScene3D mode="tech" />
+        </div>
+        <div className="workbench-flow">
+          {content.flow.map((item, index) => <React.Fragment key={item}>
+            <span>{item}</span>{index < content.flow.length - 1 && <ArrowRight size={14}/>}
+          </React.Fragment>)}
+        </div>
+      </motion.div>
+    </div>
+  </section>;
+}
+
+function ArchitectureBlueprintVisual({ t }) {
+  const labels = t.experience.arch.planLabels;
+  return <div className="blueprint-board" aria-label={t.experience.arch.planAria}>
+    <div className="blueprint-toolbar">
+      <span><i />JYM · PLANO 01</span>
+      <b>{t.experience.arch.visualStatus}</b>
+    </div>
+    <svg className="blueprint-svg" viewBox="0 0 760 520" role="img" aria-hidden="true">
+      <g className="bp-grid-lines">
+        {Array.from({ length: 12 }).map((_, i) => <line key={"v"+i} x1={50+i*60} y1="40" x2={50+i*60} y2="480" />)}
+        {Array.from({ length: 8 }).map((_, i) => <line key={"h"+i} x1="45" y1={60+i*55} x2="715" y2={60+i*55} />)}
+      </g>
+      <g className="bp-plan">
+        <rect x="115" y="90" width="520" height="330" rx="2" />
+        <line x1="340" y1="90" x2="340" y2="420" />
+        <line x1="115" y1="255" x2="635" y2="255" />
+        <line x1="500" y1="255" x2="500" y2="420" />
+        <line x1="340" y1="170" x2="635" y2="170" />
+        <path d="M115 330h95v90" />
+        <path d="M500 330h135" />
+        <path d="M340 255c45 0 70 24 70 66" className="bp-door" />
+        <path d="M500 255c0 42-22 68-64 68" className="bp-door" />
+        <path d="M210 330c0-42 22-68 64-68" className="bp-door" />
+        <line x1="95" y1="90" x2="95" y2="420" className="bp-dimension" />
+        <line x1="115" y1="445" x2="635" y2="445" className="bp-dimension" />
+        <line x1="88" y1="90" x2="103" y2="90" className="bp-dimension" />
+        <line x1="88" y1="420" x2="103" y2="420" className="bp-dimension" />
+        <line x1="115" y1="438" x2="115" y2="452" className="bp-dimension" />
+        <line x1="635" y1="438" x2="635" y2="452" className="bp-dimension" />
+      </g>
+      <g className="bp-furniture">
+        <rect x="155" y="125" width="118" height="55" rx="7" />
+        <rect x="173" y="197" width="82" height="34" rx="5" />
+        <circle cx="426" cy="337" r="44" />
+        <line x1="382" y1="337" x2="470" y2="337" />
+        <line x1="426" y1="293" x2="426" y2="381" />
+        <rect x="531" y="292" width="73" height="90" rx="5" />
+      </g>
+    </svg>
+    <div className="blueprint-label bp-label-a">{labels[0]}</div>
+    <div className="blueprint-label bp-label-b">{labels[1]}</div>
+    <div className="blueprint-label bp-label-c">{labels[2]}</div>
+    <div className="blueprint-label bp-label-d">{labels[3]}</div>
+    <div className="blueprint-scale">ESC 1:50 · A-01</div>
+  </div>;
+}
+
+function ArchitectureIntro({ setMode, t }) {
+  const content = t.experience.arch;
+  return <section className="hero world-intro arch-intro secondary-world-intro" id="plano-arquitectura">
+    <div className="intro-grid intro-grid-arch" aria-hidden="true" />
+    <div className="world-intro-shell arch-intro-shell">
+      <motion.div
+        className="intro-copy arch-intro-copy"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: .55 }}
+      >
+        <p>{content.kicker}</p>
+        <h1>{content.title}</h1>
+        <span>{content.text}</span>
+        <div className="intro-points arch-points">
+          {content.points.map(item => <b key={item}><i />{item}</b>)}
+        </div>
+        <div className="world-actions intro-actions">
+          <a className="btn btn-primary btn-arch-primary" href="#showroom">{content.primary}<ArrowRight size={18}/></a>
+          <a className="btn btn-warm" href="#proceso">{content.secondary}<ArrowRight size={18}/></a>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="architecture-desk"
+        initial={{ opacity: 0, scale: .96, x: 30 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ duration: .65, delay: .08 }}
+      >
+        <ArchitectureBlueprintVisual t={t} />
+        <div className="desk-note">
+          <span>{content.noteKicker}</span>
+          <b>{content.noteTitle}</b>
+        </div>
+      </motion.div>
+    </div>
+  </section>;
+}
+
 function Hero({ mode, setMode, t }) {
   const isTech = mode === "tech";
   const isArch = mode === "arch";
@@ -345,7 +478,7 @@ function Hero({ mode, setMode, t }) {
     setPortalFocus(next);
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     portalTimer.current = window.setTimeout(
-      () => setMode(next, { direct: true }),
+      () => setMode(next),
       reducedMotion ? 80 : 780
     );
   };
@@ -543,9 +676,106 @@ function ArchitectureShowroom({ t }) {
 function TechShowroom({ t }) {
   return <section className="tech-showroom" id="showroom">
     <div className="section-title compact-title"><p>{t.showroom.techKicker}</p><h2>{t.showroom.techTitle}</h2></div>
-    <div className="tech-grid">{techCatalog.map((item, idx) => { const Icon = iconMap[item.icon] || Monitor; const c = t.techCatalog[item.id] || [item.title,item.tag,item.description]; return <motion.article key={item.id} className="tech-card" whileHover={{ y: -12, rotateX: 2 }}>
-      <div className="tech-visual"><img src={item.image} alt={c[0]} /></div><div className="tech-card-body"><span>{String(idx + 1).padStart(2, "0")}</span><Icon size={36}/><small>{c[1]}</small><h3>{c[0]}</h3><p>{c[2]}</p><a href={wa(`Hola JYM, quiero cotizar: ${c[0]}`)} target="_blank" rel="noreferrer">{t.labels.cotizar} <ArrowRight size={16}/></a></div>
-    </motion.article>})}</div>
+    <div className="tech-grid">{techCatalog.map((item, idx) => {
+      const Icon = iconMap[item.icon] || Monitor;
+      const c = t.techCatalog[item.id] || [item.title,item.tag,item.description];
+      return <motion.article key={item.id} className="tech-card capability-card" whileHover={{ y: -8 }}>
+        <div className="tech-visual capability-visual" aria-hidden="true">
+          <span>JYM / {String(idx + 1).padStart(2, "0")}</span>
+          <div className="capability-core"><Icon size={42}/></div>
+          <i className="cap-line line-a"/><i className="cap-line line-b"/><i className="cap-line line-c"/>
+          <b>{c[1]}</b>
+        </div>
+        <div className="tech-card-body">
+          <span>{String(idx + 1).padStart(2, "0")}</span>
+          <small>{c[1]}</small>
+          <h3>{c[0]}</h3>
+          <p>{c[2]}</p>
+          <a href={wa(`Hola JYM, quiero conversar sobre: ${c[0]}`)} target="_blank" rel="noreferrer">{t.labels.cotizar} <ArrowRight size={16}/></a>
+        </div>
+      </motion.article>;
+    })}</div>
+  </section>;
+}
+
+function TechShowcase({ t }) {
+  const [active, setActive] = useState(0);
+  const selected = techProjects[active] || techProjects[0];
+  const copy = t.techShowcase;
+  const projectCopy = copy.projects[selected.id];
+
+  return <section className="tech-showcase" id="proyectos-tech">
+    <div className="showcase-heading">
+      <div>
+        <p>{copy.kicker}</p>
+        <h2>{copy.title}</h2>
+      </div>
+      <span>{copy.intro}</span>
+    </div>
+
+    <div className="showcase-stage">
+      <div className="showcase-browser">
+        <div className="browser-bar">
+          <div className="browser-dots"><i/><i/><i/></div>
+          <div className="browser-address"><ShieldCheck size={14}/><span>{selected.demo.replace(/^https?:\/\//, "")}</span></div>
+          <span className="browser-live"><i/>{copy.live}</span>
+        </div>
+        <div className="browser-screen">
+          <iframe
+            key={selected.demo}
+            src={selected.demo}
+            title={projectCopy.title}
+            loading="lazy"
+            tabIndex="-1"
+            aria-hidden="true"
+          />
+          <div className="browser-shield" aria-hidden="true" />
+        </div>
+        <div className="showcase-browser-copy">
+          <div>
+            <small>{projectCopy.category}</small>
+            <h3>{projectCopy.title}</h3>
+            <p>{projectCopy.description}</p>
+          </div>
+          <div className="showcase-actions">
+            <a className="showcase-primary" href={selected.demo} target="_blank" rel="noreferrer">
+              {copy.openDemo}<ExternalLink size={16}/>
+            </a>
+            {selected.github && <a className="showcase-secondary" href={selected.github} target="_blank" rel="noreferrer">
+              <Github size={17}/>{copy.github}
+            </a>}
+          </div>
+        </div>
+        <div className="showcase-tags">
+          {selected.tags.map(tag => <span key={tag}>{tag}</span>)}
+        </div>
+      </div>
+
+      <div className="showcase-list">
+        {techProjects.map((project, index) => {
+          const item = copy.projects[project.id];
+          return <button
+            type="button"
+            key={project.id}
+            className={active === index ? "active" : ""}
+            onClick={() => setActive(index)}
+          >
+            <span className="showcase-index">{String(index + 1).padStart(2, "0")}</span>
+            <span className="showcase-list-copy">
+              <small>{item.category}</small>
+              <b>{item.title}</b>
+              <em>{item.short}</em>
+            </span>
+            <ArrowRight size={18}/>
+          </button>;
+        })}
+      </div>
+    </div>
+
+    <div className="showcase-capability-strip">
+      <span>{copy.stripLabel}</span>
+      {copy.capabilities.map(item => <b key={item}>{item}</b>)}
+    </div>
   </section>;
 }
 
@@ -553,8 +783,9 @@ function TechProof({ t }) {
   const proof = t.techProof;
   if (!proof) return null;
 
-  const proofIcons = [Database, Workflow, Monitor, Bot];
-  return <section className="tech-proof" id="casos-reales">
+  const proofIcons = [Database, Workflow, BarChart3, Monitor];
+  const visibleCases = proof.cases.filter((_, index) => [0, 1, 3, 4].includes(index));
+  return <section className="tech-proof tech-proof-curated" id="casos-reales">
     <div className="section-title proof-heading">
       <p>{proof.kicker}</p>
       <h2>{proof.title}</h2>
@@ -562,7 +793,7 @@ function TechProof({ t }) {
     </div>
 
     <div className="proof-grid">
-      {proof.cases.map((item, index) => {
+      {visibleCases.map((item, index) => {
         const Icon = proofIcons[index] || Sparkles;
         return <article className="proof-card" key={item.title}>
           <div className="proof-card-top">
@@ -881,21 +1112,24 @@ const COMPANION_SECTIONS = {
   tech: [
     { id: "inicio", state: "home", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
-    { id: "cuellos-botella", state: "process", side: "right" },
+    { id: "vision-tech", state: "services", side: "right" },
+    { id: "proyectos-tech", state: "projects", side: "right" },
     { id: "laboratorio", state: "automation", side: "left" },
-    { id: "casos-reales", state: "projects", side: "right" },
-    { id: "servicios", state: "services", side: "right" },
-    { id: "proceso", state: "process", side: "left" },
-    { id: "automatizacion", state: "automation", side: "right" },
+    { id: "casos-reales", state: "automation", side: "left" },
+    { id: "proceso", state: "process", side: "right" },
     { id: "contacto", state: "contact", side: "left" },
   ],
   arch: [
     { id: "inicio", state: "home", side: "left" },
+    { id: "plano-arquitectura", state: "services", side: "left" },
     { id: "showroom", state: "showroom", side: "right" },
     { id: "servicios", state: "services", side: "left" },
     { id: "proceso", state: "process", side: "right" },
-    { id: "casos", state: "projects", side: "left" },
-    { id: "automatizacion", state: "automation", side: "right" },
+    { id: "contacto", state: "contact", side: "left" },
+  ],
+  portal: [
+    { id: "inicio", state: "home", side: "right" },
+    { id: "showroom", state: "showroom", side: "right" },
     { id: "contacto", state: "contact", side: "left" },
   ]
 };
@@ -1330,9 +1564,65 @@ function ScrollTopButton() {
   </button>;
 }
 
+
+function WorldTransition({ target, overlay, t }) {
+  const tech = target === "tech";
+  const arch = target === "arch";
+
+  return <div className={`transition transition-${target}`} ref={overlay} aria-hidden="true">
+    <div className="transition-theme">
+      {tech && <div className="transition-code-stage">
+        <div className="code-window">
+          <div className="code-window-bar"><i/><i/><i/><span>jym_system.boot</span></div>
+          <div className="code-lines">
+            <span><b>01</b> import &#123; automation, data, ai &#125; from "JYM";</span>
+            <span><b>02</b> const workflow = analyze(process);</span>
+            <span><b>03</b> await connect(workflow.sources);</span>
+            <span><b>04</b> validate(workflow.rules);</span>
+            <span><b>05</b> system.deploy(&#123; control: "human" &#125;);</span>
+          </div>
+          <div className="code-progress"><i/></div>
+        </div>
+        <div className="code-particles">
+          {["API","DATA","BOT","OCR","SYNC","AI"].map((item,index)=><span key={item} style={{"--i":index}}>{item}</span>)}
+        </div>
+      </div>}
+
+      {arch && <div className="transition-plan-stage">
+        <svg viewBox="0 0 760 460" className="transition-plan-svg">
+          <g className="transition-plan-grid">
+            {Array.from({length:12}).map((_,i)=><line key={"tv"+i} x1={40+i*62} y1="25" x2={40+i*62} y2="435"/>)}
+            {Array.from({length:8}).map((_,i)=><line key={"th"+i} x1="30" y1={42+i*54} x2="730" y2={42+i*54}/>)}
+          </g>
+          <g className="transition-plan-drawing">
+            <rect x="130" y="86" width="500" height="286"/>
+            <line x1="350" y1="86" x2="350" y2="372"/>
+            <line x1="130" y1="232" x2="630" y2="232"/>
+            <line x1="500" y1="232" x2="500" y2="372"/>
+            <path d="M350 232c44 0 68 24 68 66"/>
+            <path d="M500 232c0 41-22 64-63 64"/>
+            <line x1="106" y1="86" x2="106" y2="372"/>
+            <line x1="130" y1="402" x2="630" y2="402"/>
+          </g>
+        </svg>
+        <div className="transition-measure measure-a">5.20 m</div>
+        <div className="transition-measure measure-b">3.40 m</div>
+        <div className="transition-plan-status">TRAZANDO · COTANDO · DISEÑANDO</div>
+      </div>}
+    </div>
+
+    <div className="transition-brand">
+      <img className="transition-logo" src="/assets/brand/logo-jym-bg.jpg" alt="" />
+      <small>{tech ? "JYM SYSTEMS" : arch ? "JYM ARCHITECTURE" : "JYM"}</small>
+      <span>{tech ? t.nav.tech : arch ? t.nav.arch : t.nav.portal}</span>
+    </div>
+  </div>;
+}
+
 function App() {
-  const [mode, setModeState] = useState("portal");
+  const [mode, setModeState] = useState("tech");
   const [lang, setLang] = useState("es");
+  const [transitionMode, setTransitionMode] = useState("portal");
   const t = translations[lang];
   const overlay = useRef();
 
@@ -1352,13 +1642,7 @@ function App() {
       return;
     }
 
-    if (options.direct) {
-      overlay.current?.classList.remove("active");
-      setModeState(next);
-      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
-      return;
-    }
-
+    setTransitionMode(next);
     overlay.current?.classList.add("active");
     gsap.killTweensOf(".transition-logo");
     gsap.fromTo(
@@ -1368,36 +1652,67 @@ function App() {
     );
 
     window.__jymModeTimer = window.setTimeout(() => {
+      if (window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
       setModeState(next);
-      window.scrollTo({ top: 0, behavior: "auto" });
-    }, 260);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+      });
+    }, 560);
 
     window.__jymOverlayTimer = window.setTimeout(() => {
       overlay.current?.classList.remove("active");
-    }, 620);
+    }, 1120);
   };
 
   useEffect(() => {
     document.documentElement.dataset.mode = mode;
-    const safety = window.setTimeout(() => overlay.current?.classList.remove("active"), 900);
+    if (mode !== "portal") {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+      });
+    }
+    const safety = window.setTimeout(() => overlay.current?.classList.remove("active"), 1250);
     return () => window.clearTimeout(safety);
   }, [mode]);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  useEffect(() => {
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+  }, []);
 
   return <div className={`app ${mode}`}>
-    <div className="transition" ref={overlay}><img className="transition-logo" src="/assets/brand/logo-jym-bg.jpg" alt="JYM" /><span>{mode === "arch" ? t.nav.arch : mode === "tech" ? t.nav.tech : t.nav.portal}</span></div>
+    <WorldTransition target={transitionMode} overlay={overlay} t={t} />
     <Header mode={mode} setMode={setMode} lang={lang} setLang={setLang} t={t} />
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
-      <Showroom mode={mode} t={t} />
-      {mode === "tech" && <BottleneckSection t={t} />}
-      {mode === "tech" && <AutomationLab t={t} />}
-      {mode === "tech" && <TechProof t={t} />}
-      <Services mode={mode} t={t} />
-      <ProcessSection t={t} mode={mode} />
-      {mode !== "tech" && <SuccessCases mode={mode} t={t} />}
-      <SmartSection mode={mode} t={t} />
-      <Contact t={t} mode={mode} />
+
+      {mode === "portal" && <>
+        <PortalShowroom t={t} />
+        <Contact t={t} mode={mode} />
+      </>}
+
+      {mode === "tech" && <>
+        <TechShowroom t={t} />
+        <TechIntro setMode={setMode} t={t} />
+        <TechShowcase t={t} />
+        <AutomationLab t={t} />
+        <TechProof t={t} />
+        <ProcessSection t={t} mode={mode} />
+        <Contact t={t} mode={mode} />
+      </>}
+
+      {mode === "arch" && <>
+        <ArchitectureIntro setMode={setMode} t={t} />
+        <ArchitectureShowroom t={t} />
+        <Services mode={mode} t={t} />
+        <ProcessSection t={t} mode={mode} />
+        <Contact t={t} mode={mode} />
+      </>}
+
       <footer className="footer">© 2026 JYM Diseño y Arquitectura S.A.C. · Technology, Architecture & Automation.</footer>
     </main>
     <FloatingCompanion mode={mode} t={t} />

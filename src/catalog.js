@@ -166,51 +166,102 @@ export const archCatalog = [
 
 export const techCatalog = [
   {
-    "id": "redes",
-    "title": "Sistema web de redes sociales",
-    "tag": "Monitoreo y evidencias",
-    "description": "Panel para analizar publicaciones, perfilar redes, generar evidencias y reportes para clientes.",
+    "id": "systems",
+    "title": "Apps y sistemas a medida",
+    "tag": "Producto digital",
+    "description": "Plataformas web, sistemas internos y herramientas construidas alrededor de la operación real del cliente.",
     "icon": "Monitor",
     "image": "/assets/tecnologia/redes-sociales.svg"
   },
   {
-    "id": "pj",
-    "title": "Poder Judicial masivo",
-    "tag": "Automatización legal",
-    "description": "Búsqueda masiva, control de resultados, validación y exportación ordenada.",
-    "icon": "Scale",
-    "image": "/assets/tecnologia/poder-judicial.svg"
-  },
-  {
-    "id": "sunat",
-    "title": "SUNAT masivo",
-    "tag": "Validación tributaria",
-    "description": "Consulta masiva, consolidación, filtros y reportes para control empresarial.",
-    "icon": "Database",
-    "image": "/assets/tecnologia/sunat.svg"
-  },
-  {
-    "id": "dni",
-    "title": "DNI masivo",
-    "tag": "Validación de identidad",
-    "description": "Comparación, observaciones, errores y reportes para lotes grandes de personas.",
-    "icon": "IdCard",
-    "image": "/assets/tecnologia/dni.svg"
-  },
-  {
-    "id": "bots",
-    "title": "Bots de automatización",
+    "id": "automation",
+    "title": "Automatización y bots",
     "tag": "Procesos inteligentes",
-    "description": "Flujos que reducen tareas repetitivas, conectan fuentes y aceleran operaciones.",
+    "description": "Flujos que leen, consultan, validan, registran, descargan y continúan tareas repetitivas con trazabilidad.",
     "icon": "Bot",
     "image": "/assets/tecnologia/bots.svg"
   },
   {
-    "id": "dashboard",
-    "title": "Dashboards ejecutivos",
-    "tag": "Indicadores visuales",
-    "description": "Paneles para tomar decisiones con métricas, filtros, alertas y reportes.",
+    "id": "ai",
+    "title": "IA, OCR y visión artificial",
+    "tag": "Inteligencia aplicada",
+    "description": "Lectura de documentos, clasificación, asistentes, voz, análisis visual y apoyo inteligente a decisiones.",
+    "icon": "Database",
+    "image": "/assets/tecnologia/sunat.svg"
+  },
+  {
+    "id": "dashboards",
+    "title": "Dashboards y control operativo",
+    "tag": "Datos bajo control",
+    "description": "Paneles con filtros, alertas, estados, evidencias, métricas y reportes para convertir datos en decisiones.",
     "icon": "BarChart3",
     "image": "/assets/tecnologia/dashboards.svg"
+  },
+  {
+    "id": "mobile",
+    "title": "Apps móviles, PWA y offline",
+    "tag": "Operación en campo",
+    "description": "Experiencias instalables para celular y tablet, capaces de trabajar aun con conectividad limitada.",
+    "icon": "Smartphone",
+    "image": "/assets/tecnologia/dni.svg"
+  },
+  {
+    "id": "commerce",
+    "title": "E-commerce y experiencias digitales",
+    "tag": "Experiencia de usuario",
+    "description": "Tiendas, catálogos, pedidos, reservas, educación interactiva y experiencias digitales personalizadas.",
+    "icon": "ShoppingBag",
+    "image": "/assets/tecnologia/poder-judicial.svg"
+  }
+];
+
+export const techProjects = [
+  {
+    "id": "one-shot",
+    "demo": "https://one-shop.pages.dev/",
+    "github": "https://github.com/DiegoRod24/evidencia-calle-pro",
+    "tags": ["PWA", "ANDROID", "GPS", "OFFLINE", "REPORTES"]
+  },
+  {
+    "id": "vital-food",
+    "demo": "https://vital-food.pages.dev/",
+    "github": "https://github.com/DiegoRod24/vital_food",
+    "tags": ["INVENTARIO", "VOICE", "CLOUD", "OFFLINE", "SYNC"]
+  },
+  {
+    "id": "reto-fiscal",
+    "demo": "https://reto-fiscal-ai-pro.pages.dev/",
+    "github": "https://github.com/DiegoRod24/reto-fiscal-ai-pro",
+    "tags": ["EDTECH", "PWA", "VOICE", "SIMULADOR"]
+  },
+  {
+    "id": "oriente",
+    "demo": "https://oriente-alianza.pages.dev/",
+    "github": "https://github.com/DiegoRod24/ORIENTE-ALIANZA",
+    "tags": ["PWA", "MAPAS", "PEDIDOS", "STOCK", "ADMIN"]
+  },
+  {
+    "id": "mila",
+    "demo": "https://mila-5lg.pages.dev/",
+    "github": null,
+    "tags": ["ASISTENTE", "RECETAS", "VOICE", "UX"]
+  },
+  {
+    "id": "velora",
+    "demo": "https://private-shop-30j.pages.dev/",
+    "github": "https://github.com/DiegoRod24/Private-Shop",
+    "tags": ["E-COMMERCE", "MOBILE", "QR", "CATÁLOGO"]
+  },
+  {
+    "id": "math",
+    "demo": "https://diegorod24-github-io.pages.dev/",
+    "github": "https://github.com/DiegoRod24/diegorod24.github.io",
+    "tags": ["EDUCACIÓN", "JUEGOS", "WEB", "INTERACTIVO"]
+  },
+  {
+    "id": "alianza",
+    "demo": "https://alianza-lima.pages.dev/",
+    "github": "https://github.com/DiegoRod24/alianza_lima",
+    "tags": ["TIENDA", "CATÁLOGO", "RESERVAS", "MOBILE"]
   }
 ];
