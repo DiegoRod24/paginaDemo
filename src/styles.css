@@ -5800,3 +5800,387 @@ section:not(.hero) { width: min(1280px,calc(100% - 48px)); margin: 0 auto; paddi
 @media(prefers-reduced-motion:reduce) {
   .capability-core::after,.cap-line::after { animation:none!important; }
 }
+
+
+/* =========================================================
+   V29 — HERO ORIGINAL + TRANSICIONES TEMÁTICAS
+========================================================= */
+
+/* Las escenas nuevas viven después del hero original. */
+.secondary-world-intro {
+  min-height:auto !important;
+  padding:112px clamp(22px,4vw,70px) 104px !important;
+  border-top:1px solid rgba(255,255,255,.055);
+}
+.secondary-world-intro .world-intro-shell {
+  min-height:620px;
+}
+.app.tech .secondary-world-intro {
+  background:
+    linear-gradient(rgba(0,217,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,217,255,.025) 1px,transparent 1px),
+    linear-gradient(180deg,#03080c,#050a0f);
+  background-size:46px 46px,46px 46px,auto;
+}
+.app.arch .secondary-world-intro {
+  background:
+    linear-gradient(rgba(217,188,132,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(217,188,132,.035) 1px,transparent 1px),
+    linear-gradient(180deg,#080704,#0c0a06);
+  background-size:34px 34px,34px 34px,auto;
+}
+
+/* El hero original vuelve a ser protagonista. */
+.app.tech .hero-tech,
+.app.arch .hero-arch {
+  min-height:100svh;
+}
+.app.tech .hero-tech .world-copy,
+.app.arch .hero-arch .world-copy {
+  z-index:8;
+}
+.app.tech .hero-tech .world-model,
+.app.arch .hero-arch .world-model {
+  z-index:3;
+}
+
+/* ---------- Transición completa entre mundos ---------- */
+.transition {
+  overflow:hidden;
+  isolation:isolate;
+  gap:0;
+  background:#020407;
+  transition:opacity .28s ease;
+}
+.transition::before,
+.transition::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.transition::after {
+  z-index:8;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 30%,rgba(0,0,0,.14) 67%,rgba(0,0,0,.64) 100%);
+}
+.transition-theme {
+  position:absolute;
+  inset:0;
+  z-index:1;
+}
+.transition-brand {
+  position:relative;
+  z-index:12;
+  display:grid;
+  place-items:center;
+  gap:7px;
+  opacity:0;
+  transform:translateY(10px) scale(.94);
+}
+.transition.active .transition-brand {
+  animation:transitionBrandIn .42s ease forwards .14s;
+}
+.transition-brand .transition-logo {
+  width:76px;
+  height:76px;
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 16px 55px rgba(0,0,0,.45);
+}
+.transition-brand small {
+  margin-top:4px;
+  font-size:.55rem;
+  font-weight:900;
+  letter-spacing:.2em;
+  color:#7f95a9;
+}
+.transition-brand > span {
+  font-size:.78rem;
+  font-weight:900;
+  letter-spacing:.2em;
+}
+
+/* Sistemas / programación */
+.transition-tech {
+  background:
+    radial-gradient(circle at 50% 50%,rgba(0,217,255,.12),transparent 36%),
+    #01070c;
+}
+.transition-tech::before {
+  background:
+    linear-gradient(rgba(0,217,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,217,255,.045) 1px,transparent 1px);
+  background-size:38px 38px;
+  animation:transitionGridMove 1.15s linear infinite;
+}
+.transition-code-stage {
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+}
+.code-window {
+  position:absolute;
+  width:min(680px,72vw);
+  min-height:300px;
+  overflow:hidden;
+  border:1px solid rgba(0,217,255,.18);
+  border-radius:24px;
+  opacity:0;
+  transform:perspective(900px) rotateX(8deg) translateY(20px) scale(.92);
+  background:rgba(2,12,19,.9);
+  box-shadow:0 40px 120px rgba(0,0,0,.52),0 0 65px rgba(0,217,255,.08);
+}
+.transition.active .code-window {
+  animation:codeWindowBoot .7s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.code-window-bar {
+  min-height:44px;
+  padding:0 14px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  border-bottom:1px solid rgba(0,217,255,.1);
+  color:#6f8fa1;
+  font-size:.58rem;
+  letter-spacing:.1em;
+}
+.code-window-bar i {
+  width:8px;height:8px;border-radius:50%;background:#16404d;
+}
+.code-window-bar i:first-child { background:#ff6c73; }
+.code-window-bar i:nth-child(2) { background:#ffd166; }
+.code-window-bar i:nth-child(3) { background:#46dd91; }
+.code-window-bar span { margin-left:8px; }
+.code-lines {
+  padding:29px 30px 26px;
+  display:grid;
+  gap:14px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.code-lines span {
+  display:block;
+  width:0;
+  overflow:hidden;
+  white-space:nowrap;
+  color:#8bddeb;
+  opacity:.82;
+  font-size:clamp(.64rem,1.1vw,.88rem);
+}
+.code-lines span b {
+  display:inline-block;
+  width:28px;
+  color:#345b68;
+  font-weight:500;
+}
+.transition.active .code-lines span:nth-child(1) { animation:typeCode .52s steps(48,end) forwards .08s; }
+.transition.active .code-lines span:nth-child(2) { animation:typeCode .5s steps(44,end) forwards .18s; }
+.transition.active .code-lines span:nth-child(3) { animation:typeCode .5s steps(44,end) forwards .28s; }
+.transition.active .code-lines span:nth-child(4) { animation:typeCode .5s steps(42,end) forwards .38s; }
+.transition.active .code-lines span:nth-child(5) { animation:typeCode .5s steps(48,end) forwards .48s; }
+.code-progress {
+  position:absolute;
+  left:30px;right:30px;bottom:24px;
+  height:3px;
+  overflow:hidden;
+  border-radius:4px;
+  background:rgba(0,217,255,.08);
+}
+.code-progress i {
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#00d9ff,#8b5cff);
+  box-shadow:0 0 18px rgba(0,217,255,.6);
+}
+.transition.active .code-progress i {
+  animation:transitionProgress 1.05s ease forwards;
+}
+.code-particles span {
+  position:absolute;
+  left:calc(11% + (var(--i) * 14%));
+  top:calc(14% + ((var(--i) % 3) * 28%));
+  padding:6px 9px;
+  border:1px solid rgba(0,217,255,.14);
+  border-radius:7px;
+  color:#5f9cad;
+  background:rgba(0,15,23,.7);
+  font-size:.52rem;
+  font-weight:900;
+  letter-spacing:.1em;
+  opacity:0;
+}
+.transition.active .code-particles span {
+  animation:codeParticleIn .46s ease forwards;
+  animation-delay:calc(.08s + (var(--i) * .08s));
+}
+
+/* Arquitectura / plano */
+.transition-arch {
+  background:
+    radial-gradient(circle at 50% 48%,rgba(217,168,61,.13),transparent 37%),
+    #0a0804;
+}
+.transition-arch::before {
+  background:
+    linear-gradient(rgba(217,188,132,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(217,188,132,.055) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.transition-plan-stage {
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+}
+.transition-plan-svg {
+  width:min(820px,78vw);
+  height:auto;
+  opacity:.7;
+}
+.transition-plan-grid line {
+  stroke:rgba(217,188,132,.08);
+  stroke-width:1;
+}
+.transition-plan-drawing rect,
+.transition-plan-drawing line,
+.transition-plan-drawing path {
+  fill:none;
+  stroke:#d8bd86;
+  stroke-width:2;
+  stroke-dasharray:1700;
+  stroke-dashoffset:1700;
+  vector-effect:non-scaling-stroke;
+}
+.transition.active .transition-plan-drawing > * {
+  animation:transitionPlanDraw .9s cubic-bezier(.45,.05,.25,1) forwards;
+}
+.transition.active .transition-plan-drawing > *:nth-child(2n) { animation-delay:.08s; }
+.transition.active .transition-plan-drawing > *:nth-child(3n) { animation-delay:.16s; }
+.transition-measure {
+  position:absolute;
+  padding:5px 8px;
+  border:1px solid rgba(217,188,132,.18);
+  border-radius:5px;
+  color:#d9bd80;
+  background:rgba(14,11,6,.82);
+  font:800 .54rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.09em;
+  opacity:0;
+}
+.transition.active .transition-measure { animation:measureIn .35s ease forwards .55s; }
+.measure-a { left:22%;top:29%; }
+.measure-b { right:22%;bottom:27%;animation-delay:.68s!important; }
+.transition-plan-status {
+  position:absolute;
+  left:50%;
+  bottom:14%;
+  transform:translateX(-50%);
+  color:#bda36f;
+  font-size:.56rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  opacity:0;
+  white-space:nowrap;
+}
+.transition.active .transition-plan-status {
+  animation:statusPulse .42s ease forwards .58s;
+}
+
+/* La marca se ve por encima de la simulación, pero sin taparla por completo */
+.transition-tech .transition-brand,
+.transition-arch .transition-brand {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(.94);
+  padding:16px 22px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  background:rgba(2,6,9,.72);
+  backdrop-filter:blur(12px);
+}
+.transition.active.transition-tech .transition-brand,
+.transition.active.transition-arch .transition-brand {
+  animation:transitionBrandCenter .44s ease forwards .52s;
+}
+
+@keyframes transitionBrandIn {
+  to { opacity:1;transform:translateY(0) scale(1); }
+}
+@keyframes transitionBrandCenter {
+  from { opacity:0;transform:translate(-50%,-44%) scale(.9); }
+  to { opacity:1;transform:translate(-50%,-50%) scale(1); }
+}
+@keyframes transitionGridMove {
+  to { background-position:38px 38px,38px 38px; }
+}
+@keyframes codeWindowBoot {
+  to { opacity:.64;transform:perspective(900px) rotateX(0) translateY(0) scale(1); }
+}
+@keyframes typeCode {
+  to { width:100%; }
+}
+@keyframes transitionProgress {
+  to { width:100%; }
+}
+@keyframes codeParticleIn {
+  from { opacity:0;transform:translateY(8px) scale(.9); }
+  to { opacity:.72;transform:none; }
+}
+@keyframes transitionPlanDraw {
+  to { stroke-dashoffset:0; }
+}
+@keyframes measureIn {
+  from { opacity:0;transform:translateY(5px); }
+  to { opacity:1;transform:none; }
+}
+@keyframes statusPulse {
+  to { opacity:.8; }
+}
+
+/* Responsive transiciones y escenas secundarias */
+@media(max-width:900px) {
+  .secondary-world-intro .world-intro-shell { min-height:auto; }
+  .code-window { width:84vw;min-height:270px; }
+  .transition-plan-svg { width:90vw; }
+}
+@media(max-width:700px) {
+  .secondary-world-intro {
+    padding:78px 16px 72px !important;
+  }
+  .secondary-world-intro .world-intro-shell {
+    min-height:auto;
+  }
+  .code-window {
+    width:92vw;
+    min-height:240px;
+    border-radius:18px;
+  }
+  .code-lines { padding:23px 16px 20px;gap:11px; }
+  .code-lines span { font-size:.55rem; }
+  .code-lines span b { width:22px; }
+  .code-particles span:nth-child(n+4) { display:none; }
+  .transition-plan-svg { width:96vw; }
+  .measure-a { left:10%;top:30%; }
+  .measure-b { right:9%;bottom:29%; }
+  .transition-brand {
+    transform:translate(-50%,-50%) scale(.9);
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .code-window,
+  .code-lines span,
+  .code-progress i,
+  .code-particles span,
+  .transition-plan-drawing > *,
+  .transition-measure,
+  .transition-plan-status,
+  .transition-brand {
+    animation:none!important;
+    opacity:1!important;
+  }
+  .code-lines span { width:100%!important; }
+  .code-progress i { width:100%!important; }
+  .transition-plan-drawing > * { stroke-dashoffset:0!important; }
+}
