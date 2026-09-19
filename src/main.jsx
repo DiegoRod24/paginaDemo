@@ -501,10 +501,22 @@ function ArchitectureShowroom({ t }) {
   return <section className="arch-showroom" id="showroom">
     <div className="section-title compact-title"><p>{t.showroom.archKicker}</p><h2>{t.showroom.archTitle}</h2></div>
     <div className="showroom-shell">
-      <aside className="room-menu">
-        {archCatalog.map((item) => { const c = t.archCatalog[item.id] || [item.title,item.tag,item.description]; return <button key={item.id} className={item.id === selectedId ? "active" : ""} onClick={() => setSelectedId(item.id)}>
-          <span>{c[1]}</span><b>{c[0]}</b><small>{(item.images?.length || 0) + (item.videos?.length || 0)} {t.labels.evidencias}</small>
-        </button>})}
+      <aside className="showroom-sidebar">
+        <div className="room-menu">
+          {archCatalog.map((item) => { const c = t.archCatalog[item.id] || [item.title,item.tag,item.description]; return <button key={item.id} className={item.id === selectedId ? "active" : ""} onClick={() => setSelectedId(item.id)}>
+            <span>{c[1]}</span><b>{c[0]}</b><small>{(item.images?.length || 0) + (item.videos?.length || 0)} {t.labels.evidencias}</small>
+          </button>})}
+        </div>
+        <div className="arch-side-card">
+          <small>{t.showroom.archSideKicker}</small>
+          <h3>{t.showroom.archSideTitle}</h3>
+          <p>{t.showroom.archSideText}</p>
+          <div className="arch-side-meta">
+            <span><b>{media.length}</b><em>{t.showroom.archMediaLabel}</em></span>
+            <span><b>{selected.tag}</b><em>{t.showroom.archTypeLabel}</em></span>
+          </div>
+          <a href="#contacto">{t.showroom.archSideCta}<ArrowRight size={16}/></a>
+        </div>
       </aside>
       <div className="cinema-card">
         <div className={`cinema-frame cinema-frame-${current?.type || "empty"}`}>
@@ -529,7 +541,14 @@ function ArchitectureShowroom({ t }) {
             </motion.div>
           </AnimatePresence>
           {media.length > 1 && <><button className="nav-arrow left" onClick={prev}><ChevronLeft /></button><button className="nav-arrow right" onClick={next}><ChevronRight /></button></>}
-          <div className="cinema-label"><small>{selected.tag}</small><h3>{selected.title}</h3><p>{selected.description}</p></div>
+          <div className="cinema-label">
+            <small>{selected.tag}</small>
+            <h3>{selected.title}</h3>
+            <p>{selected.description}</p>
+            <div className="project-tags">
+              {(t.showroom.archTags?.[selectedRaw.id] || []).map(tag => <span key={tag}>{tag}</span>)}
+            </div>
+          </div>
         </div>
         <div className="filmstrip">{media.map((m, i) => <button key={m.src} className={i === mediaIndex ? "active" : ""} onClick={() => setMediaIndex(i)}>{m.type === "video" ? (
           <div className="video-thumb">
