@@ -142,7 +142,23 @@ export const translations = {
         "Arquitectura y diseño",
         "Automatización IA",
         "Climatización"
-      ]
+      ],
+      "catalog": {
+        "kicker": "NUESTRO CATÁLOGO",
+        "title": "Soluciones que ya hemos construido",
+        "text": "Una muestra de aplicaciones, sistemas y experiencias reales que puedes abrir y revisar. Cada proyecto demuestra una capacidad distinta de JYM.",
+        "open": "Ver proyecto",
+        "projects": {
+          "one-shot": "Aplicación para operación en campo, captura de evidencia, GPS, trabajo offline y reportes.",
+          "vital-food": "Control de inventario, pedidos, mermas y sincronización entre dispositivos con apoyo por voz.",
+          "reto-fiscal": "Plataforma educativa con banco de preguntas, modos de estudio, progreso y experiencia mobile-first.",
+          "oriente": "Experiencia móvil con información, mapas, pedidos, stock y herramientas administrativas.",
+          "mila": "Asistente digital de cocina orientado a recetas, pasos, tiempos y acompañamiento interactivo.",
+          "velora": "Experiencia de e-commerce mobile-first con catálogo, favoritos, carrito, QR y recojo.",
+          "math": "Plataforma educativa interactiva para reforzar matemáticas mediante juegos y retos.",
+          "alianza": "Catálogo digital con productos personalizados, reservas y experiencia visual para una comunidad."
+        }
+      }
     },
     "techProof": {
       "kicker": "Experiencia aplicada",
@@ -703,7 +719,23 @@ export const translations = {
         "Architecture and design",
         "AI automation",
         "HVAC solutions"
-      ]
+      ],
+      "catalog": {
+        "kicker": "OUR CATALOG",
+        "title": "Solutions we have already built",
+        "text": "A selection of real applications, systems and digital experiences you can open and review. Each project demonstrates a different JYM capability.",
+        "open": "View project",
+        "projects": {
+          "one-shot": "Field operations app with evidence capture, GPS, offline work and reporting.",
+          "vital-food": "Inventory, ordering, waste and multi-device synchronization with voice support.",
+          "reto-fiscal": "Learning platform with question bank, study modes, progress tracking and mobile-first experience.",
+          "oriente": "Mobile experience with information, maps, orders, stock and administrative tools.",
+          "mila": "Digital cooking assistant focused on recipes, steps, timing and interactive guidance.",
+          "velora": "Mobile-first e-commerce experience with catalog, favorites, cart, QR and pickup.",
+          "math": "Interactive educational platform for reinforcing mathematics through games and challenges.",
+          "alianza": "Digital catalog with customized products, reservations and a visual community experience."
+        }
+      }
     },
     "techProof": {
       "kicker": "Applied experience",
