@@ -8,7 +8,7 @@ import {
   ArrowRight, BarChart3, Bot, Building2, CheckCircle2, ChevronLeft, ChevronRight, Code2,
   Database, Download, FileSpreadsheet, Hammer, Home, IdCard, LockKeyhole, Mail, Menu,
   MessageCircle, Monitor, MousePointerClick, Phone, Play, RotateCw, Scale, ShieldCheck, Snowflake, Sparkles,
-  Timer, Workflow, X, ExternalLink, Github
+  Timer, Workflow, X, ExternalLink
 } from "lucide-react";
 import { archCatalog, techCatalog, techProjects } from "./catalog.js";
 import { translations } from "./i18n.js";
@@ -596,9 +596,6 @@ function TechShowcase({ t }) {
             <a className="showcase-primary" href={selected.demo} target="_blank" rel="noreferrer">
               {copy.openDemo}<ExternalLink size={16}/>
             </a>
-            {selected.github && <a className="showcase-secondary" href={selected.github} target="_blank" rel="noreferrer">
-              <Github size={17}/>{copy.github}
-            </a>}
           </div>
         </div>
 
