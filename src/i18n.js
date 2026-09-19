@@ -122,6 +122,66 @@ export const translations = {
         "Paneles para tomar decisiones con métricas, filtros, alertas y reportes."
       ]
     },
+    "techShowcase": {
+      "kicker": "CONSTRUIDO POR JYM",
+      "title": "Proyectos reales que puedes abrir y probar",
+      "intro": "No queremos decirte solamente que hacemos sistemas. Queremos que veas productos, herramientas y experiencias que ya hemos construido.",
+      "live": "DEMO EN VIVO",
+      "openDemo": "Abrir proyecto",
+      "github": "Ver GitHub",
+      "stripLabel": "CAPACIDADES",
+      "capabilities": ["WEB", "APPS", "IA", "OCR", "VISION", "VOICE", "BOTS", "DATA", "EXCEL", "PDF", "CLOUD", "OFFLINE", "PWA", "ANDROID"],
+      "projects": {
+        "one-shot": {
+          "title": "ONE SHOT",
+          "category": "EVIDENCIA + OPERACIÓN EN CAMPO",
+          "description": "Plataforma Web/PWA y Android para captura de evidencia con GPS, operación offline, trazabilidad y generación de reportes.",
+          "short": "Cámara, GPS, offline y reportes."
+        },
+        "vital-food": {
+          "title": "Vital Foods Control",
+          "category": "OPERACIÓN + INVENTARIO",
+          "description": "Sistema para inventario, pedidos, mermas y trabajo colaborativo, con ingreso por voz y sincronización entre dispositivos.",
+          "short": "Inventario, voz y sincronización."
+        },
+        "reto-fiscal": {
+          "title": "Reto Fiscal AI Pro",
+          "category": "EDTECH + SIMULACIÓN",
+          "description": "Plataforma de preparación y aprendizaje mobile-first con banco de preguntas, modos de estudio, progreso y experiencia por voz.",
+          "short": "Estudio, voz, progreso y PWA."
+        },
+        "oriente": {
+          "title": "Oriente Alianza",
+          "category": "COMUNIDAD + EXPERIENCIA MÓVIL",
+          "description": "PWA para organizar información, mapa, actividades, pedidos, stock y operación administrativa desde el celular.",
+          "short": "Mapa, pedidos, stock y comunidad."
+        },
+        "mila": {
+          "title": "MILA",
+          "category": "ASISTENTE DIGITAL",
+          "description": "Asistente de cocina en evolución que acompaña recetas, pasos, tiempos e interacción durante la preparación.",
+          "short": "Asistente, recetas y experiencia conversacional."
+        },
+        "velora": {
+          "title": "VELORA",
+          "category": "E-COMMERCE",
+          "description": "Experiencia de compra mobile-first con catálogo, filtros, favoritos, carrito, QR, recojo y asistente virtual.",
+          "short": "Catálogo, carrito, QR y mobile."
+        },
+        "math": {
+          "title": "Aprende Matemáticas",
+          "category": "EDUCACIÓN + GAMIFICACIÓN",
+          "description": "Experiencia educativa para reforzar matemáticas mediante retos, juegos y actividades interactivas.",
+          "short": "Aprendizaje mediante juego."
+        },
+        "alianza": {
+          "title": "Rincón del Hincha Grone",
+          "category": "TIENDA + EXPERIENCIA DIGITAL",
+          "description": "Catálogo y experiencia digital independiente con productos personalizados, reservas y recorrido visual orientado al hincha.",
+          "short": "Catálogo, reservas y personalización."
+        }
+      }
+    },
     "services": {
       "kicker": "Servicios",
       "title": "Soluciones claras para cada tipo de cliente",
@@ -682,6 +742,66 @@ export const translations = {
         "Visual indicators",
         "Panels for decision-making with metrics, filters, alerts and reports."
       ]
+    },
+    "techShowcase": {
+      "kicker": "BUILT BY JYM",
+      "title": "Real projects you can open and try",
+      "intro": "We do not want to simply tell you we build systems. We want you to see products, tools and experiences we have already created.",
+      "live": "LIVE DEMO",
+      "openDemo": "Open project",
+      "github": "View GitHub",
+      "stripLabel": "CAPABILITIES",
+      "capabilities": ["WEB", "APPS", "AI", "OCR", "VISION", "VOICE", "BOTS", "DATA", "EXCEL", "PDF", "CLOUD", "OFFLINE", "PWA", "ANDROID"],
+      "projects": {
+        "one-shot": {
+          "title": "ONE SHOT",
+          "category": "EVIDENCE + FIELD OPERATIONS",
+          "description": "Web/PWA and Android platform for field evidence capture with GPS, offline operation, traceability and automated reports.",
+          "short": "Camera, GPS, offline and reports."
+        },
+        "vital-food": {
+          "title": "Vital Foods Control",
+          "category": "OPERATIONS + INVENTORY",
+          "description": "Inventory, ordering, waste and collaborative operations system with voice input and multi-device synchronization.",
+          "short": "Inventory, voice and synchronization."
+        },
+        "reto-fiscal": {
+          "title": "Reto Fiscal AI Pro",
+          "category": "EDTECH + SIMULATION",
+          "description": "Mobile-first learning and preparation platform with question bank, study modes, progress tracking and voice experience.",
+          "short": "Learning, voice, progress and PWA."
+        },
+        "oriente": {
+          "title": "Oriente Alianza",
+          "category": "COMMUNITY + MOBILE EXPERIENCE",
+          "description": "PWA for information, maps, activities, orders, stock and administrative operations from a phone.",
+          "short": "Maps, orders, stock and community."
+        },
+        "mila": {
+          "title": "MILA",
+          "category": "DIGITAL ASSISTANT",
+          "description": "Cooking assistant in development that supports recipes, steps, timing and interaction during preparation.",
+          "short": "Assistant, recipes and conversational UX."
+        },
+        "velora": {
+          "title": "VELORA",
+          "category": "E-COMMERCE",
+          "description": "Mobile-first shopping experience with catalog, filters, favorites, cart, QR, pickup and virtual assistant.",
+          "short": "Catalog, cart, QR and mobile."
+        },
+        "math": {
+          "title": "Learn Mathematics",
+          "category": "EDUCATION + GAMIFICATION",
+          "description": "Educational experience that reinforces mathematics through challenges, games and interactive activities.",
+          "short": "Learning through play."
+        },
+        "alianza": {
+          "title": "Rincón del Hincha Grone",
+          "category": "STORE + DIGITAL EXPERIENCE",
+          "description": "Independent digital catalog and fan experience with customized products, reservations and visual storytelling.",
+          "short": "Catalog, reservations and customization."
+        }
+      }
     },
     "services": {
       "kicker": "Services",
