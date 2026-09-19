@@ -214,3 +214,63 @@ export const techCatalog = [
     "image": "/assets/tecnologia/dashboards.svg"
   }
 ];
+
+
+export const techPortfolio = [
+  {
+    id: "one-shot",
+    title: "ONE SHOT",
+    category: "Operación en campo",
+    demo: "https://one-shop.pages.dev/",
+    tags: ["PWA", "Android", "GPS", "Offline"]
+  },
+  {
+    id: "vital-food",
+    title: "Vital Foods Control",
+    category: "Operación e inventario",
+    demo: "https://vital-food.pages.dev/",
+    tags: ["Inventario", "Voz", "Cloud", "Sync"]
+  },
+  {
+    id: "reto-fiscal",
+    title: "Reto Fiscal AI Pro",
+    category: "Educación digital",
+    demo: "https://reto-fiscal-ai-pro.pages.dev/",
+    tags: ["PWA", "Voz", "Simulador", "Progreso"]
+  },
+  {
+    id: "oriente",
+    title: "Oriente Alianza",
+    category: "Experiencia móvil",
+    demo: "https://oriente-alianza.pages.dev/",
+    tags: ["PWA", "Mapas", "Pedidos", "Admin"]
+  },
+  {
+    id: "mila",
+    title: "MILA",
+    category: "Asistente digital",
+    demo: "https://mila-5lg.pages.dev/",
+    tags: ["Asistente", "Recetas", "UX", "Voz"]
+  },
+  {
+    id: "velora",
+    title: "VELORA",
+    category: "E-commerce",
+    demo: "https://private-shop-30j.pages.dev/",
+    tags: ["Catálogo", "Carrito", "QR", "Mobile"]
+  },
+  {
+    id: "math",
+    title: "Aprende Matemáticas",
+    category: "Gamificación educativa",
+    demo: "https://diegorod24-github-io.pages.dev/",
+    tags: ["Educación", "Juegos", "Web", "UX"]
+  },
+  {
+    id: "alianza",
+    title: "Rincón del Hincha Grone",
+    category: "Catálogo digital",
+    demo: "https://alianza-lima.pages.dev/",
+    tags: ["Tienda", "Catálogo", "Reservas", "Mobile"]
+  }
+];
