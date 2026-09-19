@@ -185,6 +185,7 @@ export const translations = {
     "services": {
       "kicker": "Servicios",
       "title": "Soluciones claras para cada tipo de cliente",
+      "techSectionKicker": "CAPACIDADES JYM",
       "arch": [
         "Diseño residencial",
         "Diseño comercial y corporativo",
@@ -364,19 +365,29 @@ export const translations = {
       }
     },
     "bottleneck": {
-      "kicker": "DETECTAMOS ANTES DE AUTOMATIZAR",
-      "title": "¿Dónde está perdiendo tiempo tu empresa?",
-      "text": "Una buena automatización no empieza comprando software. Empieza entendiendo dónde se repite el trabajo, dónde se acumulan los errores y qué decisión necesita mejores datos.",
-      "steps": [
-        {"title": "Observamos el trabajo", "text": "Mapeamos tareas manuales, archivos, sistemas y responsables."},
-        {"title": "Detectamos el cuello de botella", "text": "Identificamos demoras, duplicidad, errores y puntos sin trazabilidad."},
-        {"title": "Diseñamos el flujo", "text": "Definimos qué automatizar, qué integrar y qué debe revisar una persona."},
-        {"title": "Implementamos y medimos", "text": "Entregamos una solución usable, registros de actividad y mejora continua."}
+      "kicker": "AUTOMATIZACIÓN EN ACCIÓN",
+      "title": "De una operación pesada a un flujo automatizado en un solo clic",
+      "text": "Archivos, pedidos, formularios, consultas y validaciones pueden entrar a un mismo flujo. El sistema aplica reglas, organiza el trabajo y devuelve resultados listos para revisar.",
+      "inputLabel": "ENTRADAS",
+      "inputs": ["Excel y bases", "PDF y documentos", "Pedidos", "Formularios", "Consultas", "Archivos y evidencias"],
+      "engineTitle": "JYM AUTOMATION ENGINE",
+      "ready": "LISTO PARA PROCESAR",
+      "processing": "PROCESANDO FLUJO",
+      "completed": "FLUJO COMPLETADO",
+      "button": "Automatizar en un clic",
+      "processingButton": "Procesando...",
+      "runAgain": "Probar de nuevo",
+      "outputLabel": "RESULTADOS",
+      "outputs": ["Reporte final", "Alertas", "Evidencias", "Dashboard", "Exportación"],
+      "benefits": [
+        {"title": "Menos pasos manuales", "text": "El volumen lo procesa el sistema; la persona revisa lo importante."},
+        {"title": "Todo conectado", "text": "Reglas, archivos, consultas y resultados dentro de un mismo flujo."},
+        {"title": "Control y trazabilidad", "text": "Cada resultado puede quedar registrado, revisado y exportado."}
       ],
-      "resultTitle": "El objetivo no es reemplazar a tu equipo.",
-      "resultText": "Es quitarle trabajo repetitivo para que se concentre en decisiones, clientes y crecimiento.",
-      "cta": "Analizar mi cuello de botella",
-      "whatsapp": "Hola JYM, quiero identificar y solucionar un cuello de botella de mi empresa."
+      "resultTitle": "Lo complejo puede terminar siendo una sola acción.",
+      "resultText": "Diseñamos el flujo alrededor de tu operación real para reducir trabajo repetitivo sin perder control humano.",
+      "cta": "Quiero automatizar mi proceso",
+      "whatsapp": "Hola JYM, quiero convertir un proceso repetitivo de mi empresa en un flujo automatizado."
     },
     "success": {
       "kicker": "Portafolio",
@@ -806,6 +817,7 @@ export const translations = {
     "services": {
       "kicker": "Services",
       "title": "Clear solutions for each client type",
+      "techSectionKicker": "JYM CAPABILITIES",
       "arch": [
         "Residential design",
         "Commercial and corporate design",
@@ -985,19 +997,29 @@ export const translations = {
       }
     },
     "bottleneck": {
-      "kicker": "WE DIAGNOSE BEFORE WE AUTOMATE",
-      "title": "Where is your company losing time?",
-      "text": "Good automation does not begin by buying software. It begins by understanding repeated work, accumulated errors and decisions that need better data.",
-      "steps": [
-        {"title": "We observe the work", "text": "We map manual tasks, files, systems and owners."},
-        {"title": "We find the bottleneck", "text": "We identify delays, duplication, errors and missing traceability."},
-        {"title": "We design the workflow", "text": "We define what to automate, what to integrate and what requires human review."},
-        {"title": "We implement and measure", "text": "We deliver a usable solution, activity records and continuous improvement."}
+      "kicker": "AUTOMATION IN ACTION",
+      "title": "From a heavy operation to an automated workflow in one click",
+      "text": "Files, orders, forms, queries and validations can enter the same workflow. The system applies rules, organizes the work and returns results ready for review.",
+      "inputLabel": "INPUTS",
+      "inputs": ["Excel and data", "PDF and documents", "Orders", "Forms", "Queries", "Files and evidence"],
+      "engineTitle": "JYM AUTOMATION ENGINE",
+      "ready": "READY TO PROCESS",
+      "processing": "PROCESSING WORKFLOW",
+      "completed": "WORKFLOW COMPLETED",
+      "button": "Automate in one click",
+      "processingButton": "Processing...",
+      "runAgain": "Run again",
+      "outputLabel": "RESULTS",
+      "outputs": ["Final report", "Alerts", "Evidence", "Dashboard", "Export"],
+      "benefits": [
+        {"title": "Fewer manual steps", "text": "The system processes the volume while people review what matters."},
+        {"title": "Everything connected", "text": "Rules, files, queries and results inside one workflow."},
+        {"title": "Control and traceability", "text": "Every result can remain recorded, reviewed and exported."}
       ],
-      "resultTitle": "The goal is not to replace your team.",
-      "resultText": "It is to remove repetitive work so people can focus on decisions, customers and growth.",
-      "cta": "Analyze my bottleneck",
-      "whatsapp": "Hello JYM, I want to identify and fix a bottleneck in my company."
+      "resultTitle": "Complex work can become a single action.",
+      "resultText": "We design the workflow around your real operation to reduce repetitive work without losing human control.",
+      "cta": "Automate my process",
+      "whatsapp": "Hello JYM, I want to turn a repetitive business process into an automated workflow."
     },
     "success": {
       "kicker": "Portfolio",
