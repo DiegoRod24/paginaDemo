@@ -286,7 +286,7 @@ function Header({ mode, setMode, lang, setLang, t }) {
     ["#inicio", t.nav.portal],
     ["#showroom", t.nav.solutions],
     ["#proyectos-tech", t.nav.success],
-    ["#laboratorio", t.nav.lab],
+    ["#casos-reales", t.nav.realCases],
     ["#proceso", t.nav.process],
     ["#contacto", t.nav.contact]
   ] : mode === "arch" ? [
@@ -330,10 +330,147 @@ function Header({ mode, setMode, lang, setLang, t }) {
   </header>;
 }
 
+
+function TechIntro({ setMode, t }) {
+  const content = t.experience.tech;
+  return <section className="hero world-intro tech-intro" id="inicio">
+    <div className="intro-grid intro-grid-tech" aria-hidden="true" />
+    <div className="world-intro-shell">
+      <motion.div
+        className="intro-copy"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: .55 }}
+      >
+        <p>{content.kicker}</p>
+        <h1>{content.title}</h1>
+        <span>{content.text}</span>
+        <div className="intro-points">
+          {content.points.map(item => <b key={item}><i />{item}</b>)}
+        </div>
+        <div className="world-actions intro-actions">
+          <a className="btn btn-primary" href="#showroom">{content.primary}<ArrowRight size={18}/></a>
+          <a className="btn btn-cold" href="#proyectos-tech">{content.secondary}<ArrowRight size={18}/></a>
+          <button className="intro-switch" type="button" onClick={() => setMode("arch")}>{content.switch}<ArrowRight size={16}/></button>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="tech-workbench"
+        initial={{ opacity: 0, scale: .96, x: 30 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ duration: .65, delay: .08 }}
+      >
+        <div className="workbench-head">
+          <span><i />JYM SYSTEM LAB</span>
+          <b>{content.visualStatus}</b>
+        </div>
+        <div className="workbench-scene">
+          <SafeScene3D mode="tech" />
+        </div>
+        <div className="workbench-flow">
+          {content.flow.map((item, index) => <React.Fragment key={item}>
+            <span>{item}</span>{index < content.flow.length - 1 && <ArrowRight size={14}/>}
+          </React.Fragment>)}
+        </div>
+      </motion.div>
+    </div>
+  </section>;
+}
+
+function ArchitectureBlueprintVisual({ t }) {
+  const labels = t.experience.arch.planLabels;
+  return <div className="blueprint-board" aria-label={t.experience.arch.planAria}>
+    <div className="blueprint-toolbar">
+      <span><i />JYM · PLANO 01</span>
+      <b>{t.experience.arch.visualStatus}</b>
+    </div>
+    <svg className="blueprint-svg" viewBox="0 0 760 520" role="img" aria-hidden="true">
+      <g className="bp-grid-lines">
+        {Array.from({ length: 12 }).map((_, i) => <line key={"v"+i} x1={50+i*60} y1="40" x2={50+i*60} y2="480" />)}
+        {Array.from({ length: 8 }).map((_, i) => <line key={"h"+i} x1="45" y1={60+i*55} x2="715" y2={60+i*55} />)}
+      </g>
+      <g className="bp-plan">
+        <rect x="115" y="90" width="520" height="330" rx="2" />
+        <line x1="340" y1="90" x2="340" y2="420" />
+        <line x1="115" y1="255" x2="635" y2="255" />
+        <line x1="500" y1="255" x2="500" y2="420" />
+        <line x1="340" y1="170" x2="635" y2="170" />
+        <path d="M115 330h95v90" />
+        <path d="M500 330h135" />
+        <path d="M340 255c45 0 70 24 70 66" className="bp-door" />
+        <path d="M500 255c0 42-22 68-64 68" className="bp-door" />
+        <path d="M210 330c0-42 22-68 64-68" className="bp-door" />
+        <line x1="95" y1="90" x2="95" y2="420" className="bp-dimension" />
+        <line x1="115" y1="445" x2="635" y2="445" className="bp-dimension" />
+        <line x1="88" y1="90" x2="103" y2="90" className="bp-dimension" />
+        <line x1="88" y1="420" x2="103" y2="420" className="bp-dimension" />
+        <line x1="115" y1="438" x2="115" y2="452" className="bp-dimension" />
+        <line x1="635" y1="438" x2="635" y2="452" className="bp-dimension" />
+      </g>
+      <g className="bp-furniture">
+        <rect x="155" y="125" width="118" height="55" rx="7" />
+        <rect x="173" y="197" width="82" height="34" rx="5" />
+        <circle cx="426" cy="337" r="44" />
+        <line x1="382" y1="337" x2="470" y2="337" />
+        <line x1="426" y1="293" x2="426" y2="381" />
+        <rect x="531" y="292" width="73" height="90" rx="5" />
+      </g>
+    </svg>
+    <div className="blueprint-label bp-label-a">{labels[0]}</div>
+    <div className="blueprint-label bp-label-b">{labels[1]}</div>
+    <div className="blueprint-label bp-label-c">{labels[2]}</div>
+    <div className="blueprint-label bp-label-d">{labels[3]}</div>
+    <div className="blueprint-scale">ESC 1:50 · A-01</div>
+  </div>;
+}
+
+function ArchitectureIntro({ setMode, t }) {
+  const content = t.experience.arch;
+  return <section className="hero world-intro arch-intro" id="inicio">
+    <div className="intro-grid intro-grid-arch" aria-hidden="true" />
+    <div className="world-intro-shell arch-intro-shell">
+      <motion.div
+        className="intro-copy arch-intro-copy"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: .55 }}
+      >
+        <p>{content.kicker}</p>
+        <h1>{content.title}</h1>
+        <span>{content.text}</span>
+        <div className="intro-points arch-points">
+          {content.points.map(item => <b key={item}><i />{item}</b>)}
+        </div>
+        <div className="world-actions intro-actions">
+          <a className="btn btn-primary btn-arch-primary" href="#showroom">{content.primary}<ArrowRight size={18}/></a>
+          <a className="btn btn-warm" href="#proceso">{content.secondary}<ArrowRight size={18}/></a>
+          <button className="intro-switch arch-switch" type="button" onClick={() => setMode("tech")}>{content.switch}<ArrowRight size={16}/></button>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="architecture-desk"
+        initial={{ opacity: 0, scale: .96, x: 30 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ duration: .65, delay: .08 }}
+      >
+        <ArchitectureBlueprintVisual t={t} />
+        <div className="desk-note">
+          <span>{content.noteKicker}</span>
+          <b>{content.noteTitle}</b>
+        </div>
+      </motion.div>
+    </div>
+  </section>;
+}
+
 function Hero({ mode, setMode, t }) {
-  const isTech = mode === "tech";
-  const isArch = mode === "arch";
-  const portal = mode === "portal";
+  if (mode === "tech") return <TechIntro setMode={setMode} t={t} />;
+  if (mode === "arch") return <ArchitectureIntro setMode={setMode} t={t} />;
+  const isTech = false;
+  const isArch = false;
+  const portal = true;
   const [portalFocus, setPortalFocus] = useState("none");
   const [portalSelection, setPortalSelection] = useState("none");
   const portalTimer = useRef();
@@ -964,12 +1101,8 @@ const COMPANION_SECTIONS = {
     { id: "inicio", state: "home", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
     { id: "proyectos-tech", state: "projects", side: "right" },
-    { id: "cuellos-botella", state: "process", side: "right" },
-    { id: "laboratorio", state: "automation", side: "left" },
-    { id: "casos-reales", state: "projects", side: "right" },
-    { id: "servicios", state: "services", side: "right" },
-    { id: "proceso", state: "process", side: "left" },
-    { id: "automatizacion", state: "automation", side: "right" },
+    { id: "casos-reales", state: "automation", side: "left" },
+    { id: "proceso", state: "process", side: "right" },
     { id: "contacto", state: "contact", side: "left" },
   ],
   arch: [
@@ -977,8 +1110,11 @@ const COMPANION_SECTIONS = {
     { id: "showroom", state: "showroom", side: "right" },
     { id: "servicios", state: "services", side: "left" },
     { id: "proceso", state: "process", side: "right" },
-    { id: "casos", state: "projects", side: "left" },
-    { id: "automatizacion", state: "automation", side: "right" },
+    { id: "contacto", state: "contact", side: "left" },
+  ],
+  portal: [
+    { id: "inicio", state: "home", side: "right" },
+    { id: "showroom", state: "showroom", side: "right" },
     { id: "contacto", state: "contact", side: "left" },
   ]
 };
@@ -1472,16 +1608,27 @@ function App() {
     <Header mode={mode} setMode={setMode} lang={lang} setLang={setLang} t={t} />
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
-      <Showroom mode={mode} t={t} />
-      {mode === "tech" && <TechShowcase t={t} />}
-      {mode === "tech" && <BottleneckSection t={t} />}
-      {mode === "tech" && <AutomationLab t={t} />}
-      {mode === "tech" && <TechProof t={t} />}
-      <Services mode={mode} t={t} />
-      <ProcessSection t={t} mode={mode} />
-      {mode !== "tech" && <SuccessCases mode={mode} t={t} />}
-      <SmartSection mode={mode} t={t} />
-      <Contact t={t} mode={mode} />
+
+      {mode === "portal" && <>
+        <PortalShowroom t={t} />
+        <Contact t={t} mode={mode} />
+      </>}
+
+      {mode === "tech" && <>
+        <TechShowroom t={t} />
+        <TechShowcase t={t} />
+        <TechProof t={t} />
+        <ProcessSection t={t} mode={mode} />
+        <Contact t={t} mode={mode} />
+      </>}
+
+      {mode === "arch" && <>
+        <ArchitectureShowroom t={t} />
+        <Services mode={mode} t={t} />
+        <ProcessSection t={t} mode={mode} />
+        <Contact t={t} mode={mode} />
+      </>}
+
       <footer className="footer">© 2026 JYM Diseño y Arquitectura S.A.C. · Technology, Architecture & Automation.</footer>
     </main>
     <FloatingCompanion mode={mode} t={t} />
