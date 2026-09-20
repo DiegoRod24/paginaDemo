@@ -1325,8 +1325,44 @@ function AssistantMascot({ mode, state, active, content, prompt }) {
     ? techPoses[state] || "/assets/characters/asistente-tech-v2.webp"
     : "/assets/characters/asistente-arquitectura-v2.webp";
 
+  const activityMap = {
+    tech: {
+      home: { labels: ["ONLINE", "HELLO", "READY"], token: "JYM" },
+      showroom: { labels: ["DEMO", "SCAN", "LIVE"], token: "UI" },
+      services: { labels: ["API", "CODE", "BUILD"], token: "</>" },
+      process: { labels: ["INPUT", "RULES", "OUTPUT"], token: "FLOW" },
+      projects: { labels: ["CASE", "CHECK", "OK"], token: "✓" },
+      automation: { labels: ["BOT", "SYNC", "DATA"], token: "AI" },
+      contact: { labels: ["CHAT", "LINK", "READY"], token: "☎" },
+    },
+    arch: {
+      home: { labels: ["A-01", "ESC 1:50", "READY"], token: "⌂" },
+      showroom: { labels: ["MAT-01", "VIEW", "FINISH"], token: "▦" },
+      services: { labels: ["PLANO", "EJE A-A", "TRAZO"], token: "✎" },
+      process: { labels: ["5.20 m", "NPT +0.15", "CHECK"], token: "⌁" },
+      projects: { labels: ["MODEL", "VISTA", "OK"], token: "▰" },
+      automation: { labels: ["OBRA", "CLIMA", "LISTO"], token: "⚙" },
+      contact: { labels: ["VISITA", "COTIZA", "LISTO"], token: "☎" },
+    },
+  };
+  const activity = activityMap[mode]?.[state] || activityMap[mode]?.home;
+
   return <div className={`assistant-mascot assistant-mascot-${mode} assistant-action-${state} ${active ? "assistant-active" : ""}`}>
     <div className="assistant-aura"><i/><i/><i/></div>
+    <div className={`assistant-work-scene work-scene-${mode} work-scene-${state}`} aria-hidden="true">
+      <div className="work-status-stack">
+        {activity.labels.map((label, index) => <b key={label} style={{"--work-index":index}}>{label}</b>)}
+      </div>
+      <div className="work-holo-panel">
+        <i/><i/><i/>
+        <strong>{activity.token}</strong>
+      </div>
+      <div className="work-context-prop">
+        <i className="work-prop-line p1"/><i className="work-prop-line p2"/><i className="work-prop-line p3"/>
+        <b className="work-prop-node n1"/><b className="work-prop-node n2"/><b className="work-prop-node n3"/>
+        <em className="work-prop-scan"/>
+      </div>
+    </div>
     {mode === "tech"
       ? <AnimatedTechAssistant state={state} active={active} fallbackSrc={src} />
       : <img className="assistant-mascot-image" src={src} alt="" draggable="false" />}
