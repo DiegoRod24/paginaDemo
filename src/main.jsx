@@ -889,12 +889,13 @@ function GestureExperience({ t, setMode }) {
     setToast(content.openingPrefix + " " + item.title);
 
     window.setTimeout(() => {
+      stopCamera();
+
       if (item.id === "automation") {
         document.getElementById("cuellos-botella")?.scrollIntoView({ behavior: "smooth", block: "start" });
       } else if (item.id === "projects") {
         document.getElementById("proyectos-tech")?.scrollIntoView({ behavior: "smooth", block: "start" });
       } else if (item.id === "architecture") {
-        stopCamera();
         setMode?.("arch");
       }
     }, 360);
