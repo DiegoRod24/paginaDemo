@@ -741,7 +741,7 @@ async function ensureGestureRuntime() {
   await loadGestureScript("Camera", "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js");
 }
 
-function GestureExperience({ t }) {
+function GestureExperience({ t, setMode }) {
   const content = t.gestureExperience;
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -749,6 +749,10 @@ function GestureExperience({ t }) {
   const cursorRef = useRef(null);
   const cameraRef = useRef(null);
   const handsRef = useRef(null);
+  const targetRefs = useRef([]);
+  const pointerRef = useRef({ x: .5, y: .5, ready: false });
+  const hoveredRef = useRef("");
+  const actionCooldownRef = useRef(0);
   const pinchRef = useRef(false);
   const swipeRef = useRef({ x: null, at: 0, cooldown: 0 });
   const victoryRef = useRef(0);
@@ -762,6 +766,7 @@ function GestureExperience({ t }) {
   const [fps, setFps] = useState(0);
   const [scene, setScene] = useState(0);
   const [selected, setSelected] = useState("");
+  const [hovered, setHovered] = useState("");
   const [toast, setToast] = useState(content.readyToast);
   const [turbo, setTurbo] = useState(false);
 
@@ -802,19 +807,97 @@ function GestureExperience({ t }) {
     if (!stage || !cursor) return null;
 
     const rect = stage.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, (1 - landmark.x) * rect.width));
-    const y = Math.max(0, Math.min(rect.height, landmark.y * rect.height));
+
+    // Usamos una zona útil de la cámara para que no tengas que llevar la mano
+    // hasta los extremos físicos del encuadre para recorrer toda la interfaz.
+    const nx = Math.max(0, Math.min(1, ((1 - landmark.x) - .10) / .80));
+    const ny = Math.max(0, Math.min(1, (landmark.y - .08) / .82));
+    const desiredX = nx * rect.width;
+    const desiredY = ny * rect.height;
+
+    const previous = pointerRef.current;
+    const smoothing = previous.ready ? .34 : 1;
+    const x = previous.x * rect.width * (1 - smoothing) + desiredX * smoothing;
+    const y = previous.y * rect.height * (1 - smoothing) + desiredY * smoothing;
+
+    pointerRef.current = {
+      x: rect.width ? x / rect.width : .5,
+      y: rect.height ? y / rect.height : .5,
+      ready: true
+    };
+
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
     cursor.classList.add("visible");
+
     return { rect, x, y, clientX: rect.left + x, clientY: rect.top + y };
   };
 
-  const activateTargetAt = (pointer) => {
-    if (!pointer || !stageRef.current) return;
-    const node = document.elementFromPoint(pointer.clientX, pointer.clientY)?.closest(".gesture-target");
-    if (!node || !stageRef.current.contains(node)) return;
-    node.click();
+  const findTargetAt = (pointer) => {
+    if (!pointer) return null;
+    const margin = 24;
+
+    let best = null;
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    targetRefs.current.forEach((node, index) => {
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      const inside =
+        pointer.clientX >= rect.left - margin &&
+        pointer.clientX <= rect.right + margin &&
+        pointer.clientY >= rect.top - margin &&
+        pointer.clientY <= rect.bottom + margin;
+
+      if (!inside) return;
+
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distance = Math.hypot(pointer.clientX - centerX, pointer.clientY - centerY);
+
+      if (distance < bestDistance) {
+        best = { node, index, item: targets[index] };
+        bestDistance = distance;
+      }
+    });
+
+    return best;
+  };
+
+  const updateHoverTarget = (pointer) => {
+    const hit = findTargetAt(pointer);
+    const nextId = hit?.item?.id || "";
+
+    if (hoveredRef.current !== nextId) {
+      hoveredRef.current = nextId;
+      setHovered(nextId);
+    }
+
+    cursorRef.current?.classList.toggle("hovering", Boolean(hit));
+    return hit;
+  };
+
+  const runTargetAction = (item) => {
+    if (!item) return;
+    const now = performance.now();
+    if (now < actionCooldownRef.current) return;
+    actionCooldownRef.current = now + 900;
+
+    setSelected(item.id);
+    setHovered(item.id);
+    hoveredRef.current = item.id;
+    setToast(content.openingPrefix + " " + item.title);
+
+    window.setTimeout(() => {
+      if (item.id === "automation") {
+        document.getElementById("cuellos-botella")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (item.id === "projects") {
+        document.getElementById("proyectos-tech")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (item.id === "architecture") {
+        stopCamera();
+        setMode?.("arch");
+      }
+    }, 360);
   };
 
   const drawHand = (results) => {
@@ -866,12 +949,16 @@ function GestureExperience({ t }) {
       setGesture("—");
       setConfidence(0);
       pinchRef.current = false;
-      if (cursorRef.current) cursorRef.current.classList.remove("visible");
+      pointerRef.current.ready = false;
+      hoveredRef.current = "";
+      setHovered("");
+      if (cursorRef.current) cursorRef.current.classList.remove("visible", "pinching", "hovering");
       return;
     }
 
     const lm = list[0];
     const pointer = setPointer(lm[8]);
+    const hit = updateHoverTarget(pointer);
     const kind = classifyGesture(lm);
     setGesture(gestureLabel(kind));
     setConfidence(Math.round((results.multiHandedness?.[0]?.score || .9) * 100));
@@ -880,8 +967,13 @@ function GestureExperience({ t }) {
       cursorRef.current?.classList.add("pinching");
       if (!pinchRef.current) {
         pinchRef.current = true;
-        activateTargetAt(pointer);
-        setToast(content.clickToast);
+
+        if (hit?.item) {
+          setToast(content.clickToast + " · " + hit.item.title);
+          runTargetAction(hit.item);
+        } else {
+          setToast(content.pinchAimToast);
+        }
       }
     } else {
       pinchRef.current = false;
@@ -928,8 +1020,11 @@ function GestureExperience({ t }) {
     cameraRef.current = null;
     handsRef.current = null;
     pinchRef.current = false;
+    pointerRef.current = { x: .5, y: .5, ready: false };
+    hoveredRef.current = "";
+    setHovered("");
     swipeRef.current = { x: null, at: 0, cooldown: 0 };
-    if (cursorRef.current) cursorRef.current.classList.remove("visible", "pinching");
+    if (cursorRef.current) cursorRef.current.classList.remove("visible", "pinching", "hovering");
     clearCanvas();
     setHandsCount(0);
     setConfidence(0);
@@ -1055,16 +1150,19 @@ function GestureExperience({ t }) {
           <div className="gesture-targets">
             {targets.map((item, index) => <button
               type="button"
-              className={"gesture-target " + (selected === item.title ? "active" : "")}
-              key={item.title}
-              onClick={() => {
-                setSelected(item.title);
-                setToast(content.selectedPrefix + " " + item.title);
+              ref={node => { targetRefs.current[index] = node; }}
+              className={"gesture-target " + (selected === item.id ? "active " : "") + (hovered === item.id ? "hovering" : "")}
+              key={item.id}
+              onMouseEnter={() => setHovered(item.id)}
+              onMouseLeave={() => {
+                if (hoveredRef.current !== item.id) setHovered("");
               }}
+              onClick={() => runTargetAction(item)}
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
               <b>{item.title}</b>
               <small>{item.text}</small>
+              <em>{item.action}</em>
             </button>)}
           </div>
 
@@ -1427,10 +1525,10 @@ ${t.contact.messageLabel}: ${form.message}`;
 const COMPANION_SECTIONS = {
   tech: [
     { id: "inicio", state: "home", side: "right" },
+    { id: "gestos", state: "automation", side: "right" },
     { id: "showroom", state: "showroom", side: "right" },
     { id: "cuellos-botella", state: "process", side: "right" },
     { id: "laboratorio", state: "automation", side: "left" },
-    { id: "gestos", state: "automation", side: "right" },
     { id: "casos-reales", state: "projects", side: "right" },
     { id: "servicios", state: "services", side: "right" },
     { id: "proceso", state: "process", side: "left" },
@@ -2272,10 +2370,10 @@ function App() {
     <Header mode={mode} setMode={setMode} lang={lang} setLang={setLang} t={t} />
     <main>
       <Hero mode={mode} setMode={setMode} t={t} />
+      {mode === "tech" && <GestureExperience t={t} setMode={setMode} />}
       <Showroom mode={mode} t={t} />
       {mode === "tech" && <BottleneckSection t={t} />}
       {mode === "tech" && <AutomationLab t={t} />}
-      {mode === "tech" && <GestureExperience t={t} />}
       {mode === "tech" && <TechProof t={t} />}
       <Services mode={mode} t={t} />
       <ProcessSection t={t} mode={mode} />
