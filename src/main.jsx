@@ -1073,7 +1073,8 @@ const COMPANION_SECTIONS = {
 };
 
 function useVisibleCompanionSection(enabled, mode) {
-  const sections = COMPANION_SECTIONS[mode] || COMPANION_SECTIONS.tech;
+  const baseSections = COMPANION_SECTIONS[mode] || COMPANION_SECTIONS.tech;
+  const sections = baseSections.map((item, index) => ({ ...item, index, total: baseSections.length }));
   const [current, setCurrent] = useState(sections[0]);
 
   useEffect(() => setCurrent(sections[0]), [mode]);
@@ -1351,16 +1352,20 @@ function FloatingCompanion({ mode, t }) {
 
   useEffect(() => {
     setAction(false);
-    setHidden(false);
     setBubbleVisible(true);
 
-    const timer = window.setTimeout(() => setBubbleVisible(false), 2600);
+    const timer = window.setTimeout(() => setBubbleVisible(false), 3000);
     return () => window.clearTimeout(timer);
-  }, [current.state, mode]);
+  }, [current.id, mode]);
+
+  useEffect(() => {
+    setHidden(false);
+  }, [mode]);
 
   if (!enabled) return null;
 
   const content = t.companion[mode][current.state] || t.companion[mode].home;
+  const actionPrompt = content.action || t.companion.actionPrompt;
   const isTechHome = mode === "tech" && current.state === "home";
   const isArchHome = mode === "arch" && current.state === "home";
 
@@ -1381,16 +1386,10 @@ function FloatingCompanion({ mode, t }) {
 
     playCompanionTone(sound);
 
-    if (isTechHome || isArchHome) {
-      window.setTimeout(() => {
-        setHidden(true);
-        setBubbleVisible(false);
-      }, 1100);
-      window.setTimeout(() => setAction(false), 1700);
-      return;
-    }
-
-    window.setTimeout(() => setAction(false), current.state === "contact" ? 2900 : 1900);
+    window.setTimeout(
+      () => setAction(false),
+      current.state === "contact" ? 2900 : (isTechHome || isArchHome) ? 1700 : 1900
+    );
   };
 
   const followPointer = event => {
@@ -1429,12 +1428,15 @@ function FloatingCompanion({ mode, t }) {
   }
 
   return (
-    <motion.aside
-      key={mode}
+    <AnimatePresence mode="wait">
+      <motion.aside
+      key={`${mode}-${current.id}`}
+      data-companion-section={current.id}
       className={`companion-system companion-${mode} companion-${current.side} companion-${current.state} ${action ? "is-performing" : ""}`}
-      initial={{ opacity: 0, x: current.side === "left" ? -90 : 90, y: 16 }}
-      animate={{ opacity: 1, x: 0, y: 0 }}
-      transition={{ type: "spring", stiffness: 110, damping: 18 }}
+      initial={{ opacity: 0, x: current.side === "left" ? -82 : 82, y: 18, scale: .94, filter: "blur(4px)" }}
+      animate={{ opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, x: current.side === "left" ? -54 : 54, y: -10, scale: .94, filter: "blur(4px)" }}
+      transition={{ type: "spring", stiffness: 125, damping: 20 }}
       onPointerMove={followPointer}
       onMouseEnter={() => setBubbleVisible(true)}
       onMouseLeave={resetPointer}
@@ -1444,9 +1446,24 @@ function FloatingCompanion({ mode, t }) {
       }}
       role="button"
       tabIndex={0}
-      aria-label={`${content.title}. ${t.companion.actionPrompt}`}
+      aria-label={`${content.title}. ${actionPrompt}`}
     >
       <div className="companion-character-stage">
+        <button
+          type="button"
+          className="companion-hide-button"
+          aria-label={mode === "tech" ? t.companion.hideAlien : t.companion.hideArchitect}
+          title={mode === "tech" ? t.companion.hideAlien : t.companion.hideArchitect}
+          onPointerDown={event => event.stopPropagation()}
+          onClick={event => {
+            event.stopPropagation();
+            setHidden(true);
+            setBubbleVisible(false);
+            setAction(false);
+          }}
+        >
+          <X size={13}/>
+        </button>
         {mode === "tech" ? <>
           <div className={`hero-ufo-wrap tech-home-visual ${isTechHome ? "is-visible" : "is-hidden"}`}>
             <img src="/assets/characters/marcianito-nave.png" alt={t.companion.alienAlt} className="hero-ufo" draggable="false" />
@@ -1456,10 +1473,10 @@ function FloatingCompanion({ mode, t }) {
             <i className="hero-ufo-spark s2" />
           </div>
           <div className={`tech-assistant-slot ${isTechHome ? "is-hidden" : "is-visible"}`}>
-            <AssistantMascot mode="tech" state={current.state} active={action} content={content} prompt={t.companion.actionPrompt} />
+            <AssistantMascot mode="tech" state={current.state} active={action} content={content} prompt={actionPrompt} />
           </div>
         </> : (
-          <AssistantMascot mode={mode} state={current.state} active={action} content={content} prompt={t.companion.actionPrompt} />
+          <AssistantMascot mode={mode} state={current.state} active={action} content={content} prompt={actionPrompt} />
         )}
       </div>
 
@@ -1472,14 +1489,20 @@ function FloatingCompanion({ mode, t }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: .88, y: 6 }}
           >
+            <div className="companion-section-progress" aria-hidden="true">
+              <b>{String((current.index ?? 0) + 1).padStart(2, "0")}</b>
+              <i><span style={{ width: `${(((current.index ?? 0) + 1) / (current.total || 1)) * 100}%` }} /></i>
+              <b>{String(current.total || 1).padStart(2, "0")}</b>
+            </div>
             <small>{content.eyebrow}</small>
             <strong>{content.title}</strong>
             <span>{content.message}</span>
-            <em>{action ? t.companion.actionRunning : t.companion.actionPrompt}</em>
+            <em>{action ? t.companion.actionRunning : actionPrompt}</em>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.aside>
+      </motion.aside>
+    </AnimatePresence>
   );
 }
 
