@@ -751,7 +751,12 @@ function GestureExperience({ t, setMode }) {
   const handsRef = useRef(null);
   const targetRefs = useRef([]);
   const pointerRef = useRef({ x: .5, y: .5, ready: false });
+  const globalPointerRef = useRef({ x: .5, y: .5, ready: false });
   const hoveredRef = useRef("");
+  const globalHoveredRef = useRef(null);
+  const globalModeRef = useRef(false);
+  const tutorialDoneRef = useRef(false);
+  const tutorialStepRef = useRef(0);
   const actionCooldownRef = useRef(0);
   const pinchRef = useRef(false);
   const swipeRef = useRef({ x: null, at: 0, cooldown: 0 });
@@ -769,9 +774,36 @@ function GestureExperience({ t, setMode }) {
   const [hovered, setHovered] = useState("");
   const [toast, setToast] = useState(content.readyToast);
   const [turbo, setTurbo] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
+  const [tutorialDone, setTutorialDone] = useState(false);
+  const [globalMode, setGlobalMode] = useState(false);
 
   const scenes = content.scenes;
   const targets = content.targets;
+
+  const updateTutorial = (step) => {
+    tutorialStepRef.current = step;
+    setTutorialStep(step);
+  };
+
+  const markTutorialDone = (item) => {
+    tutorialDoneRef.current = true;
+    setTutorialDone(true);
+    updateTutorial(4);
+    setSelected(item?.id || "");
+    setToast(content.tutorialComplete);
+  };
+
+  const setGlobalControl = (enabled) => {
+    globalModeRef.current = enabled;
+    setGlobalMode(enabled);
+
+    if (!enabled) {
+      globalPointerRef.current = { x: .5, y: .5, ready: false };
+      globalHoveredRef.current?.classList.remove("gesture-global-hover");
+      globalHoveredRef.current = null;
+    }
+  };
 
   const distance2d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
@@ -874,7 +906,79 @@ function GestureExperience({ t, setMode }) {
     }
 
     cursorRef.current?.classList.toggle("hovering", Boolean(hit));
+
+    if (hit && !tutorialDoneRef.current && tutorialStepRef.current < 3) {
+      updateTutorial(3);
+      setToast(content.tutorialPinch);
+    }
+
     return hit;
+  };
+
+  const setGlobalPointer = (landmark) => {
+    const cursor = document.querySelector(".gesture-global-cursor");
+    if (!cursor) return null;
+
+    const nx = Math.max(0, Math.min(1, ((1 - landmark.x) - .08) / .84));
+    const ny = Math.max(0, Math.min(1, (landmark.y - .07) / .86));
+    const desiredX = nx * window.innerWidth;
+    const desiredY = ny * window.innerHeight;
+    const previous = globalPointerRef.current;
+    const smoothing = previous.ready ? .30 : 1;
+    const x = previous.x * window.innerWidth * (1 - smoothing) + desiredX * smoothing;
+    const y = previous.y * window.innerHeight * (1 - smoothing) + desiredY * smoothing;
+
+    globalPointerRef.current = {
+      x: window.innerWidth ? x / window.innerWidth : .5,
+      y: window.innerHeight ? y / window.innerHeight : .5,
+      ready: true
+    };
+
+    cursor.style.left = x + "px";
+    cursor.style.top = y + "px";
+    cursor.classList.add("visible");
+    return { x, y, clientX: x, clientY: y };
+  };
+
+  const GLOBAL_SAFE_SELECTOR = [
+    '.top-tabs a[href^="#"]',
+    '.world-actions a[href^="#"]',
+    '.showcase-list button',
+    '.lab-selector button',
+    '.one-click-button',
+    '.companion-system',
+    '.companion-quick-menu button',
+    '.scroll-top',
+    '.world-switch'
+  ].join(",");
+
+  const updateGlobalHover = (pointer) => {
+    if (!pointer) return null;
+    const node = document.elementFromPoint(pointer.clientX, pointer.clientY)?.closest(GLOBAL_SAFE_SELECTOR) || null;
+
+    if (globalHoveredRef.current !== node) {
+      globalHoveredRef.current?.classList.remove("gesture-global-hover");
+      node?.classList.add("gesture-global-hover");
+      globalHoveredRef.current = node;
+    }
+
+    document.querySelector(".gesture-global-cursor")?.classList.toggle("hovering", Boolean(node));
+    return node;
+  };
+
+  const runGlobalAction = (node) => {
+    if (!node) {
+      setToast(content.globalAimToast);
+      return;
+    }
+
+    const now = performance.now();
+    if (now < actionCooldownRef.current) return;
+    actionCooldownRef.current = now + 900;
+
+    const label = (node.getAttribute("aria-label") || node.textContent || "").trim().replace(/\s+/g, " ").slice(0, 58);
+    setToast(content.globalOpenPrefix + (label ? " · " + label : ""));
+    node.click();
   };
 
   const runTargetAction = (item) => {
@@ -951,27 +1055,49 @@ function GestureExperience({ t, setMode }) {
       setConfidence(0);
       pinchRef.current = false;
       pointerRef.current.ready = false;
+      globalPointerRef.current.ready = false;
       hoveredRef.current = "";
       setHovered("");
+      if (!tutorialDoneRef.current && status === "running") updateTutorial(1);
       if (cursorRef.current) cursorRef.current.classList.remove("visible", "pinching", "hovering");
+      document.querySelector(".gesture-global-cursor")?.classList.remove("visible", "pinching", "hovering");
+      globalHoveredRef.current?.classList.remove("gesture-global-hover");
+      globalHoveredRef.current = null;
       return;
     }
 
     const lm = list[0];
-    const pointer = setPointer(lm[8]);
-    const hit = updateHoverTarget(pointer);
+    const usingGlobal = globalModeRef.current;
+    const pointer = usingGlobal ? setGlobalPointer(lm[8]) : setPointer(lm[8]);
+    const hit = usingGlobal ? updateGlobalHover(pointer) : updateHoverTarget(pointer);
     const kind = classifyGesture(lm);
     setGesture(gestureLabel(kind));
     setConfidence(Math.round((results.multiHandedness?.[0]?.score || .9) * 100));
 
+    if (!tutorialDoneRef.current && tutorialStepRef.current < 2) {
+      updateTutorial(2);
+      setToast(content.tutorialAim);
+    }
+
     if (kind === "pinch") {
-      cursorRef.current?.classList.add("pinching");
+      if (usingGlobal) {
+        document.querySelector(".gesture-global-cursor")?.classList.add("pinching");
+      } else {
+        cursorRef.current?.classList.add("pinching");
+      }
+
       if (!pinchRef.current) {
         pinchRef.current = true;
 
-        if (hit?.item) {
-          setToast(content.clickToast + " · " + hit.item.title);
-          runTargetAction(hit.item);
+        if (usingGlobal) {
+          runGlobalAction(hit);
+        } else if (hit?.item) {
+          if (!tutorialDoneRef.current) {
+            markTutorialDone(hit.item);
+          } else {
+            setToast(content.clickToast + " · " + hit.item.title);
+            runTargetAction(hit.item);
+          }
         } else {
           setToast(content.pinchAimToast);
         }
@@ -979,6 +1105,7 @@ function GestureExperience({ t, setMode }) {
     } else {
       pinchRef.current = false;
       cursorRef.current?.classList.remove("pinching");
+      document.querySelector(".gesture-global-cursor")?.classList.remove("pinching");
     }
 
     if (kind === "open") {
@@ -989,11 +1116,28 @@ function GestureExperience({ t, setMode }) {
         swipe.at = now;
       } else if (now > swipe.cooldown && Math.abs(palmX - swipe.x) > .16) {
         const direction = palmX > swipe.x ? 1 : -1;
-        setScene(prev => (prev + direction + scenes.length) % scenes.length);
-        setToast(direction > 0 ? content.swipeRight : content.swipeLeft);
+
+        if (globalModeRef.current) {
+          const sectionIds = ["inicio", "gestos", "cuellos-botella", "laboratorio", "casos-reales", "servicios", "proceso", "automatizacion", "contacto"];
+          const currentIndex = sectionIds.reduce((bestIndex, id, index) => {
+            const node = document.getElementById(id);
+            if (!node) return bestIndex;
+            const distance = Math.abs(node.getBoundingClientRect().top - 120);
+            const bestNode = document.getElementById(sectionIds[bestIndex]);
+            const bestDistance = bestNode ? Math.abs(bestNode.getBoundingClientRect().top - 120) : Number.POSITIVE_INFINITY;
+            return distance < bestDistance ? index : bestIndex;
+          }, 0);
+          const nextIndex = Math.max(0, Math.min(sectionIds.length - 1, currentIndex + direction));
+          document.getElementById(sectionIds[nextIndex])?.scrollIntoView({ behavior: "smooth", block: "start" });
+          setToast(direction > 0 ? content.globalNext : content.globalPrevious);
+        } else {
+          setScene(prev => (prev + direction + scenes.length) % scenes.length);
+          setToast(direction > 0 ? content.swipeRight : content.swipeLeft);
+        }
+
         swipe.x = palmX;
         swipe.at = now;
-        swipe.cooldown = now + 850;
+        swipe.cooldown = now + 900;
       }
     } else if (now - swipeRef.current.at > 520) {
       swipeRef.current.x = null;
@@ -1002,7 +1146,11 @@ function GestureExperience({ t, setMode }) {
     if (kind === "fist" && now - fistRef.current > 1100) {
       fistRef.current = now;
       setSelected("");
-      setToast(content.cancelToast);
+      hoveredRef.current = "";
+      setHovered("");
+      globalHoveredRef.current?.classList.remove("gesture-global-hover");
+      globalHoveredRef.current = null;
+      setToast(globalModeRef.current ? content.globalCancel : content.cancelToast);
     }
 
     if (kind === "victory" && now - victoryRef.current > 1300) {
@@ -1022,16 +1170,25 @@ function GestureExperience({ t, setMode }) {
     handsRef.current = null;
     pinchRef.current = false;
     pointerRef.current = { x: .5, y: .5, ready: false };
+    globalPointerRef.current = { x: .5, y: .5, ready: false };
     hoveredRef.current = "";
     setHovered("");
+    globalHoveredRef.current?.classList.remove("gesture-global-hover");
+    globalHoveredRef.current = null;
+    globalModeRef.current = false;
+    setGlobalMode(false);
     swipeRef.current = { x: null, at: 0, cooldown: 0 };
     if (cursorRef.current) cursorRef.current.classList.remove("visible", "pinching", "hovering");
+    document.querySelector(".gesture-global-cursor")?.classList.remove("visible", "pinching", "hovering");
     clearCanvas();
     setHandsCount(0);
     setConfidence(0);
     setFps(0);
     setGesture("—");
     setStatus("idle");
+    tutorialDoneRef.current = false;
+    setTutorialDone(false);
+    updateTutorial(0);
     setToast(content.readyToast);
   };
 
@@ -1067,8 +1224,11 @@ function GestureExperience({ t, setMode }) {
       });
       cameraRef.current = camera;
       await camera.start();
+      tutorialDoneRef.current = false;
+      setTutorialDone(false);
+      updateTutorial(1);
       setStatus("running");
-      setToast(content.runningToast);
+      setToast(content.tutorialHand);
     } catch (error) {
       console.warn("Gesture experience camera error", error);
       stopCamera();
@@ -1111,11 +1271,37 @@ function GestureExperience({ t, setMode }) {
           <span><b>{content.privacyTitle}</b>{content.privacyText}</span>
         </div>
 
+        {status === "running" && <div className={"gesture-tutorial " + (tutorialDone ? "complete" : "")}>
+          <div className="gesture-tutorial-head">
+            <span>{content.tutorialTitle}</span>
+            <b>{tutorialDone ? "✓" : String(Math.min(tutorialStep, 3)).padStart(2, "0") + " / 03"}</b>
+          </div>
+          <div className="gesture-tutorial-steps">
+            {content.tutorialSteps.map((step, index) => <span
+              key={step}
+              className={(tutorialDone || tutorialStep > index) ? "done" : tutorialStep === index + 1 ? "active" : ""}
+            >
+              <i>{index + 1}</i>{step}
+            </span>)}
+          </div>
+          {tutorialDone && <strong>{content.tutorialReady}</strong>}
+        </div>}
+
         <div className="gesture-controls">
           <button type="button" className="btn btn-primary" onClick={startCamera} disabled={status === "loading" || status === "running"}>
             {status === "loading" ? <RotateCw className="spin"/> : <Play size={17}/>}
             {status === "loading" ? content.loading : status === "running" ? content.active : content.start}
           </button>
+          {status === "running" && tutorialDone && !globalMode && <button
+            type="button"
+            className="gesture-global-enable"
+            onClick={() => {
+              setGlobalControl(true);
+              setToast(content.globalEnabledToast);
+            }}
+          >
+            <MousePointerClick size={16}/>{content.globalEnable}
+          </button>}
           {status === "running" && <button type="button" className="gesture-stop" onClick={stopCamera}><X size={16}/>{content.stop}</button>}
         </div>
       </div>
@@ -1175,6 +1361,15 @@ function GestureExperience({ t, setMode }) {
         </div>
       </div>
     </div>
+
+    {globalMode && <div className="gesture-global-overlay" aria-live="polite">
+      <div className="gesture-global-cursor"><i/></div>
+      <div className="gesture-global-status">
+        <span><i/>{content.globalActive}</span>
+        <small>{content.globalHelp}</small>
+        <button type="button" onClick={stopCamera}><X size={14}/>{content.globalExit}</button>
+      </div>
+    </div>}
   </section>;
 }
 
@@ -2317,6 +2512,17 @@ function App() {
   const t = translations[lang];
   const overlay = useRef();
 
+  const forceWorldTop = () => {
+    const apply = () => window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    apply();
+    window.requestAnimationFrame(() => {
+      apply();
+      window.requestAnimationFrame(apply);
+    });
+    window.setTimeout(apply, 80);
+    window.setTimeout(apply, 220);
+  };
+
   const setMode = (next, options = {}) => {
     if (next === mode) {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2329,14 +2535,14 @@ function App() {
     if (next === "portal") {
       overlay.current?.classList.remove("active");
       setModeState("portal");
-      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+      forceWorldTop();
       return;
     }
 
     if (options.direct) {
       overlay.current?.classList.remove("active");
       setModeState(next);
-      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
+      forceWorldTop();
       return;
     }
 
@@ -2350,7 +2556,7 @@ function App() {
 
     window.__jymModeTimer = window.setTimeout(() => {
       setModeState(next);
-      window.scrollTo({ top: 0, behavior: "auto" });
+      forceWorldTop();
     }, 260);
 
     window.__jymOverlayTimer = window.setTimeout(() => {
@@ -2360,6 +2566,14 @@ function App() {
 
   useEffect(() => {
     document.documentElement.dataset.mode = mode;
+
+    if (mode === "tech" || mode === "arch") {
+      try {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search + "#inicio");
+      } catch {}
+      forceWorldTop();
+    }
+
     const safety = window.setTimeout(() => overlay.current?.classList.remove("active"), 900);
     return () => window.clearTimeout(safety);
   }, [mode]);
