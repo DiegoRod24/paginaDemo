@@ -379,6 +379,65 @@ export const translations = {
         "whatsapp": "Hola JYM, quiero solicitar una demo controlada de sus soluciones de automatización e IA."
       }
     },
+    "gestureExperience": {
+      "kicker": "EXPERIENCIA INTERACTIVA · COMPUTER VISION",
+      "title": "Controla esta experiencia con tus manos",
+      "intro": "Activa la cámara y prueba una interfaz que responde a tus gestos. No mostramos tu rostro: solo renderizamos la mano detectada y el cursor virtual.",
+      "headline": "Tu mano se convierte en interfaz",
+      "text": "La cámara funciona como sensor. MediaPipe detecta puntos de la mano en el navegador y JYM transforma esos movimientos en acciones visuales.",
+      "live": "MANO DETECTADA",
+      "offline": "CÁMARA APAGADA",
+      "privacyTitle": "Procesamiento local",
+      "privacyText": "La imagen de la cámara no se muestra ni se envía a JYM. Se usa en el navegador para detectar la mano.",
+      "start": "Activar experiencia",
+      "loading": "Cargando visión...",
+      "active": "Experiencia activa",
+      "stop": "Detener",
+      "stageTitle": "JYM GESTURE LAB",
+      "readyToast": "Activa la cámara para comenzar",
+      "loadingToast": "Cargando motor de visión",
+      "runningToast": "Mueve tu mano dentro del campo de la cámara",
+      "errorToast": "No pudimos iniciar la cámara",
+      "clickToast": "Pinza detectada",
+      "swipeRight": "Swipe → siguiente escena",
+      "swipeLeft": "Swipe → escena anterior",
+      "cancelToast": "Puño detectado · selección cancelada",
+      "turboToast": "Victoria detectada · modo visual activado",
+      "selectedPrefix": "Seleccionaste",
+      "metricHands": "MANOS",
+      "metricConfidence": "CONFIANZA",
+      "metricGesture": "GESTO",
+      "sceneLabel": "ESCENA",
+      "emptyTitle": "La cámara es tu sensor",
+      "emptyText": "Activa la experiencia y muestra una mano. Tu cara no aparecerá en pantalla.",
+      "errorTitle": "Cámara no disponible",
+      "errorText": "Revisa el permiso del navegador y vuelve a intentarlo.",
+      "gestures": {
+        "tracking": "RASTREANDO",
+        "point": "SEÑALAR",
+        "pinch": "PINZA",
+        "open": "MANO ABIERTA",
+        "fist": "PUÑO",
+        "victory": "VICTORIA"
+      },
+      "guide": [
+        ["☝️", "Señalar", "Mueve el cursor virtual con el índice."],
+        ["🤏", "Pinza", "Selecciona una tarjeta como si hicieras clic."],
+        ["✋", "Mano abierta", "Desliza la mano para cambiar de escena."],
+        ["✊", "Puño", "Cancela la selección actual."],
+        ["✌️", "Victoria", "Activa un efecto visual especial."]
+      ],
+      "scenes": [
+        {"title": "AUTOMATIZACIÓN", "text": "Imagina controlar dashboards, flujos y demos sin tocar la pantalla."},
+        {"title": "PROYECTOS", "text": "Navega vitrinas y experiencias interactivas con un simple movimiento."},
+        {"title": "EXPERIENCIA", "text": "La interfaz deja de ser solo una página y empieza a reaccionar a ti."}
+      ],
+      "targets": [
+        {"title": "AUTOMATIZACIÓN", "text": "Haz pinza sobre esta tarjeta"},
+        {"title": "PROYECTOS", "text": "Selecciona con pulgar + índice"},
+        {"title": "ARQUITECTURA", "text": "Prueba el cursor gestual"}
+      ]
+    },
     "bottleneck": {
       "kicker": "AUTOMATIZACIÓN EN ACCIÓN",
       "title": "De una operación pesada a un flujo automatizado en un solo clic",
@@ -1052,6 +1111,65 @@ export const translations = {
         "cta": "Request a demo",
         "whatsapp": "Hello JYM, I would like to request a controlled demo of your AI and automation solutions."
       }
+    },
+    "gestureExperience": {
+      "kicker": "INTERACTIVE EXPERIENCE · COMPUTER VISION",
+      "title": "Control this experience with your hands",
+      "intro": "Enable your camera and try an interface that responds to gestures. We do not display your face: only the detected hand and virtual cursor are rendered.",
+      "headline": "Your hand becomes the interface",
+      "text": "The camera acts as a sensor. MediaPipe detects hand landmarks in the browser and JYM turns those movements into visual actions.",
+      "live": "HAND DETECTED",
+      "offline": "CAMERA OFF",
+      "privacyTitle": "Local processing",
+      "privacyText": "The camera image is not displayed or sent to JYM. It is used in the browser to detect your hand.",
+      "start": "Enable experience",
+      "loading": "Loading vision...",
+      "active": "Experience active",
+      "stop": "Stop",
+      "stageTitle": "JYM GESTURE LAB",
+      "readyToast": "Enable the camera to begin",
+      "loadingToast": "Loading vision engine",
+      "runningToast": "Move your hand inside the camera field",
+      "errorToast": "We could not start the camera",
+      "clickToast": "Pinch detected",
+      "swipeRight": "Swipe → next scene",
+      "swipeLeft": "Swipe → previous scene",
+      "cancelToast": "Fist detected · selection cleared",
+      "turboToast": "Victory detected · visual mode activated",
+      "selectedPrefix": "Selected",
+      "metricHands": "HANDS",
+      "metricConfidence": "CONFIDENCE",
+      "metricGesture": "GESTURE",
+      "sceneLabel": "SCENE",
+      "emptyTitle": "The camera is your sensor",
+      "emptyText": "Enable the experience and show one hand. Your face will not appear on screen.",
+      "errorTitle": "Camera unavailable",
+      "errorText": "Check your browser permission and try again.",
+      "gestures": {
+        "tracking": "TRACKING",
+        "point": "POINT",
+        "pinch": "PINCH",
+        "open": "OPEN HAND",
+        "fist": "FIST",
+        "victory": "VICTORY"
+      },
+      "guide": [
+        ["☝️", "Point", "Move the virtual cursor with your index finger."],
+        ["🤏", "Pinch", "Select a card like a click."],
+        ["✋", "Open hand", "Swipe your hand to change scenes."],
+        ["✊", "Fist", "Clear the current selection."],
+        ["✌️", "Victory", "Trigger a special visual effect."]
+      ],
+      "scenes": [
+        {"title": "AUTOMATION", "text": "Imagine controlling dashboards, workflows and demos without touching the screen."},
+        {"title": "PROJECTS", "text": "Navigate showcases and interactive experiences with a simple movement."},
+        {"title": "EXPERIENCE", "text": "The interface stops being just a page and starts reacting to you."}
+      ],
+      "targets": [
+        {"title": "AUTOMATION", "text": "Pinch over this card"},
+        {"title": "PROJECTS", "text": "Select with thumb + index"},
+        {"title": "ARCHITECTURE", "text": "Try the gesture cursor"}
+      ]
     },
     "bottleneck": {
       "kicker": "AUTOMATION IN ACTION",
