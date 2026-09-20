@@ -566,74 +566,88 @@ export const translations = {
         "home": {
           "eyebrow": "JYM BOT",
           "title": "Bienvenido al mundo tecnológico",
-          "message": "Estoy listo para mostrarte cómo automatizamos y desarrollamos soluciones."
+          "message": "Estoy listo para mostrarte cómo automatizamos y desarrollamos soluciones.",
+          "action": "Salúdame y mira cómo cambio"
         },
         "showroom": {
           "eyebrow": "CATÁLOGO DIGITAL",
           "title": "Revisando nuestras herramientas",
-          "message": "Aquí encontrarás sistemas, paneles, bots y experiencias web."
+          "message": "Aquí encontrarás sistemas, paneles, bots y experiencias web.",
+          "action": "Tócame: revisemos el catálogo"
         },
         "services": {
           "eyebrow": "SERVICIOS",
           "title": "Trabajando con mi laptop",
-          "message": "Estoy preparando soluciones web, automatizaciones e integraciones para tu empresa."
+          "message": "Estoy preparando soluciones web, automatizaciones e integraciones para tu empresa.",
+          "action": "Tócame: estoy trabajando"
         },
         "process": {
           "eyebrow": "METODOLOGÍA",
           "title": "Organizando el flujo",
-          "message": "Analizamos, diseñamos, desarrollamos y validamos cada proyecto."
+          "message": "Analizamos, diseñamos, desarrollamos y validamos cada proyecto.",
+          "action": "Tócame: te muestro el flujo"
         },
         "projects": {
           "eyebrow": "PROYECTOS",
           "title": "Pensando frente a la pizarra",
-          "message": "Estudio cada caso para encontrar una solución práctica y escalable."
+          "message": "Estudio cada caso para encontrar una solución práctica y escalable.",
+          "action": "Tócame: revisemos el caso"
         },
         "automation": {
           "eyebrow": "AUTOMATIZACIÓN",
           "title": "Conectando procesos",
-          "message": "Los engranajes representan tareas que ahora pueden trabajar por ti."
+          "message": "Los engranajes representan tareas que ahora pueden trabajar por ti.",
+          "action": "Tócame: activa la automatización"
         },
         "contact": {
           "eyebrow": "CONTACTO",
           "title": "Esperando tu llamada",
-          "message": "Cuéntanos tu necesidad y te ayudaremos a convertirla en una solución."
+          "message": "Cuéntanos tu necesidad y te ayudaremos a convertirla en una solución.",
+          "action": "Tócame: listo para ayudarte"
         }
       },
       "arch": {
         "home": {
           "eyebrow": "GUÍA JYM",
           "title": "Bienvenido al mundo de arquitectura",
-          "message": "Te acompañaré por nuestros espacios, diseños y proyectos."
+          "message": "Te acompañaré por nuestros espacios, diseños y proyectos.",
+          "action": "Salúdame y recorramos el proyecto"
         },
         "showroom": {
           "eyebrow": "SHOWROOM",
           "title": "Observando los acabados",
-          "message": "Explora ambientes, renders, materiales y recorridos de nuestros proyectos."
+          "message": "Explora ambientes, renders, materiales y recorridos de nuestros proyectos.",
+          "action": "Tócame: revisemos el proyecto"
         },
         "services": {
           "eyebrow": "SERVICIOS",
           "title": "Dibujando nuevos planos",
-          "message": "Cada espacio comienza con una idea, medidas y una buena planificación."
+          "message": "Cada espacio comienza con una idea, medidas y una buena planificación.",
+          "action": "Tócame: dibujo el plano"
         },
         "process": {
           "eyebrow": "METODOLOGÍA",
           "title": "Midiendo cada etapa",
-          "message": "Diseñamos, coordinamos y ejecutamos cuidando cada detalle."
+          "message": "Diseñamos, coordinamos y ejecutamos cuidando cada detalle.",
+          "action": "Tócame: medimos la etapa"
         },
         "projects": {
           "eyebrow": "PROYECTOS",
           "title": "Revisando la maqueta",
-          "message": "Analizo proporciones, circulación y experiencia antes de construir."
+          "message": "Analizo proporciones, circulación y experiencia antes de construir.",
+          "action": "Tócame: revisemos la maqueta"
         },
         "automation": {
           "eyebrow": "DISEÑO Y OBRA",
           "title": "Preparando materiales",
-          "message": "Integramos diseño, funcionalidad, ejecución y climatización."
+          "message": "Integramos diseño, funcionalidad, ejecución y climatización.",
+          "action": "Tócame: preparo la ejecución"
         },
         "contact": {
           "eyebrow": "CONTACTO",
           "title": "Listo para atenderte",
-          "message": "Conversemos sobre el espacio que deseas transformar."
+          "message": "Conversemos sobre el espacio que deseas transformar.",
+          "action": "Tócame: listo para cotizar"
         }
       },
       "alienAlt": "Marcianito visitante de JYM volando en su nave",
@@ -643,7 +657,7 @@ export const translations = {
       "hideArchitect": "Ocultar guía de arquitectura",
       "returnArchitect": "Mostrar nuevamente al arquitecto",
       "actionPrompt": "Tócame para interactuar",
-      "actionRunning": "¡Mira mi acción!"
+      "actionRunning": "Acción en curso..."
     }
   },
   "en": {
@@ -1213,74 +1227,88 @@ export const translations = {
         "home": {
           "eyebrow": "JYM BOT",
           "title": "Welcome to the technology world",
-          "message": "I am ready to show you how we automate and build solutions."
+          "message": "I am ready to show you how we automate and build solutions.",
+          "action": "Say hello and watch me change"
         },
         "showroom": {
           "eyebrow": "DIGITAL CATALOG",
           "title": "Reviewing our tools",
-          "message": "Discover systems, dashboards, bots and web experiences."
+          "message": "Discover systems, dashboards, bots and web experiences.",
+          "action": "Tap me: let’s review the catalog"
         },
         "services": {
           "eyebrow": "SERVICES",
           "title": "Working on my laptop",
-          "message": "I am preparing web solutions, automation and integrations for your company."
+          "message": "I am preparing web solutions, automation and integrations for your company.",
+          "action": "Tap me: I am working"
         },
         "process": {
           "eyebrow": "METHOD",
           "title": "Organizing the workflow",
-          "message": "We analyze, design, build and validate every project."
+          "message": "We analyze, design, build and validate every project.",
+          "action": "Tap me: I’ll show you the flow"
         },
         "projects": {
           "eyebrow": "PROJECTS",
           "title": "Thinking at the board",
-          "message": "I study each case to find a practical and scalable solution."
+          "message": "I study each case to find a practical and scalable solution.",
+          "action": "Tap me: let’s review the case"
         },
         "automation": {
           "eyebrow": "AUTOMATION",
           "title": "Connecting processes",
-          "message": "The gears represent tasks that can now work for you."
+          "message": "The gears represent tasks that can now work for you.",
+          "action": "Tap me: activate automation"
         },
         "contact": {
           "eyebrow": "CONTACT",
           "title": "Waiting for your call",
-          "message": "Tell us what you need and we will turn it into a solution."
+          "message": "Tell us what you need and we will turn it into a solution.",
+          "action": "Tap me: ready to help"
         }
       },
       "arch": {
         "home": {
           "eyebrow": "JYM GUIDE",
           "title": "Welcome to the architecture world",
-          "message": "I will guide you through our spaces, designs and projects."
+          "message": "I will guide you through our spaces, designs and projects.",
+          "action": "Say hello and let’s tour the project"
         },
         "showroom": {
           "eyebrow": "SHOWROOM",
           "title": "Reviewing the finishes",
-          "message": "Explore spaces, renders, materials and project walkthroughs."
+          "message": "Explore spaces, renders, materials and project walkthroughs.",
+          "action": "Tap me: let’s review the project"
         },
         "services": {
           "eyebrow": "SERVICES",
           "title": "Drawing new plans",
-          "message": "Every space begins with an idea, measurements and careful planning."
+          "message": "Every space begins with an idea, measurements and careful planning.",
+          "action": "Tap me: I’ll draw the plan"
         },
         "process": {
           "eyebrow": "METHOD",
           "title": "Measuring every stage",
-          "message": "We design, coordinate and execute while caring for every detail."
+          "message": "We design, coordinate and execute while caring for every detail.",
+          "action": "Tap me: let’s measure the stage"
         },
         "projects": {
           "eyebrow": "PROJECTS",
           "title": "Reviewing the model",
-          "message": "I analyze proportions, circulation and experience before construction."
+          "message": "I analyze proportions, circulation and experience before construction.",
+          "action": "Tap me: let’s review the model"
         },
         "automation": {
           "eyebrow": "DESIGN AND BUILD",
           "title": "Preparing materials",
-          "message": "We integrate design, functionality, construction and climate control."
+          "message": "We integrate design, functionality, construction and climate control.",
+          "action": "Tap me: I’ll prepare the build"
         },
         "contact": {
           "eyebrow": "CONTACT",
           "title": "Ready to help",
-          "message": "Let us discuss the space you want to transform."
+          "message": "Let us discuss the space you want to transform.",
+          "action": "Tap me: ready to quote"
         }
       },
       "alienAlt": "JYM alien visitor flying in a spaceship",
@@ -1290,7 +1318,7 @@ export const translations = {
       "hideArchitect": "Hide architecture guide",
       "returnArchitect": "Show the architect again",
       "actionPrompt": "Tap me to interact",
-      "actionRunning": "Watch my action!"
+      "actionRunning": "Action in progress..."
     }
   }
 };
