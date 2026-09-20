@@ -704,6 +704,381 @@ function TechProof({ t }) {
   </section>;
 }
 
+
+const gestureScriptCache = new Map();
+
+function loadGestureScript(id, src) {
+  if (window[id]) return Promise.resolve();
+  if (gestureScriptCache.has(src)) return gestureScriptCache.get(src);
+
+  const existing = document.querySelector('script[data-jym-gesture="' + id + '"]');
+  if (existing) {
+    const pending = new Promise((resolve, reject) => {
+      if (window[id]) return resolve();
+      existing.addEventListener("load", resolve, { once: true });
+      existing.addEventListener("error", reject, { once: true });
+    });
+    gestureScriptCache.set(src, pending);
+    return pending;
+  }
+
+  const pending = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.dataset.jymGesture = id;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("No se pudo cargar " + id));
+    document.head.appendChild(script);
+  });
+  gestureScriptCache.set(src, pending);
+  return pending;
+}
+
+async function ensureGestureRuntime() {
+  await loadGestureScript("Hands", "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js");
+  await loadGestureScript("drawConnectors", "https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js");
+  await loadGestureScript("Camera", "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js");
+}
+
+function GestureExperience({ t }) {
+  const content = t.gestureExperience;
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const stageRef = useRef(null);
+  const cursorRef = useRef(null);
+  const cameraRef = useRef(null);
+  const handsRef = useRef(null);
+  const pinchRef = useRef(false);
+  const swipeRef = useRef({ x: null, at: 0, cooldown: 0 });
+  const victoryRef = useRef(0);
+  const fistRef = useRef(0);
+  const frameRef = useRef({ last: 0, fps: 0 });
+
+  const [status, setStatus] = useState("idle");
+  const [gesture, setGesture] = useState("—");
+  const [handsCount, setHandsCount] = useState(0);
+  const [confidence, setConfidence] = useState(0);
+  const [fps, setFps] = useState(0);
+  const [scene, setScene] = useState(0);
+  const [selected, setSelected] = useState("");
+  const [toast, setToast] = useState(content.readyToast);
+  const [turbo, setTurbo] = useState(false);
+
+  const scenes = content.scenes;
+  const targets = content.targets;
+
+  const distance2d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+  const classifyGesture = (lm) => {
+    const wrist = lm[0];
+    const extended = (tip, pip) => distance2d(wrist, lm[tip]) > distance2d(wrist, lm[pip]) * 1.16;
+    const index = extended(8, 6);
+    const middle = extended(12, 10);
+    const ring = extended(16, 14);
+    const pinky = extended(20, 18);
+    const pinch = distance2d(lm[4], lm[8]) < .065;
+
+    if (pinch) return "pinch";
+    if (index && middle && !ring && !pinky) return "victory";
+    if (index && middle && ring && pinky) return "open";
+    if (index && !middle && !ring && !pinky) return "point";
+    if (!index && !middle && !ring && !pinky) return "fist";
+    return "tracking";
+  };
+
+  const gestureLabel = (kind) => content.gestures[kind] || content.gestures.tracking;
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const setPointer = (landmark) => {
+    const stage = stageRef.current;
+    const cursor = cursorRef.current;
+    if (!stage || !cursor) return null;
+
+    const rect = stage.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, (1 - landmark.x) * rect.width));
+    const y = Math.max(0, Math.min(rect.height, landmark.y * rect.height));
+    cursor.style.left = x + "px";
+    cursor.style.top = y + "px";
+    cursor.classList.add("visible");
+    return { rect, x, y, clientX: rect.left + x, clientY: rect.top + y };
+  };
+
+  const activateTargetAt = (pointer) => {
+    if (!pointer || !stageRef.current) return;
+    const node = document.elementFromPoint(pointer.clientX, pointer.clientY)?.closest(".gesture-target");
+    if (!node || !stageRef.current.contains(node)) return;
+    node.click();
+  };
+
+  const drawHand = (results) => {
+    const stage = stageRef.current;
+    const canvas = canvasRef.current;
+    if (!stage || !canvas) return;
+
+    const rect = stage.getBoundingClientRect();
+    if (canvas.width !== Math.round(rect.width) || canvas.height !== Math.round(rect.height)) {
+      canvas.width = Math.round(rect.width);
+      canvas.height = Math.round(rect.height);
+    }
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const landmarks = results.multiHandLandmarks?.[0];
+    if (!landmarks || !window.drawConnectors || !window.drawLandmarks) return;
+
+    ctx.save();
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+    window.drawConnectors(ctx, landmarks, window.HAND_CONNECTIONS, {
+      color: "rgba(0,217,255,.72)",
+      lineWidth: 3
+    });
+    window.drawLandmarks(ctx, landmarks, {
+      color: "#b8ff62",
+      fillColor: "#07131f",
+      lineWidth: 2,
+      radius: 3.2
+    });
+    ctx.restore();
+  };
+
+  const onResults = (results) => {
+    drawHand(results);
+    const list = results.multiHandLandmarks || [];
+    setHandsCount(list.length);
+
+    const now = performance.now();
+    if (frameRef.current.last) {
+      const instant = 1000 / Math.max(1, now - frameRef.current.last);
+      frameRef.current.fps = frameRef.current.fps ? frameRef.current.fps * .82 + instant * .18 : instant;
+      setFps(Math.round(frameRef.current.fps));
+    }
+    frameRef.current.last = now;
+
+    if (!list.length) {
+      setGesture("—");
+      setConfidence(0);
+      pinchRef.current = false;
+      if (cursorRef.current) cursorRef.current.classList.remove("visible");
+      return;
+    }
+
+    const lm = list[0];
+    const pointer = setPointer(lm[8]);
+    const kind = classifyGesture(lm);
+    setGesture(gestureLabel(kind));
+    setConfidence(Math.round((results.multiHandedness?.[0]?.score || .9) * 100));
+
+    if (kind === "pinch") {
+      cursorRef.current?.classList.add("pinching");
+      if (!pinchRef.current) {
+        pinchRef.current = true;
+        activateTargetAt(pointer);
+        setToast(content.clickToast);
+      }
+    } else {
+      pinchRef.current = false;
+      cursorRef.current?.classList.remove("pinching");
+    }
+
+    if (kind === "open") {
+      const palmX = 1 - lm[9].x;
+      const swipe = swipeRef.current;
+      if (swipe.x == null || now - swipe.at > 520) {
+        swipe.x = palmX;
+        swipe.at = now;
+      } else if (now > swipe.cooldown && Math.abs(palmX - swipe.x) > .16) {
+        const direction = palmX > swipe.x ? 1 : -1;
+        setScene(prev => (prev + direction + scenes.length) % scenes.length);
+        setToast(direction > 0 ? content.swipeRight : content.swipeLeft);
+        swipe.x = palmX;
+        swipe.at = now;
+        swipe.cooldown = now + 850;
+      }
+    } else if (now - swipeRef.current.at > 520) {
+      swipeRef.current.x = null;
+    }
+
+    if (kind === "fist" && now - fistRef.current > 1100) {
+      fistRef.current = now;
+      setSelected("");
+      setToast(content.cancelToast);
+    }
+
+    if (kind === "victory" && now - victoryRef.current > 1300) {
+      victoryRef.current = now;
+      setTurbo(true);
+      setToast(content.turboToast);
+      window.setTimeout(() => setTurbo(false), 950);
+    }
+  };
+
+  const stopCamera = () => {
+    try { cameraRef.current?.stop?.(); } catch {}
+    const stream = videoRef.current?.srcObject;
+    if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
+    try { handsRef.current?.close?.(); } catch {}
+    cameraRef.current = null;
+    handsRef.current = null;
+    pinchRef.current = false;
+    swipeRef.current = { x: null, at: 0, cooldown: 0 };
+    if (cursorRef.current) cursorRef.current.classList.remove("visible", "pinching");
+    clearCanvas();
+    setHandsCount(0);
+    setConfidence(0);
+    setFps(0);
+    setGesture("—");
+    setStatus("idle");
+    setToast(content.readyToast);
+  };
+
+  const startCamera = async () => {
+    if (status === "loading" || status === "running") return;
+    setStatus("loading");
+    setToast(content.loadingToast);
+
+    try {
+      if (!navigator.mediaDevices?.getUserMedia) throw new Error("camera-not-supported");
+      await ensureGestureRuntime();
+
+      const hands = new window.Hands({
+        locateFile: file => "https://cdn.jsdelivr.net/npm/@mediapipe/hands/" + file
+      });
+      hands.setOptions({
+        maxNumHands: 1,
+        modelComplexity: 1,
+        minDetectionConfidence: .65,
+        minTrackingConfidence: .60
+      });
+      hands.onResults(onResults);
+      handsRef.current = hands;
+
+      const camera = new window.Camera(videoRef.current, {
+        onFrame: async () => {
+          if (handsRef.current && videoRef.current?.readyState >= 2) {
+            await handsRef.current.send({ image: videoRef.current });
+          }
+        },
+        width: 960,
+        height: 540
+      });
+      cameraRef.current = camera;
+      await camera.start();
+      setStatus("running");
+      setToast(content.runningToast);
+    } catch (error) {
+      console.warn("Gesture experience camera error", error);
+      stopCamera();
+      setStatus("error");
+      setToast(content.errorToast);
+    }
+  };
+
+  useEffect(() => () => {
+    try { cameraRef.current?.stop?.(); } catch {}
+    const stream = videoRef.current?.srcObject;
+    if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
+    try { handsRef.current?.close?.(); } catch {}
+  }, []);
+
+  return <section className="gesture-experience" id="gestos">
+    <div className="gesture-heading">
+      <div>
+        <p>{content.kicker}</p>
+        <h2>{content.title}</h2>
+      </div>
+      <span>{content.intro}</span>
+    </div>
+
+    <div className="gesture-layout">
+      <div className="gesture-copy-card">
+        <div className="gesture-live-pill"><i className={status === "running" ? "on" : ""}/>{status === "running" ? content.live : content.offline}</div>
+        <h3>{content.headline}</h3>
+        <p>{content.text}</p>
+
+        <div className="gesture-guide">
+          {content.guide.map(([icon, title, text]) => <article key={title}>
+            <span>{icon}</span>
+            <div><b>{title}</b><small>{text}</small></div>
+          </article>)}
+        </div>
+
+        <div className="gesture-privacy">
+          <ShieldCheck size={18}/>
+          <span><b>{content.privacyTitle}</b>{content.privacyText}</span>
+        </div>
+
+        <div className="gesture-controls">
+          <button type="button" className="btn btn-primary" onClick={startCamera} disabled={status === "loading" || status === "running"}>
+            {status === "loading" ? <RotateCw className="spin"/> : <Play size={17}/>}
+            {status === "loading" ? content.loading : status === "running" ? content.active : content.start}
+          </button>
+          {status === "running" && <button type="button" className="gesture-stop" onClick={stopCamera}><X size={16}/>{content.stop}</button>}
+        </div>
+      </div>
+
+      <div className={"gesture-stage-card " + (turbo ? "is-turbo" : "")}>
+        <div className="gesture-stage-bar">
+          <div><i/><i/><i/></div>
+          <b>{content.stageTitle}</b>
+          <span>{toast}</span>
+        </div>
+
+        <div className="gesture-stage" ref={stageRef}>
+          <video ref={videoRef} className="gesture-hidden-video" autoPlay muted playsInline/>
+          <canvas ref={canvasRef} className="gesture-hand-canvas"/>
+
+          <div className="gesture-scanline"/>
+          <div className="gesture-grid"/>
+          <div ref={cursorRef} className="gesture-cursor"><i/></div>
+
+          <div className="gesture-stage-hud">
+            <span><b>{handsCount}</b>{content.metricHands}</span>
+            <span><b>{confidence}%</b>{content.metricConfidence}</span>
+            <span><b>{fps}</b>FPS</span>
+            <span className="gesture-now"><b>{gesture}</b>{content.metricGesture}</span>
+          </div>
+
+          <div className="gesture-scene-copy">
+            <small>{content.sceneLabel} {String(scene + 1).padStart(2, "0")}</small>
+            <strong>{scenes[scene].title}</strong>
+            <span>{scenes[scene].text}</span>
+          </div>
+
+          <div className="gesture-targets">
+            {targets.map((item, index) => <button
+              type="button"
+              className={"gesture-target " + (selected === item.title ? "active" : "")}
+              key={item.title}
+              onClick={() => {
+                setSelected(item.title);
+                setToast(content.selectedPrefix + " " + item.title);
+              }}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b>{item.title}</b>
+              <small>{item.text}</small>
+            </button>)}
+          </div>
+
+          {status !== "running" && <div className="gesture-empty">
+            <Sparkles size={34}/>
+            <b>{status === "error" ? content.errorTitle : content.emptyTitle}</b>
+            <span>{status === "error" ? content.errorText : content.emptyText}</span>
+          </div>}
+        </div>
+      </div>
+    </div>
+  </section>;
+}
+
 function AutomationLab({ t }) {
   const content = t.aiLab;
   const [active, setActive] = useState(0);
@@ -1055,6 +1430,7 @@ const COMPANION_SECTIONS = {
     { id: "showroom", state: "showroom", side: "right" },
     { id: "cuellos-botella", state: "process", side: "right" },
     { id: "laboratorio", state: "automation", side: "left" },
+    { id: "gestos", state: "automation", side: "right" },
     { id: "casos-reales", state: "projects", side: "right" },
     { id: "servicios", state: "services", side: "right" },
     { id: "proceso", state: "process", side: "left" },
@@ -1899,6 +2275,7 @@ function App() {
       <Showroom mode={mode} t={t} />
       {mode === "tech" && <BottleneckSection t={t} />}
       {mode === "tech" && <AutomationLab t={t} />}
+      {mode === "tech" && <GestureExperience t={t} />}
       {mode === "tech" && <TechProof t={t} />}
       <Services mode={mode} t={t} />
       <ProcessSection t={t} mode={mode} />
