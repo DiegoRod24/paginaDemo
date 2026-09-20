@@ -8,6 +8,7 @@
 
 /* SISTEMAS · Problema -> Solución -> Prueba -> Método -> Contacto */
 .app.tech main > .hero{order:10}
+.app.tech main > .gesture-experience{order:15}
 .app.tech main > .tech-showroom{order:20}
 .app.tech main > .jym-tech-story{order:25}
 .app.tech main > .bottleneck-section{order:30}
@@ -74,6 +75,7 @@
 }
 
 /* Marcadores discretos de capítulo. */
+.app.tech .gesture-experience,
 .app.tech .tech-showroom,
 .app.tech .automation-lab,
 .app.tech .process-section,
@@ -85,6 +87,7 @@
   position:relative;
 }
 
+.app.tech .gesture-experience::before,
 .app.tech .tech-showroom::before,
 .app.tech .automation-lab::before,
 .app.tech .process-section::before,
@@ -103,10 +106,11 @@
   opacity:.55;
 }
 
-.app.tech .tech-showroom::before{content:'02 / 05 · SOLUCIONES';color:#7deeff}
-.app.tech .automation-lab::before{content:'03 / 05 · DEMOS Y CASOS';color:#7deeff}
-.app.tech .process-section::before{content:'04 / 05 · PROCESO';color:#7deeff}
-.app.tech .contact::before{content:'05 / 05 · CONTACTO';color:#7deeff}
+.app.tech .gesture-experience::before{content:'02 / 06 · EXPERIENCIA GESTUAL';color:#7deeff}
+.app.tech .tech-showroom::before{content:'03 / 06 · SOLUCIONES';color:#7deeff}
+.app.tech .automation-lab::before{content:'04 / 06 · DEMOS Y CASOS';color:#7deeff}
+.app.tech .process-section::before{content:'05 / 06 · PROCESO';color:#7deeff}
+.app.tech .contact::before{content:'06 / 06 · CONTACTO';color:#7deeff}
 .app.arch .arch-showroom::before{content:'02 / 05 · PROYECTOS';color:#e5bd65}
 .app.arch .services::before{content:'03 / 05 · SERVICIOS';color:#e5bd65}
 .app.arch .process-section::before{content:'04 / 05 · PROCESO';color:#e5bd65}
