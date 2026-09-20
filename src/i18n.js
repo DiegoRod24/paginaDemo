@@ -657,7 +657,20 @@ export const translations = {
       "hideArchitect": "Ocultar guía de arquitectura",
       "returnArchitect": "Mostrar nuevamente al arquitecto",
       "actionPrompt": "Tócame para interactuar",
-      "actionRunning": "Acción en curso..."
+      "actionRunning": "Acción en curso...",
+      "quickActions": {
+        "title": "¿A dónde vamos?",
+        "techDemo": "Ver automatización",
+        "techProjects": "Abrir proyectos reales",
+        "lab": "Entrar al laboratorio",
+        "quote": "Quiero cotizar",
+        "archProjects": "Ver proyectos",
+        "archServices": "Ver servicios",
+        "archProcess": "Cómo trabajamos",
+        "archCases": "Ver casos",
+        "whatsapp": "Hablar por WhatsApp",
+        "backTop": "Volver al inicio"
+      }
     }
   },
   "en": {
@@ -1318,7 +1331,20 @@ export const translations = {
       "hideArchitect": "Hide architecture guide",
       "returnArchitect": "Show the architect again",
       "actionPrompt": "Tap me to interact",
-      "actionRunning": "Action in progress..."
+      "actionRunning": "Action in progress...",
+      "quickActions": {
+        "title": "Where should we go?",
+        "techDemo": "See automation",
+        "techProjects": "Open real projects",
+        "lab": "Enter the lab",
+        "quote": "Request a quote",
+        "archProjects": "View projects",
+        "archServices": "View services",
+        "archProcess": "How we work",
+        "archCases": "View cases",
+        "whatsapp": "Chat on WhatsApp",
+        "backTop": "Back to top"
+      }
     }
   }
 };
