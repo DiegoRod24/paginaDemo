@@ -399,6 +399,8 @@ export const translations = {
       "runningToast": "Mueve tu mano dentro del campo de la cámara",
       "errorToast": "No pudimos iniciar la cámara",
       "clickToast": "Pinza detectada",
+      "pinchAimToast": "Pinza detectada · apunta primero a una tarjeta iluminada",
+      "openingPrefix": "Abriendo",
       "swipeRight": "Swipe → siguiente escena",
       "swipeLeft": "Swipe → escena anterior",
       "cancelToast": "Puño detectado · selección cancelada",
@@ -433,9 +435,9 @@ export const translations = {
         {"title": "EXPERIENCIA", "text": "La interfaz deja de ser solo una página y empieza a reaccionar a ti."}
       ],
       "targets": [
-        {"title": "AUTOMATIZACIÓN", "text": "Haz pinza sobre esta tarjeta"},
-        {"title": "PROYECTOS", "text": "Selecciona con pulgar + índice"},
-        {"title": "ARQUITECTURA", "text": "Prueba el cursor gestual"}
+        {"id": "automation", "title": "AUTOMATIZACIÓN", "text": "Apunta y haz pinza", "action": "IR AL FLUJO REAL"},
+        {"id": "projects", "title": "PROYECTOS", "text": "Apunta y haz pinza", "action": "ABRIR PROYECTOS"},
+        {"id": "architecture", "title": "ARQUITECTURA", "text": "Apunta y haz pinza", "action": "CAMBIAR DE MUNDO"}
       ]
     },
     "bottleneck": {
@@ -1132,6 +1134,8 @@ export const translations = {
       "runningToast": "Move your hand inside the camera field",
       "errorToast": "We could not start the camera",
       "clickToast": "Pinch detected",
+      "pinchAimToast": "Pinch detected · point at a highlighted card first",
+      "openingPrefix": "Opening",
       "swipeRight": "Swipe → next scene",
       "swipeLeft": "Swipe → previous scene",
       "cancelToast": "Fist detected · selection cleared",
@@ -1166,9 +1170,9 @@ export const translations = {
         {"title": "EXPERIENCE", "text": "The interface stops being just a page and starts reacting to you."}
       ],
       "targets": [
-        {"title": "AUTOMATION", "text": "Pinch over this card"},
-        {"title": "PROJECTS", "text": "Select with thumb + index"},
-        {"title": "ARCHITECTURE", "text": "Try the gesture cursor"}
+        {"id": "automation", "title": "AUTOMATION", "text": "Point and pinch", "action": "GO TO LIVE FLOW"},
+        {"id": "projects", "title": "PROJECTS", "text": "Point and pinch", "action": "OPEN PROJECTS"},
+        {"id": "architecture", "title": "ARCHITECTURE", "text": "Point and pinch", "action": "SWITCH WORLD"}
       ]
     },
     "bottleneck": {
