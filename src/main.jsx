@@ -1385,9 +1385,11 @@ function FloatingCompanion({ mode, t }) {
   const [action, setAction] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [bubbleVisible, setBubbleVisible] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setAction(false);
+    setMenuOpen(false);
     setBubbleVisible(true);
 
     const timer = window.setTimeout(() => setBubbleVisible(false), 3000);
@@ -1402,8 +1404,74 @@ function FloatingCompanion({ mode, t }) {
 
   const content = t.companion[mode][current.state] || t.companion[mode].home;
   const actionPrompt = content.action || t.companion.actionPrompt;
+  const quick = t.companion.quickActions;
   const isTechHome = mode === "tech" && current.state === "home";
   const isArchHome = mode === "arch" && current.state === "home";
+
+  const quickActionsById = mode === "tech" ? {
+    "inicio": [
+      { label: quick.techDemo, kind: "scroll", target: "cuellos-botella" },
+      { label: quick.techProjects, kind: "scroll", target: "proyectos-tech" },
+    ],
+    "cuellos-botella": [
+      { label: quick.lab, kind: "scroll", target: "laboratorio" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "laboratorio": [
+      { label: quick.techProjects, kind: "scroll", target: "proyectos-tech" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "casos-reales": [
+      { label: quick.techProjects, kind: "scroll", target: "proyectos-tech" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "servicios": [
+      { label: quick.techProjects, kind: "scroll", target: "proyectos-tech" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "proceso": [
+      { label: quick.lab, kind: "scroll", target: "laboratorio" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "automatizacion": [
+      { label: quick.techProjects, kind: "scroll", target: "proyectos-tech" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "contacto": [
+      { label: quick.whatsapp, kind: "whatsapp" },
+      { label: quick.backTop, kind: "scroll", target: "inicio" },
+    ],
+  } : {
+    "inicio": [
+      { label: quick.archProjects, kind: "scroll", target: "showroom" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "showroom": [
+      { label: quick.archServices, kind: "scroll", target: "servicios" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "servicios": [
+      { label: quick.archProcess, kind: "scroll", target: "proceso" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "proceso": [
+      { label: quick.archCases, kind: "scroll", target: "casos" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "casos": [
+      { label: quick.archProjects, kind: "scroll", target: "showroom" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "automatizacion": [
+      { label: quick.archProjects, kind: "scroll", target: "showroom" },
+      { label: quick.quote, kind: "scroll", target: "contacto" },
+    ],
+    "contacto": [
+      { label: quick.whatsapp, kind: "whatsapp" },
+      { label: quick.backTop, kind: "scroll", target: "inicio" },
+    ],
+  };
+  const quickActions = quickActionsById[current.id] || [];
 
   const triggerAction = () => {
     if (action) return;
@@ -1422,10 +1490,29 @@ function FloatingCompanion({ mode, t }) {
 
     playCompanionTone(sound);
 
+    setMenuOpen(true);
+
     window.setTimeout(
       () => setAction(false),
       current.state === "contact" ? 2900 : (isTechHome || isArchHome) ? 1700 : 1900
     );
+  };
+
+  const runQuickAction = (item, event) => {
+    event?.stopPropagation();
+    setMenuOpen(false);
+    setBubbleVisible(false);
+
+    if (item.kind === "whatsapp") {
+      const prefix = mode === "tech"
+        ? "Hola JYM, estoy viendo sus soluciones tecnológicas y quiero conversar sobre una propuesta."
+        : "Hola JYM, estoy viendo sus proyectos de arquitectura y quiero cotizar una propuesta.";
+      window.open(wa(prefix), "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    const target = document.getElementById(item.target);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const followPointer = event => {
@@ -1495,6 +1582,7 @@ function FloatingCompanion({ mode, t }) {
             event.stopPropagation();
             setHidden(true);
             setBubbleVisible(false);
+            setMenuOpen(false);
             setAction(false);
           }}
         >
@@ -1534,6 +1622,31 @@ function FloatingCompanion({ mode, t }) {
             <strong>{content.title}</strong>
             <span>{content.message}</span>
             <em>{action ? t.companion.actionRunning : actionPrompt}</em>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menuOpen && quickActions.length > 0 && (
+          <motion.div
+            className="companion-quick-menu"
+            initial={{ opacity: 0, y: 10, scale: .92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: .95 }}
+            transition={{ duration: .22 }}
+            onPointerDown={event => event.stopPropagation()}
+            onClick={event => event.stopPropagation()}
+          >
+            <small>{quick.title}</small>
+            <div>
+              {quickActions.map((item, index) => (
+                <button key={`${current.id}-${item.label}`} type="button" onClick={(event) => runQuickAction(item, event)}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <b>{item.label}</b>
+                  <ArrowRight size={14}/>
+                </button>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
