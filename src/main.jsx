@@ -1696,13 +1696,12 @@ function GestureExperience({ t, setMode }) {
   const onResults = (results) => {
     drawHand(results);
     const list = results.multiHandLandmarks || [];
-    setHandsCount(list.length);
 
     const now = performance.now();
     if (frameRef.current.last) {
       const instant = 1000 / Math.max(1, now - frameRef.current.last);
       frameRef.current.fps = frameRef.current.fps ? frameRef.current.fps * .82 + instant * .18 : instant;
-      if (now - hudUpdateRef.current > 120) setFps(Math.round(frameRef.current.fps));
+      // FPS se pinta junto al resto del HUD para evitar renders extra.
     }
     frameRef.current.last = now;
 
@@ -1735,8 +1734,10 @@ function GestureExperience({ t, setMode }) {
     // HUD máximo ~8 veces/s; interacción sigue procesándose a todos los frames.
     if (now - hudUpdateRef.current > 120) {
       hudUpdateRef.current = now;
+      setHandsCount(list.length);
       setGesture(gestureLabel(kind));
       setConfidence(Math.round((results.multiHandedness?.[0]?.score || .9) * 100));
+      setFps(Math.round(frameRef.current.fps || 0));
     }
 
     if (!tutorialDoneRef.current && tutorialStepRef.current < 2) {
