@@ -765,6 +765,7 @@ function GestureExperience({ t, setMode }) {
   const victoryRef = useRef(0);
   const fistRef = useRef(0);
   const frameRef = useRef({ last: 0, fps: 0 });
+  const statusRef = useRef("idle");
 
   const [status, setStatus] = useState("idle");
   const [gesture, setGesture] = useState("—");
@@ -1137,7 +1138,7 @@ function GestureExperience({ t, setMode }) {
       globalPointerRef.current.ready = false;
       hoveredRef.current = "";
       setHovered("");
-      if (!tutorialDoneRef.current && status === "running") updateTutorial(1);
+      if (!tutorialDoneRef.current && statusRef.current === "running") updateTutorial(1);
       if (cursorRef.current) cursorRef.current.classList.remove("visible", "pinching", "hovering");
       document.querySelector(".gesture-global-cursor")?.classList.remove("visible", "pinching", "hovering");
       globalHoveredRef.current?.classList.remove("gesture-global-hover");
@@ -1289,6 +1290,7 @@ function GestureExperience({ t, setMode }) {
     setConfidence(0);
     setFps(0);
     setGesture("—");
+    statusRef.current = "idle";
     setStatus("idle");
     tutorialDoneRef.current = false;
     setTutorialDone(false);
@@ -1298,6 +1300,7 @@ function GestureExperience({ t, setMode }) {
 
   const startCamera = async () => {
     if (status === "loading" || status === "running") return;
+    statusRef.current = "loading";
     setStatus("loading");
     setToast(content.loadingToast);
 
@@ -1331,11 +1334,13 @@ function GestureExperience({ t, setMode }) {
       tutorialDoneRef.current = false;
       setTutorialDone(false);
       updateTutorial(1);
+      statusRef.current = "running";
       setStatus("running");
       setToast(content.tutorialHand);
     } catch (error) {
       console.warn("Gesture experience camera error", error);
       stopCamera();
+      statusRef.current = "error";
       setStatus("error");
       setToast(content.errorToast);
     }
