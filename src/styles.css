@@ -8594,3 +8594,206 @@ a.gesture-global-hover {
     transition:none!important;
   }
 }
+
+
+/* =========================================================
+   V36.3 — GESTURE PRECISION UX
+   Magnetismo visual + pinza confirmada + feedback de estado.
+========================================================= */
+.gesture-cursor.locked,
+.gesture-global-cursor.locked {
+  border-color:#b8ff62;
+  box-shadow:
+    0 0 0 11px rgba(184,255,98,.07),
+    0 0 28px rgba(184,255,98,.48);
+}
+.gesture-cursor.locked i,
+.gesture-global-cursor.locked i {
+  background:#b8ff62;
+  box-shadow:0 0 13px #b8ff62;
+}
+
+/* Aro de progreso de la pinza */
+.gesture-cursor i::after,
+.gesture-global-cursor i::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  background:
+    conic-gradient(
+      #b8ff62 calc(var(--pinch-progress,0) * 1turn),
+      rgba(184,255,98,.10) 0
+    );
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0);
+  mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0);
+  transition:opacity .08s ease;
+}
+.gesture-cursor.confirming i::after,
+.gesture-global-cursor.confirming i::after,
+.gesture-cursor.confirmed i::after,
+.gesture-global-cursor.confirmed i::after {
+  opacity:1;
+}
+.gesture-cursor.confirming,
+.gesture-global-cursor.confirming {
+  border-color:#f0ff85;
+  box-shadow:
+    0 0 0 12px rgba(240,255,133,.06),
+    0 0 32px rgba(184,255,98,.52);
+}
+.gesture-cursor.confirmed,
+.gesture-global-cursor.confirmed {
+  animation:gestureConfirmPop .34s cubic-bezier(.2,.9,.25,1);
+  border-color:#fff;
+  box-shadow:
+    0 0 0 16px rgba(184,255,98,.03),
+    0 0 36px rgba(184,255,98,.66);
+}
+
+/* Objetivo fijado */
+.gesture-target.hovering {
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease,
+    background .15s ease;
+}
+.gesture-target.hovering::after {
+  content:"OBJETIVO";
+  position:absolute;
+  right:10px;
+  top:10px;
+  padding:4px 6px;
+  border:1px solid rgba(184,255,98,.22);
+  border-radius:999px;
+  color:#dfffc8;
+  background:rgba(184,255,98,.055);
+  font:900 .43rem/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.08em;
+}
+.gesture-global-locked {
+  outline-color:rgba(184,255,98,.92)!important;
+  box-shadow:
+    0 0 0 8px rgba(184,255,98,.075),
+    0 0 30px rgba(184,255,98,.18)!important;
+}
+
+/* Estado en tiempo real */
+.gesture-action-feedback {
+  position:absolute;
+  z-index:13;
+  left:50%;
+  top:58px;
+  min-height:30px;
+  padding:0 11px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  transform:translateX(-50%);
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:999px;
+  color:rgba(255,255,255,.60);
+  background:rgba(3,8,12,.72);
+  backdrop-filter:blur(10px);
+  box-shadow:0 8px 24px rgba(0,0,0,.20);
+  pointer-events:none;
+  font-size:.50rem;
+  font-weight:950;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+.gesture-action-feedback i {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#74838d;
+}
+.gesture-action-feedback.phase-tracking i {
+  background:var(--cyan);
+  box-shadow:0 0 10px rgba(0,217,255,.66);
+}
+.gesture-action-feedback.phase-aiming {
+  color:#d5e9ef;
+  border-color:rgba(0,217,255,.14);
+}
+.gesture-action-feedback.phase-aiming i {
+  background:#6edff2;
+}
+.gesture-action-feedback.phase-locked,
+.gesture-action-feedback.phase-confirming,
+.gesture-action-feedback.phase-done {
+  color:#eaffd8;
+  border-color:rgba(184,255,98,.22);
+  background:rgba(7,15,9,.78);
+}
+.gesture-action-feedback.phase-locked i,
+.gesture-action-feedback.phase-confirming i {
+  background:#b8ff62;
+  box-shadow:0 0 11px rgba(184,255,98,.70);
+}
+.gesture-action-feedback.phase-confirming i {
+  animation:gestureConfirmDot .48s ease-in-out infinite alternate;
+}
+.gesture-action-feedback.phase-done {
+  color:#fff;
+  border-color:rgba(184,255,98,.40);
+}
+.gesture-action-feedback.phase-done i {
+  background:#fff;
+  box-shadow:0 0 14px rgba(184,255,98,.9);
+}
+
+/* Más área perceptiva sin hacer más grandes las tarjetas */
+.gesture-targets {
+  gap:12px;
+}
+.gesture-target {
+  min-height:118px;
+}
+.gesture-target.hovering {
+  transform:translateY(-6px) scale(1.022);
+}
+
+/* HUD menos competitivo mientras se usa la mano */
+.gesture-stage:has(.gesture-cursor.visible) .gesture-stage-hud {
+  opacity:.78;
+}
+.gesture-stage:has(.gesture-cursor.confirming) .gesture-scene-copy {
+  opacity:.66;
+  transform:translateX(-50%) scale(.985);
+}
+
+@keyframes gestureConfirmPop {
+  0% { transform:translate(-50%,-50%) scale(.72); }
+  60% { transform:translate(-50%,-50%) scale(1.18); }
+  100% { transform:translate(-50%,-50%) scale(1); }
+}
+@keyframes gestureConfirmDot {
+  to { opacity:.35;transform:scale(.72); }
+}
+
+@media(max-width:700px) {
+  .gesture-action-feedback {
+    top:56px;
+    max-width:calc(100% - 28px);
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .gesture-target.hovering::after {
+    display:none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .gesture-cursor.confirmed,
+  .gesture-global-cursor.confirmed,
+  .gesture-action-feedback.phase-confirming i {
+    animation:none!important;
+  }
+}
