@@ -741,6 +741,397 @@ async function ensureGestureRuntime() {
   await loadGestureScript("Camera", "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js");
 }
 
+
+function ArchitectureGestureMode({ t }) {
+  const content = t.archGesture;
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const cameraRef = useRef(null);
+  const handsRef = useRef(null);
+  const cursorRef = useRef(null);
+  const pointerRef = useRef({ x: .5, y: .5, ready: false });
+  const pinchRef = useRef({ key: "", since: 0, fired: false });
+  const swipeRef = useRef({ x: null, at: 0, cooldown: 0 });
+  const twoHandRef = useRef({ active: false, baseDistance: 0, baseScale: 1, baseMid: null });
+  const hoveredRef = useRef(null);
+
+  const [status, setStatus] = useState("idle");
+  const [gesture, setGesture] = useState(content.idle);
+  const [handsCount, setHandsCount] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [message, setMessage] = useState(content.ready);
+  const [hoveredLabel, setHoveredLabel] = useState("");
+
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+  const setViewerTransform = (scale = 1, panX = 0, panY = 0) => {
+    const frame = document.querySelector(".app.arch .cinema-frame");
+    if (!frame) return;
+    frame.style.setProperty("--arch-gesture-scale", String(scale));
+    frame.style.setProperty("--arch-gesture-pan-x", panX.toFixed(1) + "px");
+    frame.style.setProperty("--arch-gesture-pan-y", panY.toFixed(1) + "px");
+  };
+
+  const resetView = () => {
+    twoHandRef.current = { active: false, baseDistance: 0, baseScale: 1, baseMid: null };
+    setZoom(1);
+    setViewerTransform(1, 0, 0);
+    setMessage(content.viewReset);
+  };
+
+  const clearHover = () => {
+    hoveredRef.current?.classList.remove("arch-gesture-hover", "arch-gesture-locked");
+    hoveredRef.current = null;
+    setHoveredLabel("");
+    cursorRef.current?.classList.remove("hovering", "confirming", "confirmed");
+  };
+
+  const stopCamera = () => {
+    try { cameraRef.current?.stop?.(); } catch {}
+    const stream = videoRef.current?.srcObject;
+    if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
+    try { handsRef.current?.close?.(); } catch {}
+    cameraRef.current = null;
+    handsRef.current = null;
+    pointerRef.current = { x: .5, y: .5, ready: false };
+    pinchRef.current = { key: "", since: 0, fired: false };
+    swipeRef.current = { x: null, at: 0, cooldown: 0 };
+    clearHover();
+    const ctx = canvasRef.current?.getContext("2d");
+    if (ctx && canvasRef.current) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    setHandsCount(0);
+    setGesture(content.idle);
+    setStatus("idle");
+    setMessage(content.ready);
+    document.documentElement.removeAttribute("data-arch-gesture");
+  };
+
+  const safeSelector = [
+    ".app.arch .room-menu button",
+    ".app.arch .filmstrip button",
+    ".app.arch .nav-arrow",
+    ".app.arch .arch-side-card a"
+  ].join(",");
+
+  const getPointer = (landmark) => {
+    const cursor = cursorRef.current;
+    if (!cursor) return null;
+
+    const nx = clamp(((1 - landmark.x) - .08) / .84, 0, 1);
+    const ny = clamp((landmark.y - .07) / .86, 0, 1);
+    const desiredX = nx * window.innerWidth;
+    const desiredY = ny * window.innerHeight;
+
+    const prev = pointerRef.current;
+    const prevX = prev.x * window.innerWidth;
+    const prevY = prev.y * window.innerHeight;
+    const travel = prev.ready ? Math.hypot(desiredX - prevX, desiredY - prevY) : window.innerWidth;
+    const speed = Math.min(1, travel / 130);
+    const smoothing = prev.ready ? (.15 + speed * .42) : 1;
+
+    const x = prevX * (1 - smoothing) + desiredX * smoothing;
+    const y = prevY * (1 - smoothing) + desiredY * smoothing;
+    pointerRef.current = { x: x / window.innerWidth, y: y / window.innerHeight, ready: true };
+
+    cursor.style.left = x + "px";
+    cursor.style.top = y + "px";
+    cursor.classList.add("visible");
+
+    return { x, y };
+  };
+
+  const updateHover = (pointer) => {
+    if (!pointer) return null;
+    const node = document.elementFromPoint(pointer.x, pointer.y)?.closest(safeSelector) || null;
+
+    if (node !== hoveredRef.current) {
+      hoveredRef.current?.classList.remove("arch-gesture-hover", "arch-gesture-locked");
+      node?.classList.add("arch-gesture-hover");
+      hoveredRef.current = node;
+      pinchRef.current = { key: "", since: 0, fired: false };
+
+      const label = node ? (node.getAttribute("aria-label") || node.textContent || "").trim().replace(/\s+/g, " ").slice(0, 54) : "";
+      setHoveredLabel(label);
+      setMessage(node ? content.target : content.point);
+    }
+
+    cursorRef.current?.classList.toggle("hovering", Boolean(node));
+    return node;
+  };
+
+  const drawHands = (results) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, width, height);
+
+    const hands = results.multiHandLandmarks || [];
+    if (!hands.length || !window.drawConnectors || !window.drawLandmarks) return;
+
+    ctx.save();
+    ctx.translate(width, 0);
+    ctx.scale(-1, 1);
+    ctx.shadowBlur = 14;
+    ctx.shadowColor = "rgba(217,168,61,.38)";
+
+    hands.forEach((landmarks, index) => {
+      const color = index === 0 ? "rgba(238,205,137,.86)" : "rgba(255,242,194,.82)";
+      window.drawConnectors(ctx, landmarks, window.HAND_CONNECTIONS, { color, lineWidth: 2.4 });
+      window.drawLandmarks(ctx, landmarks, {
+        color: "#f1d38b",
+        fillColor: "#171008",
+        lineWidth: 1.5,
+        radius: 3
+      });
+    });
+
+    ctx.restore();
+  };
+
+  const classify = (lm) => {
+    const wrist = lm[0];
+    const extended = (tip, pip) => distance(wrist, lm[tip]) > distance(wrist, lm[pip]) * 1.16;
+    const index = extended(8, 6);
+    const middle = extended(12, 10);
+    const ring = extended(16, 14);
+    const pinky = extended(20, 18);
+    const pinch = distance(lm[4], lm[8]) < .065;
+
+    if (pinch) return "pinch";
+    if (index && middle && ring && pinky) return "open";
+    if (index && !middle && !ring && !pinky) return "point";
+    if (!index && !middle && !ring && !pinky) return "fist";
+    return "tracking";
+  };
+
+  const handleTwoHands = (first, second) => {
+    const nowDistance = distance(first[9], second[9]);
+    const mid = {
+      x: 1 - ((first[9].x + second[9].x) / 2),
+      y: (first[9].y + second[9].y) / 2
+    };
+
+    const state = twoHandRef.current;
+    if (!state.active || !state.baseDistance) {
+      twoHandRef.current = {
+        active: true,
+        baseDistance: Math.max(.02, nowDistance),
+        baseScale: zoom,
+        baseMid: mid
+      };
+      setGesture(content.twoHands);
+      setMessage(content.twoHandsHelp);
+      clearHover();
+      return;
+    }
+
+    const ratio = nowDistance / Math.max(.02, state.baseDistance);
+    const nextScale = clamp(state.baseScale * ratio, .82, 1.78);
+    const panX = clamp((mid.x - state.baseMid.x) * 520, -120, 120);
+    const panY = clamp((mid.y - state.baseMid.y) * 340, -80, 80);
+
+    setZoom(nextScale);
+    setViewerTransform(nextScale, panX, panY);
+    setGesture(content.zooming);
+    setMessage(nextScale >= 1 ? content.zoomIn : content.zoomOut);
+  };
+
+  const onResults = (results) => {
+    drawHands(results);
+    const hands = results.multiHandLandmarks || [];
+    setHandsCount(hands.length);
+
+    if (!hands.length) {
+      pointerRef.current.ready = false;
+      twoHandRef.current.active = false;
+      clearHover();
+      cursorRef.current?.classList.remove("visible", "pinching");
+      setGesture(content.waiting);
+      setMessage(content.showHand);
+      return;
+    }
+
+    if (hands.length >= 2) {
+      cursorRef.current?.classList.remove("visible", "pinching");
+      handleTwoHands(hands[0], hands[1]);
+      return;
+    }
+
+    if (twoHandRef.current.active) {
+      twoHandRef.current = { active: false, baseDistance: 0, baseScale: zoom, baseMid: null };
+    }
+
+    const lm = hands[0];
+    const kind = classify(lm);
+    const pointer = getPointer(lm[8]);
+    const hit = updateHover(pointer);
+    setGesture(content.gestures[kind] || content.gestures.tracking);
+
+    const now = performance.now();
+
+    if (kind === "pinch") {
+      cursorRef.current?.classList.add("pinching");
+
+      if (!hit) {
+        pinchRef.current = { key: "", since: 0, fired: false };
+        setMessage(content.pinchAim);
+      } else {
+        const key = (hit.getAttribute("aria-label") || hit.textContent || "target").trim().slice(0, 80);
+        const state = pinchRef.current;
+
+        if (state.key !== key) {
+          pinchRef.current = { key, since: now, fired: false };
+          cursorRef.current?.classList.add("confirming");
+          setMessage(content.confirming);
+        }
+
+        const current = pinchRef.current;
+        const progress = Math.min(1, (now - current.since) / 300);
+        cursorRef.current?.style.setProperty("--arch-pinch-progress", String(progress));
+        hit.classList.add("arch-gesture-locked");
+
+        if (progress >= 1 && !current.fired) {
+          current.fired = true;
+          cursorRef.current?.classList.remove("confirming");
+          cursorRef.current?.classList.add("confirmed");
+          setMessage(content.done);
+          window.setTimeout(() => {
+            hit.click();
+            cursorRef.current?.classList.remove("confirmed");
+          }, 120);
+        }
+      }
+    } else {
+      cursorRef.current?.classList.remove("pinching", "confirming", "confirmed");
+      cursorRef.current?.style.removeProperty("--arch-pinch-progress");
+      pinchRef.current = { key: "", since: 0, fired: false };
+    }
+
+    if (kind === "open") {
+      const palmX = 1 - lm[9].x;
+      const swipe = swipeRef.current;
+
+      if (swipe.x == null || now - swipe.at > 520) {
+        swipe.x = palmX;
+        swipe.at = now;
+      } else if (now > swipe.cooldown && Math.abs(palmX - swipe.x) > .15) {
+        const toRight = palmX > swipe.x;
+        const arrow = document.querySelector(toRight ? ".app.arch .nav-arrow.right" : ".app.arch .nav-arrow.left");
+        arrow?.click();
+        setMessage(toRight ? content.nextEvidence : content.previousEvidence);
+        document.querySelector(".app.arch .cinema-frame")?.classList.add(toRight ? "arch-swipe-right" : "arch-swipe-left");
+        window.setTimeout(() => document.querySelector(".app.arch .cinema-frame")?.classList.remove("arch-swipe-right", "arch-swipe-left"), 520);
+        swipe.cooldown = now + 900;
+        swipe.x = palmX;
+        swipe.at = now;
+      }
+    } else if (now - swipeRef.current.at > 520) {
+      swipeRef.current.x = null;
+    }
+
+    if (kind === "fist") {
+      clearHover();
+      setMessage(content.cancelled);
+    }
+  };
+
+  const startCamera = async () => {
+    if (status === "loading" || status === "running") return;
+
+    setStatus("loading");
+    setMessage(content.loading);
+
+    try {
+      await ensureGestureRuntime();
+
+      const hands = new window.Hands({
+        locateFile: file => "https://cdn.jsdelivr.net/npm/@mediapipe/hands/" + file
+      });
+
+      hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 1,
+        minDetectionConfidence: .65,
+        minTrackingConfidence: .60
+      });
+
+      hands.onResults(onResults);
+      handsRef.current = hands;
+
+      const camera = new window.Camera(videoRef.current, {
+        onFrame: async () => {
+          if (handsRef.current && videoRef.current?.readyState >= 2) {
+            await handsRef.current.send({ image: videoRef.current });
+          }
+        },
+        width: 960,
+        height: 540
+      });
+
+      cameraRef.current = camera;
+      await camera.start();
+      setStatus("running");
+      setGesture(content.waiting);
+      setMessage(content.showHand);
+      document.documentElement.setAttribute("data-arch-gesture", "on");
+    } catch (error) {
+      console.warn("Architecture gesture mode error", error);
+      stopCamera();
+      setStatus("error");
+      setMessage(content.error);
+    }
+  };
+
+  useEffect(() => () => {
+    try { cameraRef.current?.stop?.(); } catch {}
+    const stream = videoRef.current?.srcObject;
+    if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
+    try { handsRef.current?.close?.(); } catch {}
+    document.documentElement.removeAttribute("data-arch-gesture");
+  }, []);
+
+  return <>
+    <video ref={videoRef} className="arch-gesture-video" autoPlay muted playsInline />
+    <canvas ref={canvasRef} className={"arch-gesture-canvas " + (status === "running" ? "visible" : "")} />
+
+    {status !== "running" && <button
+      type="button"
+      className={"arch-gesture-launch " + (status === "loading" ? "loading" : "")}
+      onClick={startCamera}
+      disabled={status === "loading"}
+    >
+      <span>🖐</span>
+      <div><small>{content.kicker}</small><b>{status === "loading" ? content.loading : content.start}</b></div>
+    </button>}
+
+    {status === "running" && <div className="arch-gesture-mode" aria-live="polite">
+      <div className="arch-gesture-status">
+        <span className="arch-gesture-live"><i/>{content.active}</span>
+        <b>{gesture}</b>
+        <small>{message}{hoveredLabel ? " · " + hoveredLabel : ""}</small>
+        <span className="arch-gesture-zoom">{Math.round(zoom * 100)}%</span>
+        <button type="button" onClick={resetView}>{content.reset}</button>
+        <button type="button" className="arch-gesture-exit" onClick={stopCamera}><X size={14}/>{content.exit}</button>
+      </div>
+      <div ref={cursorRef} className="arch-gesture-cursor"><i/></div>
+    </div>}
+
+    {status === "error" && <div className="arch-gesture-error">
+      <span>{content.error}</span>
+      <button type="button" onClick={() => setStatus("idle")}><X size={13}/></button>
+    </div>}
+  </>;
+}
+
 function GestureExperience({ t, setMode }) {
   const content = t.gestureExperience;
   const videoRef = useRef(null);
@@ -2884,6 +3275,7 @@ function App() {
       <Contact t={t} mode={mode} />
       <footer className="footer">© 2026 JYM Diseño y Arquitectura S.A.C. · Technology, Architecture & Automation.</footer>
     </main>
+    {mode === "arch" && <ArchitectureGestureMode t={t} />}
     <FloatingCompanion mode={mode} t={t} />
     <div className="floating-actions">
       <ScrollTopButton />
