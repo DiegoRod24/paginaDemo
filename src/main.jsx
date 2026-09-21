@@ -741,6 +741,54 @@ async function ensureGestureRuntime() {
   await loadGestureScript("Camera", "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js");
 }
 
+const gestureDistance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+function classifyHandGesture(lm) {
+  if (!lm?.length) return "tracking";
+
+  const wrist = lm[0];
+  const palm = Math.max(.035, gestureDistance(lm[0], lm[9]));
+  const extended = (tip, pip) =>
+    gestureDistance(wrist, lm[tip]) > gestureDistance(wrist, lm[pip]) * 1.09;
+
+  const index = extended(8, 6);
+  const middle = extended(12, 10);
+  const ring = extended(16, 14);
+  const pinky = extended(20, 18);
+
+  // Umbral relativo al tamaño de la mano: funciona mejor cerca/lejos de cámara.
+  const pinchRatio = gestureDistance(lm[4], lm[8]) / palm;
+  if (pinchRatio < .43) return "pinch";
+  if (index && middle && !ring && !pinky) return "victory";
+  if (index && middle && ring && pinky) return "open";
+  if (index && !middle && !ring && !pinky) return "point";
+  if (!index && !middle && !ring && !pinky) return "fist";
+  return "tracking";
+}
+
+function stabilizeGesture(raw, ref) {
+  const state = ref.current;
+  if (raw === state.stable) {
+    state.candidate = raw;
+    state.count = 0;
+    return raw;
+  }
+
+  if (raw === state.candidate) state.count += 1;
+  else {
+    state.candidate = raw;
+    state.count = 1;
+  }
+
+  // Pinza debe sentirse inmediata; los demás requieren solo 2 frames.
+  const needed = raw === "pinch" ? 1 : 2;
+  if (state.count >= needed) {
+    state.stable = raw;
+    state.count = 0;
+  }
+  return state.stable;
+}
+
 
 function ArchitectureGestureMode({ t }) {
   const content = t.archGesture;
@@ -756,6 +804,8 @@ function ArchitectureGestureMode({ t }) {
   const zoomRef = useRef(1);
   const zoomTextRef = useRef(null);
   const gestureStateRef = useRef("");
+  const gestureStableRef = useRef({ stable: "tracking", candidate: "", count: 0 });
+  const victoryRef = useRef(0);
   const frameSendRef = useRef(false);
   const hoveredRef = useRef(null);
 
@@ -840,8 +890,8 @@ function ArchitectureGestureMode({ t }) {
     const prevX = prev.x * window.innerWidth;
     const prevY = prev.y * window.innerHeight;
     const travel = prev.ready ? Math.hypot(desiredX - prevX, desiredY - prevY) : window.innerWidth;
-    const speed = Math.min(1, travel / 130);
-    const smoothing = prev.ready ? (.15 + speed * .42) : 1;
+    const speed = Math.min(1, travel / 105);
+    const smoothing = prev.ready ? (.42 + speed * .38) : 1;
 
     const x = prevX * (1 - smoothing) + desiredX * smoothing;
     const y = prevY * (1 - smoothing) + desiredY * smoothing;
@@ -910,22 +960,6 @@ function ArchitectureGestureMode({ t }) {
     ctx.restore();
   };
 
-  const classify = (lm) => {
-    const wrist = lm[0];
-    const extended = (tip, pip) => distance(wrist, lm[tip]) > distance(wrist, lm[pip]) * 1.16;
-    const index = extended(8, 6);
-    const middle = extended(12, 10);
-    const ring = extended(16, 14);
-    const pinky = extended(20, 18);
-    const pinch = distance(lm[4], lm[8]) < .065;
-
-    if (pinch) return "pinch";
-    if (index && middle && ring && pinky) return "open";
-    if (index && !middle && !ring && !pinky) return "point";
-    if (!index && !middle && !ring && !pinky) return "fist";
-    return "tracking";
-  };
-
   const handleTwoHands = (first, second) => {
     const nowDistance = distance(first[9], second[9]);
     const mid = {
@@ -984,7 +1018,8 @@ function ArchitectureGestureMode({ t }) {
     }
 
     const lm = hands[0];
-    const kind = classify(lm);
+    const rawKind = classifyHandGesture(lm);
+    const kind = stabilizeGesture(rawKind, gestureStableRef);
     const pointer = getPointer(lm[8]);
     const hit = updateHover(pointer);
     updateGestureLabel(content.gestures[kind] || content.gestures.tracking);
@@ -1008,7 +1043,7 @@ function ArchitectureGestureMode({ t }) {
         }
 
         const current = pinchRef.current;
-        const progress = Math.min(1, (now - current.since) / 300);
+        const progress = Math.min(1, (now - current.since) / 105);
         cursorRef.current?.style.setProperty("--arch-pinch-progress", String(progress));
         hit.classList.add("arch-gesture-locked");
 
@@ -1017,10 +1052,8 @@ function ArchitectureGestureMode({ t }) {
           cursorRef.current?.classList.remove("confirming");
           cursorRef.current?.classList.add("confirmed");
           setMessage(content.done);
-          window.setTimeout(() => {
-            hit.click();
-            cursorRef.current?.classList.remove("confirmed");
-          }, 120);
+          hit.click();
+          window.setTimeout(() => cursorRef.current?.classList.remove("confirmed"), 180);
         }
       }
     } else {
@@ -1034,52 +1067,64 @@ function ArchitectureGestureMode({ t }) {
       const palmY = lm[9].y;
       const swipe = swipeRef.current;
 
-      if (swipe.x == null || swipe.y == null || now - swipe.at > 520) {
-        swipe.x = palmX;
-        swipe.y = palmY;
-        swipe.at = now;
-      } else if (now > swipe.cooldown) {
-        const dx = palmX - swipe.x;
-        const dy = palmY - swipe.y;
-        const absX = Math.abs(dx);
-        const absY = Math.abs(dy);
+      // Scroll continuo por zonas: no espera a completar un swipe.
+      if (palmY < .30) {
+        const speed = Math.round(18 + ((.30 - palmY) / .30) * 34);
+        window.scrollBy(0, -speed);
+        setMessage(content.scrollUp);
+        updateGestureLabel(content.scrollUpGesture);
+        document.documentElement.dataset.archGestureScroll = "up";
+      } else if (palmY > .70) {
+        const speed = Math.round(18 + ((palmY - .70) / .30) * 34);
+        window.scrollBy(0, speed);
+        setMessage(content.scrollDown);
+        updateGestureLabel(content.scrollDownGesture);
+        document.documentElement.dataset.archGestureScroll = "down";
+      } else {
+        delete document.documentElement.dataset.archGestureScroll;
 
-        if (absY > .115 && absY > absX * 1.15) {
-          // Gesto natural: mano hacia arriba -> contenido sube -> bajas por la web.
-          const goingDownPage = dy < 0;
-          const amount = Math.round(window.innerHeight * .64) * (goingDownPage ? 1 : -1);
-          window.scrollBy({ top: amount, behavior: "smooth" });
-          setMessage(goingDownPage ? content.scrollDown : content.scrollUp);
-          updateGestureLabel(goingDownPage ? content.scrollDownGesture : content.scrollUpGesture);
-          document.documentElement.dataset.archGestureScroll = goingDownPage ? "down" : "up";
-          window.setTimeout(() => delete document.documentElement.dataset.archGestureScroll, 650);
-
-          swipe.cooldown = now + 780;
+        if (swipe.x == null || now - swipe.at > 360) {
           swipe.x = palmX;
           swipe.y = palmY;
           swipe.at = now;
-        } else if (absX > .14 && absX > absY * 1.1) {
-          const toRight = dx > 0;
-          const arrow = document.querySelector(toRight ? ".app.arch .nav-arrow.right" : ".app.arch .nav-arrow.left");
-          arrow?.click();
-          setMessage(toRight ? content.nextEvidence : content.previousEvidence);
-          document.querySelector(".app.arch .cinema-frame")?.classList.add(toRight ? "arch-swipe-right" : "arch-swipe-left");
-          window.setTimeout(() => document.querySelector(".app.arch .cinema-frame")?.classList.remove("arch-swipe-right", "arch-swipe-left"), 420);
+        } else if (now > swipe.cooldown) {
+          const dx = palmX - swipe.x;
+          if (Math.abs(dx) > .085) {
+            const toRight = dx > 0;
+            const arrow = document.querySelector(toRight ? ".app.arch .nav-arrow.right" : ".app.arch .nav-arrow.left");
+            arrow?.click();
+            setMessage(toRight ? content.nextEvidence : content.previousEvidence);
+            document.querySelector(".app.arch .cinema-frame")?.classList.add(toRight ? "arch-swipe-right" : "arch-swipe-left");
+            window.setTimeout(() => document.querySelector(".app.arch .cinema-frame")?.classList.remove("arch-swipe-right", "arch-swipe-left"), 300);
 
-          swipe.cooldown = now + 760;
-          swipe.x = palmX;
-          swipe.y = palmY;
-          swipe.at = now;
+            swipe.cooldown = now + 360;
+            swipe.x = palmX;
+            swipe.y = palmY;
+            swipe.at = now;
+          }
         }
       }
-    } else if (now - swipeRef.current.at > 500) {
-      swipeRef.current.x = null;
-      swipeRef.current.y = null;
+    } else {
+      delete document.documentElement.dataset.archGestureScroll;
+      if (now - swipeRef.current.at > 280) {
+        swipeRef.current.x = null;
+        swipeRef.current.y = null;
+      }
     }
 
     if (kind === "fist") {
       clearHover();
+      pinchRef.current = { key: "", since: 0, fired: false };
+      cursorRef.current?.classList.remove("pinching", "confirming", "confirmed");
       setMessage(content.cancelled);
+    }
+
+    if (kind === "victory" && now - victoryRef.current > 650) {
+      victoryRef.current = now;
+      resetView();
+      setMessage(content.victoryAction);
+      document.documentElement.dataset.archGestureSpecial = "victory";
+      window.setTimeout(() => delete document.documentElement.dataset.archGestureSpecial, 700);
     }
   };
 
@@ -1099,8 +1144,8 @@ function ArchitectureGestureMode({ t }) {
       hands.setOptions({
         maxNumHands: 2,
         modelComplexity: 0,
-        minDetectionConfidence: .60,
-        minTrackingConfidence: .55
+        minDetectionConfidence: .55,
+        minTrackingConfidence: .50
       });
 
       hands.onResults(onResults);
@@ -1205,6 +1250,9 @@ function GestureExperience({ t, setMode }) {
   const fistRef = useRef(0);
   const frameRef = useRef({ last: 0, fps: 0 });
   const statusRef = useRef("idle");
+  const gestureStableRef = useRef({ stable: "tracking", candidate: "", count: 0 });
+  const frameSendRef = useRef(false);
+  const hudUpdateRef = useRef(0);
   const interactionPhaseRef = useRef("idle");
   const localTrailRefs = useRef([]);
   const globalTrailRefs = useRef([]);
@@ -1339,23 +1387,6 @@ function GestureExperience({ t, setMode }) {
 
   const distance2d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
-  const classifyGesture = (lm) => {
-    const wrist = lm[0];
-    const extended = (tip, pip) => distance2d(wrist, lm[tip]) > distance2d(wrist, lm[pip]) * 1.16;
-    const index = extended(8, 6);
-    const middle = extended(12, 10);
-    const ring = extended(16, 14);
-    const pinky = extended(20, 18);
-    const pinch = distance2d(lm[4], lm[8]) < .065;
-
-    if (pinch) return "pinch";
-    if (index && middle && !ring && !pinky) return "victory";
-    if (index && middle && ring && pinky) return "open";
-    if (index && !middle && !ring && !pinky) return "point";
-    if (!index && !middle && !ring && !pinky) return "fist";
-    return "tracking";
-  };
-
   const gestureLabel = (kind) => content.gestures[kind] || content.gestures.tracking;
 
   const clearCanvas = () => {
@@ -1384,7 +1415,7 @@ function GestureExperience({ t, setMode }) {
     const previousY = previous.y * rect.height;
     const travel = previous.ready ? Math.hypot(desiredX - previousX, desiredY - previousY) : rect.width;
     const normalizedTravel = Math.min(1, travel / Math.max(90, rect.width * .16));
-    const smoothing = previous.ready ? (.16 + normalizedTravel * .42) : 1;
+    const smoothing = previous.ready ? (.40 + normalizedTravel * .40) : 1;
     const x = previousX * (1 - smoothing) + desiredX * smoothing;
     const y = previousY * (1 - smoothing) + desiredY * smoothing;
 
@@ -1501,7 +1532,7 @@ function GestureExperience({ t, setMode }) {
     const previousY = previous.y * window.innerHeight;
     const travel = previous.ready ? Math.hypot(desiredX - previousX, desiredY - previousY) : window.innerWidth;
     const normalizedTravel = Math.min(1, travel / Math.max(100, window.innerWidth * .12));
-    const smoothing = previous.ready ? (.14 + normalizedTravel * .40) : 1;
+    const smoothing = previous.ready ? (.38 + normalizedTravel * .42) : 1;
     const x = previousX * (1 - smoothing) + desiredX * smoothing;
     const y = previousY * (1 - smoothing) + desiredY * smoothing;
 
@@ -1572,7 +1603,7 @@ function GestureExperience({ t, setMode }) {
 
     const now = performance.now();
     if (now < actionCooldownRef.current) return;
-    actionCooldownRef.current = now + 900;
+    actionCooldownRef.current = now + 420;
 
     const label = (node.getAttribute("aria-label") || node.textContent || "").trim().replace(/\s+/g, " ").slice(0, 58);
     setToast(content.globalOpenPrefix + (label ? " · " + label : ""));
@@ -1583,7 +1614,7 @@ function GestureExperience({ t, setMode }) {
     if (!item) return;
     const now = performance.now();
     if (now < actionCooldownRef.current) return;
-    actionCooldownRef.current = now + 900;
+    actionCooldownRef.current = now + 420;
 
     setSelected(item.id);
     setHovered(item.id);
@@ -1671,7 +1702,7 @@ function GestureExperience({ t, setMode }) {
     if (frameRef.current.last) {
       const instant = 1000 / Math.max(1, now - frameRef.current.last);
       frameRef.current.fps = frameRef.current.fps ? frameRef.current.fps * .82 + instant * .18 : instant;
-      setFps(Math.round(frameRef.current.fps));
+      if (now - hudUpdateRef.current > 120) setFps(Math.round(frameRef.current.fps));
     }
     frameRef.current.last = now;
 
@@ -1698,9 +1729,15 @@ function GestureExperience({ t, setMode }) {
     const usingGlobal = globalModeRef.current;
     const pointer = usingGlobal ? setGlobalPointer(lm[8]) : setPointer(lm[8]);
     const hit = usingGlobal ? updateGlobalHover(pointer) : updateHoverTarget(pointer);
-    const kind = classifyGesture(lm);
-    setGesture(gestureLabel(kind));
-    setConfidence(Math.round((results.multiHandedness?.[0]?.score || .9) * 100));
+    const rawKind = classifyHandGesture(lm);
+    const kind = stabilizeGesture(rawKind, gestureStableRef);
+
+    // HUD máximo ~8 veces/s; interacción sigue procesándose a todos los frames.
+    if (now - hudUpdateRef.current > 120) {
+      hudUpdateRef.current = now;
+      setGesture(gestureLabel(kind));
+      setConfidence(Math.round((results.multiHandedness?.[0]?.score || .9) * 100));
+    }
 
     if (!tutorialDoneRef.current && tutorialStepRef.current < 2) {
       updateTutorial(2);
@@ -1730,7 +1767,7 @@ function GestureExperience({ t, setMode }) {
         }
 
         const currentConfirm = pinchConfirmRef.current;
-        const progress = Math.min(1, (now - currentConfirm.since) / 320);
+        const progress = Math.min(1, (now - currentConfirm.since) / 105);
         setCursorConfirmationProgress(usingGlobal, progress);
 
         if (progress >= 1 && !currentConfirm.fired) {
@@ -1745,7 +1782,7 @@ function GestureExperience({ t, setMode }) {
             if (!tutorialDoneRef.current) {
               markTutorialDone(hit.item);
             } else {
-              window.setTimeout(() => runTargetAction(hit.item), 120);
+              runTargetAction(hit.item);
             }
           }
         }
@@ -1761,43 +1798,55 @@ function GestureExperience({ t, setMode }) {
 
     if (kind === "open") {
       const palmX = 1 - lm[9].x;
+      const palmY = lm[9].y;
       const swipe = swipeRef.current;
-      if (swipe.x == null || now - swipe.at > 520) {
-        swipe.x = palmX;
-        swipe.at = now;
-      } else if (now > swipe.cooldown && Math.abs(palmX - swipe.x) > .16) {
-        const direction = palmX > swipe.x ? 1 : -1;
 
-        if (globalModeRef.current) {
-          const sectionIds = ["inicio", "gestos", "cuellos-botella", "laboratorio", "casos-reales", "servicios", "proceso", "automatizacion", "contacto"];
-          const currentIndex = sectionIds.reduce((bestIndex, id, index) => {
-            const node = document.getElementById(id);
-            if (!node) return bestIndex;
-            const distance = Math.abs(node.getBoundingClientRect().top - 120);
-            const bestNode = document.getElementById(sectionIds[bestIndex]);
-            const bestDistance = bestNode ? Math.abs(bestNode.getBoundingClientRect().top - 120) : Number.POSITIVE_INFINITY;
-            return distance < bestDistance ? index : bestIndex;
-          }, 0);
-          const nextIndex = Math.max(0, Math.min(sectionIds.length - 1, currentIndex + direction));
-          document.getElementById(sectionIds[nextIndex])?.scrollIntoView({ behavior: "smooth", block: "start" });
-          setToast(direction > 0 ? content.globalNext : content.globalPrevious);
-        } else {
-          const motion = direction > 0 ? "right" : "left";
-          setSwipeMotion(motion);
-          setScene(prev => (prev + direction + scenes.length) % scenes.length);
-          setToast(direction > 0 ? content.swipeRight : content.swipeLeft);
-          window.setTimeout(() => setSwipeMotion(""), 520);
+      if (globalModeRef.current && palmY < .30) {
+        const speed = Math.round(18 + ((.30 - palmY) / .30) * 34);
+        window.scrollBy(0, -speed);
+        setToast(content.globalScrollUp);
+      } else if (globalModeRef.current && palmY > .70) {
+        const speed = Math.round(18 + ((palmY - .70) / .30) * 34);
+        window.scrollBy(0, speed);
+        setToast(content.globalScrollDown);
+      } else {
+        if (swipe.x == null || now - swipe.at > 360) {
+          swipe.x = palmX;
+          swipe.at = now;
+        } else if (now > swipe.cooldown && Math.abs(palmX - swipe.x) > .085) {
+          const direction = palmX > swipe.x ? 1 : -1;
+
+          if (globalModeRef.current) {
+            const sectionIds = ["inicio", "gestos", "cuellos-botella", "laboratorio", "casos-reales", "servicios", "proceso", "automatizacion", "contacto"];
+            const currentIndex = sectionIds.reduce((bestIndex, id, index) => {
+              const node = document.getElementById(id);
+              if (!node) return bestIndex;
+              const d = Math.abs(node.getBoundingClientRect().top - 120);
+              const bestNode = document.getElementById(sectionIds[bestIndex]);
+              const bestDistance = bestNode ? Math.abs(bestNode.getBoundingClientRect().top - 120) : Number.POSITIVE_INFINITY;
+              return d < bestDistance ? index : bestIndex;
+            }, 0);
+            const nextIndex = Math.max(0, Math.min(sectionIds.length - 1, currentIndex + direction));
+            document.getElementById(sectionIds[nextIndex])?.scrollIntoView({ behavior: "smooth", block: "start" });
+            setToast(direction > 0 ? content.globalNext : content.globalPrevious);
+          } else {
+            const motion = direction > 0 ? "right" : "left";
+            setSwipeMotion(motion);
+            setScene(prev => (prev + direction + scenes.length) % scenes.length);
+            setToast(direction > 0 ? content.swipeRight : content.swipeLeft);
+            window.setTimeout(() => setSwipeMotion(""), 320);
+          }
+
+          swipe.x = palmX;
+          swipe.at = now;
+          swipe.cooldown = now + 360;
         }
-
-        swipe.x = palmX;
-        swipe.at = now;
-        swipe.cooldown = now + 900;
       }
-    } else if (now - swipeRef.current.at > 520) {
+    } else if (now - swipeRef.current.at > 280) {
       swipeRef.current.x = null;
     }
 
-    if (kind === "fist" && now - fistRef.current > 1100) {
+    if (kind === "fist" && now - fistRef.current > 450) {
       fistRef.current = now;
       setSelected("");
       hoveredRef.current = "";
@@ -1807,7 +1856,7 @@ function GestureExperience({ t, setMode }) {
       setToast(globalModeRef.current ? content.globalCancel : content.cancelToast);
     }
 
-    if (kind === "victory" && now - victoryRef.current > 1300) {
+    if (kind === "victory" && now - victoryRef.current > 650) {
       victoryRef.current = now;
       setTurbo(true);
       document.documentElement.dataset.jymGestureSpecial = "victory";
@@ -1832,6 +1881,7 @@ function GestureExperience({ t, setMode }) {
     delete document.documentElement.dataset.jymGestureSpecial;
     cameraRef.current = null;
     handsRef.current = null;
+    frameSendRef.current = false;
     pinchRef.current = false;
     resetPinchConfirmation();
     setInteractionPhase("idle");
@@ -1879,16 +1929,20 @@ function GestureExperience({ t, setMode }) {
       hands.setOptions({
         maxNumHands: 1,
         modelComplexity: 0,
-        minDetectionConfidence: .60,
-        minTrackingConfidence: .55
+        minDetectionConfidence: .55,
+        minTrackingConfidence: .50
       });
       hands.onResults(onResults);
       handsRef.current = hands;
 
       const camera = new window.Camera(videoRef.current, {
         onFrame: async () => {
-          if (handsRef.current && videoRef.current?.readyState >= 2) {
+          if (!handsRef.current || videoRef.current?.readyState < 2 || frameSendRef.current) return;
+          frameSendRef.current = true;
+          try {
             await handsRef.current.send({ image: videoRef.current });
+          } finally {
+            frameSendRef.current = false;
           }
         },
         width: 640,
