@@ -408,6 +408,7 @@ export const translations = {
       "scrollDownShort": "BAJAR",
       "cancelled": "Selección cancelada",
       "viewReset": "Vista restablecida",
+      "victoryAction": "Victoria detectada · vista centrada",
       "reset": "Restablecer",
       "exit": "Salir",
       "error": "No pudimos iniciar la cámara",
@@ -415,8 +416,9 @@ export const translations = {
         "tracking": "RASTREANDO",
         "point": "SEÑALAR",
         "pinch": "PINZA",
-        "open": "SWIPE",
-        "fist": "CANCELAR"
+        "open": "MANO ABIERTA",
+        "fist": "CANCELAR",
+        "victory": "VICTORIA"
       }
     },
     "gestureExperience": {
@@ -462,6 +464,8 @@ export const translations = {
       "globalOpenPrefix": "Activando",
       "globalNext": "Siguiente sección",
       "globalPrevious": "Sección anterior",
+      "globalScrollUp": "Subiendo suavemente",
+      "globalScrollDown": "Bajando suavemente",
       "globalCancel": "Selección cancelada",
       "targetLocked": "OBJETIVO FIJADO",
       "confirmingSelection": "Mantén la pinza un instante...",
@@ -1214,6 +1218,7 @@ export const translations = {
       "scrollDownShort": "DOWN",
       "cancelled": "Selection cancelled",
       "viewReset": "View reset",
+      "victoryAction": "Victory detected · view centered",
       "reset": "Reset view",
       "exit": "Exit",
       "error": "We could not start the camera",
@@ -1221,8 +1226,9 @@ export const translations = {
         "tracking": "TRACKING",
         "point": "POINT",
         "pinch": "PINCH",
-        "open": "SWIPE",
-        "fist": "CANCEL"
+        "open": "OPEN HAND",
+        "fist": "CANCEL",
+        "victory": "VICTORY"
       }
     },
     "gestureExperience": {
@@ -1268,6 +1274,8 @@ export const translations = {
       "globalOpenPrefix": "Activating",
       "globalNext": "Next section",
       "globalPrevious": "Previous section",
+      "globalScrollUp": "Scrolling up",
+      "globalScrollDown": "Scrolling down",
       "globalCancel": "Selection cancelled",
       "targetLocked": "TARGET LOCKED",
       "confirmingSelection": "Hold the pinch for a moment...",
