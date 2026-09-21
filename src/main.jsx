@@ -753,6 +753,7 @@ function ArchitectureGestureMode({ t }) {
   const pinchRef = useRef({ key: "", since: 0, fired: false });
   const swipeRef = useRef({ x: null, at: 0, cooldown: 0 });
   const twoHandRef = useRef({ active: false, baseDistance: 0, baseScale: 1, baseMid: null });
+  const zoomRef = useRef(1);
   const hoveredRef = useRef(null);
 
   const [status, setStatus] = useState("idle");
@@ -775,6 +776,7 @@ function ArchitectureGestureMode({ t }) {
 
   const resetView = () => {
     twoHandRef.current = { active: false, baseDistance: 0, baseScale: 1, baseMid: null };
+    zoomRef.current = 1;
     setZoom(1);
     setViewerTransform(1, 0, 0);
     setMessage(content.viewReset);
@@ -925,7 +927,7 @@ function ArchitectureGestureMode({ t }) {
       twoHandRef.current = {
         active: true,
         baseDistance: Math.max(.02, nowDistance),
-        baseScale: zoom,
+        baseScale: zoomRef.current,
         baseMid: mid
       };
       setGesture(content.twoHands);
@@ -939,6 +941,7 @@ function ArchitectureGestureMode({ t }) {
     const panX = clamp((mid.x - state.baseMid.x) * 520, -120, 120);
     const panY = clamp((mid.y - state.baseMid.y) * 340, -80, 80);
 
+    zoomRef.current = nextScale;
     setZoom(nextScale);
     setViewerTransform(nextScale, panX, panY);
     setGesture(content.zooming);
@@ -967,7 +970,7 @@ function ArchitectureGestureMode({ t }) {
     }
 
     if (twoHandRef.current.active) {
-      twoHandRef.current = { active: false, baseDistance: 0, baseScale: zoom, baseMid: null };
+      twoHandRef.current = { active: false, baseDistance: 0, baseScale: zoomRef.current, baseMid: null };
     }
 
     const lm = hands[0];
