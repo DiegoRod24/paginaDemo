@@ -766,6 +766,12 @@ function GestureExperience({ t, setMode }) {
   const fistRef = useRef(0);
   const frameRef = useRef({ last: 0, fps: 0 });
   const statusRef = useRef("idle");
+  const interactionPhaseRef = useRef("idle");
+  const localTrailRefs = useRef([]);
+  const globalTrailRefs = useRef([]);
+  const localTrailHistoryRef = useRef([]);
+  const globalTrailHistoryRef = useRef([]);
+  const activationTimersRef = useRef([]);
 
   const [status, setStatus] = useState("idle");
   const [gesture, setGesture] = useState("—");
@@ -781,9 +787,69 @@ function GestureExperience({ t, setMode }) {
   const [tutorialDone, setTutorialDone] = useState(false);
   const [globalMode, setGlobalMode] = useState(false);
   const [interactionPhase, setInteractionPhase] = useState("idle");
+  const [activationPhase, setActivationPhase] = useState("idle");
+  const [swipeMotion, setSwipeMotion] = useState("");
+  const [globalLaunch, setGlobalLaunch] = useState(false);
 
   const scenes = content.scenes;
   const targets = content.targets;
+
+  useEffect(() => {
+    interactionPhaseRef.current = interactionPhase;
+    document.documentElement.dataset.jymGestureState = status === "running" ? interactionPhase : "off";
+    document.documentElement.dataset.jymGestureGlobal = globalMode ? "1" : "0";
+    document.documentElement.dataset.jymGestureCamera = status === "running" ? "on" : "off";
+
+    return () => {
+      if (status !== "running") {
+        delete document.documentElement.dataset.jymGestureState;
+        delete document.documentElement.dataset.jymGestureGlobal;
+        delete document.documentElement.dataset.jymGestureCamera;
+      }
+    };
+  }, [interactionPhase, globalMode, status]);
+
+  const clearActivationTimers = () => {
+    activationTimersRef.current.forEach(timer => window.clearTimeout(timer));
+    activationTimersRef.current = [];
+  };
+
+  const scheduleActivationPhase = (phase, delay) => {
+    const timer = window.setTimeout(() => setActivationPhase(phase), delay);
+    activationTimersRef.current.push(timer);
+    return timer;
+  };
+
+  const clearTrail = () => {
+    localTrailHistoryRef.current = [];
+    globalTrailHistoryRef.current = [];
+    [...localTrailRefs.current, ...globalTrailRefs.current].forEach(node => {
+      if (!node) return;
+      node.style.opacity = "0";
+    });
+  };
+
+  const updateTrail = (usingGlobal, x, y, travel = 0) => {
+    const historyRef = usingGlobal ? globalTrailHistoryRef : localTrailHistoryRef;
+    const nodes = usingGlobal ? globalTrailRefs.current : localTrailRefs.current;
+    const history = historyRef.current;
+    history.unshift({ x, y });
+    if (history.length > nodes.length) history.length = nodes.length;
+
+    const energy = Math.min(1, travel / 85);
+    nodes.forEach((node, index) => {
+      if (!node) return;
+      const point = history[index];
+      if (!point || energy < .08) {
+        node.style.opacity = "0";
+        return;
+      }
+      node.style.left = point.x + "px";
+      node.style.top = point.y + "px";
+      node.style.opacity = String(Math.max(0, (.38 - index * .055) * energy));
+      node.style.transform = `translate(-50%,-50%) scale(${Math.max(.35, 1 - index * .12)})`;
+    });
+  };
 
   const updateTutorial = (step) => {
     tutorialStepRef.current = step;
@@ -801,6 +867,12 @@ function GestureExperience({ t, setMode }) {
   const setGlobalControl = (enabled) => {
     globalModeRef.current = enabled;
     setGlobalMode(enabled);
+
+    if (enabled) {
+      setGlobalLaunch(true);
+      window.setTimeout(() => setGlobalLaunch(false), 1150);
+      setInteractionPhase("tracking");
+    }
 
     if (!enabled) {
       globalPointerRef.current = { x: .5, y: .5, ready: false };
@@ -886,6 +958,7 @@ function GestureExperience({ t, setMode }) {
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
     cursor.classList.add("visible");
+    updateTrail(false, x, y, travel);
 
     return { rect, x, y, clientX: rect.left + x, clientY: rect.top + y };
   };
@@ -995,6 +1068,7 @@ function GestureExperience({ t, setMode }) {
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
     cursor.classList.add("visible");
+    updateTrail(true, x, y, travel);
     return { x, y, clientX: x, clientY: y };
   };
 
@@ -1099,19 +1173,46 @@ function GestureExperience({ t, setMode }) {
     const landmarks = results.multiHandLandmarks?.[0];
     if (!landmarks || !window.drawConnectors || !window.drawLandmarks) return;
 
+    const phase = interactionPhaseRef.current;
+    const locked = phase === "locked" || phase === "confirming" || phase === "done";
+    const lineColor = phase === "confirming" ? "rgba(240,255,133,.96)" : locked ? "rgba(184,255,98,.92)" : "rgba(0,217,255,.80)";
+    const glowColor = phase === "confirming" ? "rgba(240,255,133,.58)" : locked ? "rgba(184,255,98,.48)" : "rgba(0,217,255,.42)";
+    const pointColor = phase === "done" ? "#ffffff" : locked ? "#b8ff62" : "#8ff8ff";
+
     ctx.save();
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
+
+    ctx.shadowBlur = 22;
+    ctx.shadowColor = glowColor;
     window.drawConnectors(ctx, landmarks, window.HAND_CONNECTIONS, {
-      color: "rgba(0,217,255,.72)",
-      lineWidth: 3
+      color: glowColor,
+      lineWidth: 7
     });
+
+    ctx.shadowBlur = 10;
+    window.drawConnectors(ctx, landmarks, window.HAND_CONNECTIONS, {
+      color: lineColor,
+      lineWidth: 2.8
+    });
+
     window.drawLandmarks(ctx, landmarks, {
-      color: "#b8ff62",
+      color: pointColor,
       fillColor: "#07131f",
       lineWidth: 2,
-      radius: 3.2
+      radius: 3.4
     });
+
+    [4,8,12,16,20].forEach((tip, index) => {
+      const point = landmarks[tip];
+      ctx.beginPath();
+      ctx.arc(point.x * canvas.width, point.y * canvas.height, index === 1 ? 6.2 : 4.6, 0, Math.PI * 2);
+      ctx.fillStyle = index === 1 ? pointColor : lineColor;
+      ctx.shadowBlur = index === 1 ? 20 : 12;
+      ctx.shadowColor = glowColor;
+      ctx.fill();
+    });
+
     ctx.restore();
   };
 
@@ -1143,6 +1244,7 @@ function GestureExperience({ t, setMode }) {
       document.querySelector(".gesture-global-cursor")?.classList.remove("visible", "pinching", "hovering");
       globalHoveredRef.current?.classList.remove("gesture-global-hover");
       globalHoveredRef.current = null;
+      clearTrail();
       return;
     }
 
@@ -1234,8 +1336,11 @@ function GestureExperience({ t, setMode }) {
           document.getElementById(sectionIds[nextIndex])?.scrollIntoView({ behavior: "smooth", block: "start" });
           setToast(direction > 0 ? content.globalNext : content.globalPrevious);
         } else {
+          const motion = direction > 0 ? "right" : "left";
+          setSwipeMotion(motion);
           setScene(prev => (prev + direction + scenes.length) % scenes.length);
           setToast(direction > 0 ? content.swipeRight : content.swipeLeft);
+          window.setTimeout(() => setSwipeMotion(""), 520);
         }
 
         swipe.x = palmX;
@@ -1259,8 +1364,12 @@ function GestureExperience({ t, setMode }) {
     if (kind === "victory" && now - victoryRef.current > 1300) {
       victoryRef.current = now;
       setTurbo(true);
+      document.documentElement.dataset.jymGestureSpecial = "victory";
       setToast(content.turboToast);
-      window.setTimeout(() => setTurbo(false), 950);
+      window.setTimeout(() => {
+        setTurbo(false);
+        delete document.documentElement.dataset.jymGestureSpecial;
+      }, 1250);
     }
   };
 
@@ -1269,6 +1378,12 @@ function GestureExperience({ t, setMode }) {
     const stream = videoRef.current?.srcObject;
     if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
     try { handsRef.current?.close?.(); } catch {}
+    clearActivationTimers();
+    setActivationPhase("idle");
+    setSwipeMotion("");
+    setGlobalLaunch(false);
+    clearTrail();
+    delete document.documentElement.dataset.jymGestureSpecial;
     cameraRef.current = null;
     handsRef.current = null;
     pinchRef.current = false;
@@ -1300,13 +1415,17 @@ function GestureExperience({ t, setMode }) {
 
   const startCamera = async () => {
     if (status === "loading" || status === "running") return;
+    clearActivationTimers();
+    setActivationPhase("sensor");
     statusRef.current = "loading";
     setStatus("loading");
-    setToast(content.loadingToast);
+    setToast(content.bootSensor);
 
     try {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error("camera-not-supported");
       await ensureGestureRuntime();
+      setActivationPhase("model");
+      setToast(content.bootModel);
 
       const hands = new window.Hands({
         locateFile: file => "https://cdn.jsdelivr.net/npm/@mediapipe/hands/" + file
@@ -1331,15 +1450,22 @@ function GestureExperience({ t, setMode }) {
       });
       cameraRef.current = camera;
       await camera.start();
+      setActivationPhase("tracking");
+      setToast(content.bootTracking);
       tutorialDoneRef.current = false;
       setTutorialDone(false);
       updateTutorial(1);
       statusRef.current = "running";
       setStatus("running");
-      setToast(content.tutorialHand);
+      scheduleActivationPhase("ready", 620);
+      activationTimersRef.current.push(window.setTimeout(() => {
+        setActivationPhase("idle");
+        setToast(content.tutorialHand);
+      }, 1500));
     } catch (error) {
       console.warn("Gesture experience camera error", error);
       stopCamera();
+      setActivationPhase("idle");
       statusRef.current = "error";
       setStatus("error");
       setToast(content.errorToast);
@@ -1347,6 +1473,11 @@ function GestureExperience({ t, setMode }) {
   };
 
   useEffect(() => () => {
+    clearActivationTimers();
+    delete document.documentElement.dataset.jymGestureState;
+    delete document.documentElement.dataset.jymGestureGlobal;
+    delete document.documentElement.dataset.jymGestureCamera;
+    delete document.documentElement.dataset.jymGestureSpecial;
     try { cameraRef.current?.stop?.(); } catch {}
     const stream = videoRef.current?.srcObject;
     if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
@@ -1415,7 +1546,7 @@ function GestureExperience({ t, setMode }) {
         </div>
       </div>
 
-      <div className={"gesture-stage-card " + (turbo ? "is-turbo" : "")}>
+      <div className={"gesture-stage-card " + (turbo ? "is-turbo " : "") + (swipeMotion ? "is-swipe-" + swipeMotion : "")}>
         <div className="gesture-stage-bar">
           <div><i/><i/><i/></div>
           <b>{content.stageTitle}</b>
@@ -1428,7 +1559,28 @@ function GestureExperience({ t, setMode }) {
 
           <div className="gesture-scanline"/>
           <div className="gesture-grid"/>
+
+          <div className="gesture-cursor-trail" aria-hidden="true">
+            {Array.from({length:6}).map((_, index) => <i key={index} ref={node => { localTrailRefs.current[index] = node; }}/>)}
+          </div>
           <div ref={cursorRef} className="gesture-cursor"><i/></div>
+
+          {activationPhase !== "idle" && <div className={"gesture-boot-overlay boot-" + activationPhase}>
+            <div className="gesture-boot-core"><i/><i/><i/></div>
+            <small>JYM VISION ENGINE</small>
+            <strong>{
+              activationPhase === "sensor" ? content.bootSensor :
+              activationPhase === "model" ? content.bootModel :
+              activationPhase === "tracking" ? content.bootTracking :
+              content.bootReady
+            }</strong>
+            <div className="gesture-boot-steps">
+              <span className={["sensor","model","tracking","ready"].includes(activationPhase) ? "active" : ""}>CAMERA</span>
+              <span className={["model","tracking","ready"].includes(activationPhase) ? "active" : ""}>MODEL</span>
+              <span className={["tracking","ready"].includes(activationPhase) ? "active" : ""}>TRACK</span>
+              <span className={activationPhase === "ready" ? "active" : ""}>READY</span>
+            </div>
+          </div>}
 
           <div className={"gesture-action-feedback phase-" + interactionPhase}>
             <i/>
@@ -1449,7 +1601,7 @@ function GestureExperience({ t, setMode }) {
             <span className="gesture-now"><b>{gesture}</b>{content.metricGesture}</span>
           </div>
 
-          <div className="gesture-scene-copy">
+          <div key={"gesture-scene-" + scene + "-" + swipeMotion} className={"gesture-scene-copy " + (swipeMotion ? "scene-swipe-" + swipeMotion : "")}>
             <small>{content.sceneLabel} {String(scene + 1).padStart(2, "0")}</small>
             <strong>{scenes[scene].title}</strong>
             <span>{scenes[scene].text}</span>
@@ -1483,8 +1635,15 @@ function GestureExperience({ t, setMode }) {
       </div>
     </div>
 
-    {globalMode && <div className="gesture-global-overlay" aria-live="polite">
+    {globalMode && <div className={"gesture-global-overlay " + (globalLaunch ? "is-launching" : "")} aria-live="polite">
+      <div className="gesture-global-trail" aria-hidden="true">
+        {Array.from({length:6}).map((_, index) => <i key={index} ref={node => { globalTrailRefs.current[index] = node; }}/>)}
+      </div>
       <div className="gesture-global-cursor"><i/></div>
+      {globalLaunch && <div className="gesture-global-unlock" aria-hidden="true">
+        <i/><i/><i/>
+        <strong>{content.globalUnlock}</strong>
+      </div>}
       <div className="gesture-global-status">
         <span><i/>{content.globalActive}</span>
         <small>{content.globalHelp}</small>
