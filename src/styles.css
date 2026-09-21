@@ -9598,3 +9598,91 @@ html[data-arch-gesture="on"] .companion-arch .assistant-tool-dock {
     animation:none!important;
   }
 }
+
+
+/* =========================================================
+   V37.1 — GESTURE SCROLL + PERFORMANCE
+========================================================= */
+.arch-gesture-scroll-hint {
+  position:fixed;
+  z-index:251;
+  right:22px;
+  top:50%;
+  display:grid;
+  gap:8px;
+  transform:translateY(-50%);
+  pointer-events:none;
+}
+.arch-gesture-scroll-hint span {
+  min-width:78px;
+  padding:8px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:1px solid rgba(217,168,61,.12);
+  border-radius:12px;
+  color:rgba(244,225,181,.48);
+  background:rgba(13,9,5,.58);
+  backdrop-filter:blur(10px);
+  font-size:.54rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  transition:.18s ease;
+}
+.arch-gesture-scroll-hint span b {
+  font:inherit;
+}
+html[data-arch-gesture-scroll="up"] .arch-gesture-scroll-hint .up,
+html[data-arch-gesture-scroll="down"] .arch-gesture-scroll-hint .down {
+  color:#fff2c9;
+  border-color:rgba(217,168,61,.38);
+  background:rgba(217,168,61,.10);
+  box-shadow:0 0 22px rgba(217,168,61,.14);
+  transform:scale(1.06);
+}
+
+/* Menos coste visual durante tracking activo */
+html[data-arch-gesture="on"] .world-ambient,
+html[data-jym-gesture-camera="on"] .world-ambient {
+  filter:none!important;
+}
+html[data-arch-gesture="on"] .app.arch .cinema-backdrop {
+  filter:blur(14px) brightness(.52);
+}
+html[data-arch-gesture="on"] .app.arch .media-transition,
+html[data-jym-gesture-camera="on"] .gesture-hand-canvas {
+  will-change:transform,opacity;
+}
+html[data-arch-gesture="on"] .companion-system,
+html[data-jym-gesture-camera="on"] .companion-system {
+  transition-duration:.16s!important;
+}
+
+/* Mientras se hace scroll gestual, simplificamos efectos pesados un instante. */
+html[data-arch-gesture-scroll] .app.arch .world-ambient,
+html[data-arch-gesture-scroll] .app.arch .arch-line,
+html[data-arch-gesture-scroll] .app.arch .arch-frame {
+  opacity:.18!important;
+}
+html[data-arch-gesture-scroll] .arch-gesture-canvas {
+  opacity:.60;
+}
+
+@media(max-width:900px) {
+  .arch-gesture-scroll-hint {
+    right:10px;
+  }
+  .arch-gesture-scroll-hint span {
+    min-width:54px;
+    padding:7px;
+  }
+  .arch-gesture-scroll-hint span b {
+    display:none;
+  }
+}
+@media(max-width:650px) {
+  .arch-gesture-scroll-hint {
+    display:none;
+  }
+}
