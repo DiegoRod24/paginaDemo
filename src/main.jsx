@@ -1269,6 +1269,9 @@ function ArchitectureGestureMode({ t }) {
         <span className="up">↑ <b>{content.scrollUpShort}</b></span>
         <span className="down">↓ <b>{content.scrollDownShort}</b></span>
       </div>
+      <div className="arch-gesture-legend">
+        {content.legend.map(([icon,label]) => <span key={label}><i>{icon}</i>{label}</span>)}
+      </div>
       <div ref={cursorRef} className="arch-gesture-cursor"><i/></div>
     </div>}
 
