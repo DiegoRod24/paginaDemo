@@ -412,6 +412,14 @@ export const translations = {
       "reset": "Restablecer",
       "exit": "Salir",
       "error": "No pudimos iniciar la cámara",
+      "legend": [
+        ["☝️", "Cursor"],
+        ["🤏", "Seleccionar"],
+        ["✋", "Scroll / swipe"],
+        ["✊", "Cancelar"],
+        ["✌️", "Centrar vista"],
+        ["👐", "Zoom / mover"]
+      ],
       "gestures": {
         "tracking": "RASTREANDO",
         "point": "SEÑALAR",
@@ -1222,6 +1230,14 @@ export const translations = {
       "reset": "Reset view",
       "exit": "Exit",
       "error": "We could not start the camera",
+      "legend": [
+        ["☝️", "Cursor"],
+        ["🤏", "Select"],
+        ["✋", "Scroll / swipe"],
+        ["✊", "Cancel"],
+        ["✌️", "Center view"],
+        ["👐", "Zoom / pan"]
+      ],
       "gestures": {
         "tracking": "TRACKING",
         "point": "POINT",
