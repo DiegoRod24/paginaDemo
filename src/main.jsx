@@ -751,20 +751,31 @@ function ArchitectureGestureMode({ t }) {
   const cursorRef = useRef(null);
   const pointerRef = useRef({ x: .5, y: .5, ready: false });
   const pinchRef = useRef({ key: "", since: 0, fired: false });
-  const swipeRef = useRef({ x: null, at: 0, cooldown: 0 });
+  const swipeRef = useRef({ x: null, y: null, at: 0, cooldown: 0 });
   const twoHandRef = useRef({ active: false, baseDistance: 0, baseScale: 1, baseMid: null });
   const zoomRef = useRef(1);
+  const zoomTextRef = useRef(null);
+  const gestureStateRef = useRef("");
+  const frameSendRef = useRef(false);
   const hoveredRef = useRef(null);
 
   const [status, setStatus] = useState("idle");
   const [gesture, setGesture] = useState(content.idle);
-  const [handsCount, setHandsCount] = useState(0);
-  const [zoom, setZoom] = useState(1);
   const [message, setMessage] = useState(content.ready);
   const [hoveredLabel, setHoveredLabel] = useState("");
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+  const updateGestureLabel = (next) => {
+    if (gestureStateRef.current === next) return;
+    gestureStateRef.current = next;
+    setGesture(next);
+  };
+
+  const updateZoomHud = (value) => {
+    if (zoomTextRef.current) zoomTextRef.current.textContent = Math.round(value * 100) + "%";
+  };
 
   const setViewerTransform = (scale = 1, panX = 0, panY = 0) => {
     const frame = document.querySelector(".app.arch .cinema-frame");
@@ -777,7 +788,7 @@ function ArchitectureGestureMode({ t }) {
   const resetView = () => {
     twoHandRef.current = { active: false, baseDistance: 0, baseScale: 1, baseMid: null };
     zoomRef.current = 1;
-    setZoom(1);
+    updateZoomHud(1);
     setViewerTransform(1, 0, 0);
     setMessage(content.viewReset);
   };
@@ -796,14 +807,14 @@ function ArchitectureGestureMode({ t }) {
     try { handsRef.current?.close?.(); } catch {}
     cameraRef.current = null;
     handsRef.current = null;
+    frameSendRef.current = false;
     pointerRef.current = { x: .5, y: .5, ready: false };
     pinchRef.current = { key: "", since: 0, fired: false };
-    swipeRef.current = { x: null, at: 0, cooldown: 0 };
+    swipeRef.current = { x: null, y: null, at: 0, cooldown: 0 };
     clearHover();
     const ctx = canvasRef.current?.getContext("2d");
     if (ctx && canvasRef.current) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    setHandsCount(0);
-    setGesture(content.idle);
+    updateGestureLabel(content.idle);
     setStatus("idle");
     setMessage(content.ready);
     document.documentElement.removeAttribute("data-arch-gesture");
@@ -930,7 +941,7 @@ function ArchitectureGestureMode({ t }) {
         baseScale: zoomRef.current,
         baseMid: mid
       };
-      setGesture(content.twoHands);
+      updateGestureLabel(content.twoHands);
       setMessage(content.twoHandsHelp);
       clearHover();
       return;
@@ -942,23 +953,22 @@ function ArchitectureGestureMode({ t }) {
     const panY = clamp((mid.y - state.baseMid.y) * 340, -80, 80);
 
     zoomRef.current = nextScale;
-    setZoom(nextScale);
+    updateZoomHud(nextScale);
     setViewerTransform(nextScale, panX, panY);
-    setGesture(content.zooming);
+    updateGestureLabel(content.zooming);
     setMessage(nextScale >= 1 ? content.zoomIn : content.zoomOut);
   };
 
   const onResults = (results) => {
     drawHands(results);
     const hands = results.multiHandLandmarks || [];
-    setHandsCount(hands.length);
 
     if (!hands.length) {
       pointerRef.current.ready = false;
       twoHandRef.current.active = false;
       clearHover();
       cursorRef.current?.classList.remove("visible", "pinching");
-      setGesture(content.waiting);
+      updateGestureLabel(content.waiting);
       setMessage(content.showHand);
       return;
     }
@@ -977,7 +987,7 @@ function ArchitectureGestureMode({ t }) {
     const kind = classify(lm);
     const pointer = getPointer(lm[8]);
     const hit = updateHover(pointer);
-    setGesture(content.gestures[kind] || content.gestures.tracking);
+    updateGestureLabel(content.gestures[kind] || content.gestures.tracking);
 
     const now = performance.now();
 
@@ -1021,24 +1031,50 @@ function ArchitectureGestureMode({ t }) {
 
     if (kind === "open") {
       const palmX = 1 - lm[9].x;
+      const palmY = lm[9].y;
       const swipe = swipeRef.current;
 
-      if (swipe.x == null || now - swipe.at > 520) {
+      if (swipe.x == null || swipe.y == null || now - swipe.at > 520) {
         swipe.x = palmX;
+        swipe.y = palmY;
         swipe.at = now;
-      } else if (now > swipe.cooldown && Math.abs(palmX - swipe.x) > .15) {
-        const toRight = palmX > swipe.x;
-        const arrow = document.querySelector(toRight ? ".app.arch .nav-arrow.right" : ".app.arch .nav-arrow.left");
-        arrow?.click();
-        setMessage(toRight ? content.nextEvidence : content.previousEvidence);
-        document.querySelector(".app.arch .cinema-frame")?.classList.add(toRight ? "arch-swipe-right" : "arch-swipe-left");
-        window.setTimeout(() => document.querySelector(".app.arch .cinema-frame")?.classList.remove("arch-swipe-right", "arch-swipe-left"), 520);
-        swipe.cooldown = now + 900;
-        swipe.x = palmX;
-        swipe.at = now;
+      } else if (now > swipe.cooldown) {
+        const dx = palmX - swipe.x;
+        const dy = palmY - swipe.y;
+        const absX = Math.abs(dx);
+        const absY = Math.abs(dy);
+
+        if (absY > .115 && absY > absX * 1.15) {
+          // Gesto natural: mano hacia arriba -> contenido sube -> bajas por la web.
+          const goingDownPage = dy < 0;
+          const amount = Math.round(window.innerHeight * .64) * (goingDownPage ? 1 : -1);
+          window.scrollBy({ top: amount, behavior: "smooth" });
+          setMessage(goingDownPage ? content.scrollDown : content.scrollUp);
+          updateGestureLabel(goingDownPage ? content.scrollDownGesture : content.scrollUpGesture);
+          document.documentElement.dataset.archGestureScroll = goingDownPage ? "down" : "up";
+          window.setTimeout(() => delete document.documentElement.dataset.archGestureScroll, 650);
+
+          swipe.cooldown = now + 780;
+          swipe.x = palmX;
+          swipe.y = palmY;
+          swipe.at = now;
+        } else if (absX > .14 && absX > absY * 1.1) {
+          const toRight = dx > 0;
+          const arrow = document.querySelector(toRight ? ".app.arch .nav-arrow.right" : ".app.arch .nav-arrow.left");
+          arrow?.click();
+          setMessage(toRight ? content.nextEvidence : content.previousEvidence);
+          document.querySelector(".app.arch .cinema-frame")?.classList.add(toRight ? "arch-swipe-right" : "arch-swipe-left");
+          window.setTimeout(() => document.querySelector(".app.arch .cinema-frame")?.classList.remove("arch-swipe-right", "arch-swipe-left"), 420);
+
+          swipe.cooldown = now + 760;
+          swipe.x = palmX;
+          swipe.y = palmY;
+          swipe.at = now;
+        }
       }
-    } else if (now - swipeRef.current.at > 520) {
+    } else if (now - swipeRef.current.at > 500) {
       swipeRef.current.x = null;
+      swipeRef.current.y = null;
     }
 
     if (kind === "fist") {
@@ -1062,9 +1098,9 @@ function ArchitectureGestureMode({ t }) {
 
       hands.setOptions({
         maxNumHands: 2,
-        modelComplexity: 1,
-        minDetectionConfidence: .65,
-        minTrackingConfidence: .60
+        modelComplexity: 0,
+        minDetectionConfidence: .60,
+        minTrackingConfidence: .55
       });
 
       hands.onResults(onResults);
@@ -1072,18 +1108,23 @@ function ArchitectureGestureMode({ t }) {
 
       const camera = new window.Camera(videoRef.current, {
         onFrame: async () => {
-          if (handsRef.current && videoRef.current?.readyState >= 2) {
+          if (!handsRef.current || videoRef.current?.readyState < 2 || frameSendRef.current) return;
+          frameSendRef.current = true;
+          try {
             await handsRef.current.send({ image: videoRef.current });
+          } finally {
+            frameSendRef.current = false;
           }
         },
-        width: 960,
-        height: 540
+        width: 640,
+        height: 360
       });
 
       cameraRef.current = camera;
       await camera.start();
       setStatus("running");
-      setGesture(content.waiting);
+      gestureStateRef.current = "";
+      updateGestureLabel(content.waiting);
       setMessage(content.showHand);
       document.documentElement.setAttribute("data-arch-gesture", "on");
     } catch (error) {
@@ -1121,9 +1162,13 @@ function ArchitectureGestureMode({ t }) {
         <span className="arch-gesture-live"><i/>{content.active}</span>
         <b>{gesture}</b>
         <small>{message}{hoveredLabel ? " · " + hoveredLabel : ""}</small>
-        <span className="arch-gesture-zoom">{Math.round(zoom * 100)}%</span>
+        <span className="arch-gesture-zoom" ref={zoomTextRef}>100%</span>
         <button type="button" onClick={resetView}>{content.reset}</button>
         <button type="button" className="arch-gesture-exit" onClick={stopCamera}><X size={14}/>{content.exit}</button>
+      </div>
+      <div className="arch-gesture-scroll-hint" aria-hidden="true">
+        <span className="up">↑ <b>{content.scrollUpShort}</b></span>
+        <span className="down">↓ <b>{content.scrollDownShort}</b></span>
       </div>
       <div ref={cursorRef} className="arch-gesture-cursor"><i/></div>
     </div>}
@@ -1833,9 +1878,9 @@ function GestureExperience({ t, setMode }) {
       });
       hands.setOptions({
         maxNumHands: 1,
-        modelComplexity: 1,
-        minDetectionConfidence: .65,
-        minTrackingConfidence: .60
+        modelComplexity: 0,
+        minDetectionConfidence: .60,
+        minTrackingConfidence: .55
       });
       hands.onResults(onResults);
       handsRef.current = hands;
@@ -1846,8 +1891,8 @@ function GestureExperience({ t, setMode }) {
             await handsRef.current.send({ image: videoRef.current });
           }
         },
-        width: 960,
-        height: 540
+        width: 640,
+        height: 360
       });
       cameraRef.current = camera;
       await camera.start();
