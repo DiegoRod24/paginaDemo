@@ -379,6 +379,40 @@ export const translations = {
         "whatsapp": "Hola JYM, quiero solicitar una demo controlada de sus soluciones de automatización e IA."
       }
     },
+    "archGesture": {
+      "kicker": "ARQUITECTURA INTERACTIVA",
+      "start": "Controlar showroom con gestos",
+      "loading": "Preparando visión...",
+      "active": "GESTOS ARQUITECTURA",
+      "ready": "Activa la cámara para controlar el showroom",
+      "idle": "INACTIVO",
+      "waiting": "ESPERANDO MANO",
+      "showHand": "Muestra una mano para comenzar",
+      "point": "Apunta a un proyecto, miniatura o flecha",
+      "target": "OBJETIVO DETECTADO",
+      "pinchAim": "Haz pinza sobre un objetivo iluminado",
+      "confirming": "Mantén la pinza un instante",
+      "done": "ACCIÓN EJECUTADA",
+      "twoHands": "DOS MANOS",
+      "twoHandsHelp": "Separa para acercar · junta para alejar · mueve el centro para desplazar",
+      "zooming": "ZOOM 2 MANOS",
+      "zoomIn": "Acercando proyecto",
+      "zoomOut": "Alejando proyecto",
+      "nextEvidence": "Siguiente evidencia",
+      "previousEvidence": "Evidencia anterior",
+      "cancelled": "Selección cancelada",
+      "viewReset": "Vista restablecida",
+      "reset": "Restablecer",
+      "exit": "Salir",
+      "error": "No pudimos iniciar la cámara",
+      "gestures": {
+        "tracking": "RASTREANDO",
+        "point": "SEÑALAR",
+        "pinch": "PINZA",
+        "open": "SWIPE",
+        "fist": "CANCELAR"
+      }
+    },
     "gestureExperience": {
       "kicker": "EXPERIENCIA INTERACTIVA · COMPUTER VISION",
       "title": "Controla esta experiencia con tus manos",
@@ -1143,6 +1177,40 @@ export const translations = {
         "security": "No credentials or live access",
         "cta": "Request a demo",
         "whatsapp": "Hello JYM, I would like to request a controlled demo of your AI and automation solutions."
+      }
+    },
+    "archGesture": {
+      "kicker": "INTERACTIVE ARCHITECTURE",
+      "start": "Control showroom with gestures",
+      "loading": "Preparing vision...",
+      "active": "ARCHITECTURE GESTURES",
+      "ready": "Enable the camera to control the showroom",
+      "idle": "IDLE",
+      "waiting": "WAITING FOR HAND",
+      "showHand": "Show one hand to begin",
+      "point": "Point at a project, thumbnail or arrow",
+      "target": "TARGET DETECTED",
+      "pinchAim": "Pinch over a highlighted target",
+      "confirming": "Hold the pinch for a moment",
+      "done": "ACTION EXECUTED",
+      "twoHands": "TWO HANDS",
+      "twoHandsHelp": "Separate to zoom in · bring together to zoom out · move center to pan",
+      "zooming": "TWO-HAND ZOOM",
+      "zoomIn": "Zooming into project",
+      "zoomOut": "Zooming out",
+      "nextEvidence": "Next evidence",
+      "previousEvidence": "Previous evidence",
+      "cancelled": "Selection cancelled",
+      "viewReset": "View reset",
+      "reset": "Reset view",
+      "exit": "Exit",
+      "error": "We could not start the camera",
+      "gestures": {
+        "tracking": "TRACKING",
+        "point": "POINT",
+        "pinch": "PINCH",
+        "open": "SWIPE",
+        "fist": "CANCEL"
       }
     },
     "gestureExperience": {
