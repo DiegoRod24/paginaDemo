@@ -757,6 +757,8 @@ function GestureExperience({ t, setMode }) {
   const globalModeRef = useRef(false);
   const tutorialDoneRef = useRef(false);
   const tutorialStepRef = useRef(0);
+  const hoverLockRef = useRef({ key: "", since: 0, locked: false });
+  const pinchConfirmRef = useRef({ key: "", since: 0, fired: false });
   const actionCooldownRef = useRef(0);
   const pinchRef = useRef(false);
   const swipeRef = useRef({ x: null, at: 0, cooldown: 0 });
@@ -777,6 +779,7 @@ function GestureExperience({ t, setMode }) {
   const [tutorialStep, setTutorialStep] = useState(0);
   const [tutorialDone, setTutorialDone] = useState(false);
   const [globalMode, setGlobalMode] = useState(false);
+  const [interactionPhase, setInteractionPhase] = useState("idle");
 
   const scenes = content.scenes;
   const targets = content.targets;
@@ -803,6 +806,23 @@ function GestureExperience({ t, setMode }) {
       globalHoveredRef.current?.classList.remove("gesture-global-hover");
       globalHoveredRef.current = null;
     }
+  };
+
+  const resetPinchConfirmation = () => {
+    pinchConfirmRef.current = { key: "", since: 0, fired: false };
+    cursorRef.current?.classList.remove("confirming", "confirmed");
+    const globalCursor = document.querySelector(".gesture-global-cursor");
+    globalCursor?.classList.remove("confirming", "confirmed");
+    cursorRef.current?.style.removeProperty("--pinch-progress");
+    globalCursor?.style.removeProperty("--pinch-progress");
+  };
+
+  const setCursorConfirmationProgress = (usingGlobal, progress) => {
+    const cursor = usingGlobal ? document.querySelector(".gesture-global-cursor") : cursorRef.current;
+    if (!cursor) return;
+    cursor.style.setProperty("--pinch-progress", String(Math.max(0, Math.min(1, progress))));
+    cursor.classList.toggle("confirming", progress > 0 && progress < 1);
+    cursor.classList.toggle("confirmed", progress >= 1);
   };
 
   const distance2d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -848,9 +868,13 @@ function GestureExperience({ t, setMode }) {
     const desiredY = ny * rect.height;
 
     const previous = pointerRef.current;
-    const smoothing = previous.ready ? .34 : 1;
-    const x = previous.x * rect.width * (1 - smoothing) + desiredX * smoothing;
-    const y = previous.y * rect.height * (1 - smoothing) + desiredY * smoothing;
+    const previousX = previous.x * rect.width;
+    const previousY = previous.y * rect.height;
+    const travel = previous.ready ? Math.hypot(desiredX - previousX, desiredY - previousY) : rect.width;
+    const normalizedTravel = Math.min(1, travel / Math.max(90, rect.width * .16));
+    const smoothing = previous.ready ? (.16 + normalizedTravel * .42) : 1;
+    const x = previousX * (1 - smoothing) + desiredX * smoothing;
+    const y = previousY * (1 - smoothing) + desiredY * smoothing;
 
     pointerRef.current = {
       x: rect.width ? x / rect.width : .5,
@@ -867,7 +891,7 @@ function GestureExperience({ t, setMode }) {
 
   const findTargetAt = (pointer) => {
     if (!pointer) return null;
-    const margin = 24;
+    const margin = 46;
 
     let best = null;
     let bestDistance = Number.POSITIVE_INFINITY;
@@ -899,17 +923,46 @@ function GestureExperience({ t, setMode }) {
   const updateHoverTarget = (pointer) => {
     const hit = findTargetAt(pointer);
     const nextId = hit?.item?.id || "";
+    const now = performance.now();
 
     if (hoveredRef.current !== nextId) {
       hoveredRef.current = nextId;
       setHovered(nextId);
+      hoverLockRef.current = { key: nextId, since: now, locked: false };
+      setInteractionPhase(hit ? "aiming" : "tracking");
     }
 
-    cursorRef.current?.classList.toggle("hovering", Boolean(hit));
+    const cursor = cursorRef.current;
+    cursor?.classList.toggle("hovering", Boolean(hit));
 
-    if (hit && !tutorialDoneRef.current && tutorialStepRef.current < 3) {
-      updateTutorial(3);
-      setToast(content.tutorialPinch);
+    if (hit && pointer && cursor) {
+      const rect = hit.node.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const magnet = .18;
+      const visualX = pointer.x + (centerX - pointer.clientX) * magnet;
+      const visualY = pointer.y + (centerY - pointer.clientY) * magnet;
+      cursor.style.left = visualX + "px";
+      cursor.style.top = visualY + "px";
+
+      const lock = hoverLockRef.current;
+      if (lock.key === nextId && !lock.locked && now - lock.since >= 180) {
+        lock.locked = true;
+        cursor.classList.add("locked");
+        setInteractionPhase("locked");
+        setToast(content.targetLocked + " · " + hit.item.title);
+
+        if (!tutorialDoneRef.current && tutorialStepRef.current < 3) {
+          updateTutorial(3);
+        }
+      }
+
+      if (!tutorialDoneRef.current && tutorialStepRef.current < 3 && !lock.locked) {
+        setToast(content.tutorialPinch);
+      }
+    } else {
+      cursor?.classList.remove("locked");
+      hoverLockRef.current = { key: "", since: now, locked: false };
     }
 
     return hit;
@@ -924,9 +977,13 @@ function GestureExperience({ t, setMode }) {
     const desiredX = nx * window.innerWidth;
     const desiredY = ny * window.innerHeight;
     const previous = globalPointerRef.current;
-    const smoothing = previous.ready ? .30 : 1;
-    const x = previous.x * window.innerWidth * (1 - smoothing) + desiredX * smoothing;
-    const y = previous.y * window.innerHeight * (1 - smoothing) + desiredY * smoothing;
+    const previousX = previous.x * window.innerWidth;
+    const previousY = previous.y * window.innerHeight;
+    const travel = previous.ready ? Math.hypot(desiredX - previousX, desiredY - previousY) : window.innerWidth;
+    const normalizedTravel = Math.min(1, travel / Math.max(100, window.innerWidth * .12));
+    const smoothing = previous.ready ? (.14 + normalizedTravel * .40) : 1;
+    const x = previousX * (1 - smoothing) + desiredX * smoothing;
+    const y = previousY * (1 - smoothing) + desiredY * smoothing;
 
     globalPointerRef.current = {
       x: window.innerWidth ? x / window.innerWidth : .5,
@@ -955,14 +1012,34 @@ function GestureExperience({ t, setMode }) {
   const updateGlobalHover = (pointer) => {
     if (!pointer) return null;
     const node = document.elementFromPoint(pointer.clientX, pointer.clientY)?.closest(GLOBAL_SAFE_SELECTOR) || null;
+    const cursor = document.querySelector(".gesture-global-cursor");
+    const now = performance.now();
+    const nodeKey = node ? (node.getAttribute("href") || node.getAttribute("aria-label") || node.textContent || "target").trim().slice(0, 80) : "";
 
     if (globalHoveredRef.current !== node) {
-      globalHoveredRef.current?.classList.remove("gesture-global-hover");
+      globalHoveredRef.current?.classList.remove("gesture-global-hover", "gesture-global-locked");
       node?.classList.add("gesture-global-hover");
       globalHoveredRef.current = node;
+      hoverLockRef.current = { key: nodeKey, since: now, locked: false };
+      setInteractionPhase(node ? "aiming" : "tracking");
     }
 
-    document.querySelector(".gesture-global-cursor")?.classList.toggle("hovering", Boolean(node));
+    cursor?.classList.toggle("hovering", Boolean(node));
+
+    if (node) {
+      const lock = hoverLockRef.current;
+      if (lock.key === nodeKey && !lock.locked && now - lock.since >= 180) {
+        lock.locked = true;
+        node.classList.add("gesture-global-locked");
+        cursor?.classList.add("locked");
+        setInteractionPhase("locked");
+        setToast(content.targetLocked);
+      }
+    } else {
+      cursor?.classList.remove("locked");
+      hoverLockRef.current = { key: "", since: now, locked: false };
+    }
+
     return node;
   };
 
@@ -1054,6 +1131,8 @@ function GestureExperience({ t, setMode }) {
       setGesture("—");
       setConfidence(0);
       pinchRef.current = false;
+      resetPinchConfirmation();
+      setInteractionPhase("idle");
       pointerRef.current.ready = false;
       globalPointerRef.current.ready = false;
       hoveredRef.current = "";
@@ -1080,32 +1159,55 @@ function GestureExperience({ t, setMode }) {
     }
 
     if (kind === "pinch") {
-      if (usingGlobal) {
-        document.querySelector(".gesture-global-cursor")?.classList.add("pinching");
+      const activeCursor = usingGlobal ? document.querySelector(".gesture-global-cursor") : cursorRef.current;
+      activeCursor?.classList.add("pinching");
+      pinchRef.current = true;
+
+      const targetKey = usingGlobal
+        ? (hit ? (hit.getAttribute("href") || hit.getAttribute("aria-label") || hit.textContent || "target").trim().slice(0, 80) : "")
+        : (hit?.item?.id || "");
+
+      if (!targetKey) {
+        resetPinchConfirmation();
+        setInteractionPhase("aiming");
+        setToast(content.pinchAimToast);
       } else {
-        cursorRef.current?.classList.add("pinching");
-      }
+        const confirm = pinchConfirmRef.current;
 
-      if (!pinchRef.current) {
-        pinchRef.current = true;
+        if (confirm.key !== targetKey) {
+          pinchConfirmRef.current = { key: targetKey, since: now, fired: false };
+          setInteractionPhase("confirming");
+          setToast(content.confirmingSelection);
+        }
 
-        if (usingGlobal) {
-          runGlobalAction(hit);
-        } else if (hit?.item) {
-          if (!tutorialDoneRef.current) {
-            markTutorialDone(hit.item);
-          } else {
-            setToast(content.clickToast + " · " + hit.item.title);
-            runTargetAction(hit.item);
+        const currentConfirm = pinchConfirmRef.current;
+        const progress = Math.min(1, (now - currentConfirm.since) / 320);
+        setCursorConfirmationProgress(usingGlobal, progress);
+
+        if (progress >= 1 && !currentConfirm.fired) {
+          currentConfirm.fired = true;
+          setInteractionPhase("done");
+          setToast(content.selectionConfirmed);
+          activeCursor?.classList.add("confirmed");
+
+          if (usingGlobal) {
+            runGlobalAction(hit);
+          } else if (hit?.item) {
+            if (!tutorialDoneRef.current) {
+              markTutorialDone(hit.item);
+            } else {
+              window.setTimeout(() => runTargetAction(hit.item), 120);
+            }
           }
-        } else {
-          setToast(content.pinchAimToast);
         }
       }
     } else {
       pinchRef.current = false;
+      resetPinchConfirmation();
       cursorRef.current?.classList.remove("pinching");
       document.querySelector(".gesture-global-cursor")?.classList.remove("pinching");
+      if (hit) setInteractionPhase("locked");
+      else setInteractionPhase("tracking");
     }
 
     if (kind === "open") {
@@ -1169,6 +1271,8 @@ function GestureExperience({ t, setMode }) {
     cameraRef.current = null;
     handsRef.current = null;
     pinchRef.current = false;
+    resetPinchConfirmation();
+    setInteractionPhase("idle");
     pointerRef.current = { x: .5, y: .5, ready: false };
     globalPointerRef.current = { x: .5, y: .5, ready: false };
     hoveredRef.current = "";
@@ -1320,6 +1424,18 @@ function GestureExperience({ t, setMode }) {
           <div className="gesture-scanline"/>
           <div className="gesture-grid"/>
           <div ref={cursorRef} className="gesture-cursor"><i/></div>
+
+          <div className={"gesture-action-feedback phase-" + interactionPhase}>
+            <i/>
+            <span>{
+              interactionPhase === "locked" ? content.feedbackLocked :
+              interactionPhase === "confirming" ? content.feedbackConfirming :
+              interactionPhase === "done" ? content.feedbackDone :
+              interactionPhase === "aiming" ? content.feedbackAiming :
+              interactionPhase === "tracking" ? content.feedbackTracking :
+              content.feedbackIdle
+            }</span>
+          </div>
 
           <div className="gesture-stage-hud">
             <span><b>{handsCount}</b>{content.metricHands}</span>
