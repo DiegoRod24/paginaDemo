@@ -9686,3 +9686,85 @@ html[data-arch-gesture-scroll] .arch-gesture-canvas {
     display:none;
   }
 }
+
+
+/* =========================================================
+   V37.2 — LOW LATENCY GESTURE ENGINE
+========================================================= */
+.arch-gesture-legend {
+  position:fixed;
+  z-index:251;
+  left:20px;
+  top:50%;
+  transform:translateY(-50%);
+  display:grid;
+  gap:6px;
+  pointer-events:none;
+}
+.arch-gesture-legend span {
+  min-height:30px;
+  padding:5px 9px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid rgba(217,168,61,.10);
+  border-radius:10px;
+  color:rgba(244,229,194,.52);
+  background:rgba(13,9,5,.52);
+  backdrop-filter:blur(8px);
+  font-size:.51rem;
+  font-weight:850;
+  letter-spacing:.045em;
+}
+.arch-gesture-legend i {
+  width:20px;
+  text-align:center;
+  font-style:normal;
+  font-size:.78rem;
+}
+
+/* Priorizar respuesta sobre animación durante tracking. */
+html[data-arch-gesture="on"] .arch-gesture-cursor,
+html[data-jym-gesture-camera="on"] .gesture-cursor,
+html[data-jym-gesture-camera="on"] .gesture-global-cursor {
+  transition:
+    opacity .05s linear,
+    transform .04s linear,
+    border-color .08s linear,
+    box-shadow .08s linear;
+}
+html[data-arch-gesture="on"] .app.arch .arch-gesture-hover,
+html[data-jym-gesture-camera="on"] .gesture-target.hovering {
+  transition-duration:.08s!important;
+}
+
+/* Victoria en arquitectura: feedback rápido y claro. */
+html[data-arch-gesture-special="victory"] .app.arch .cinema-frame {
+  animation:archGestureVictory .62s ease both;
+}
+html[data-arch-gesture-special="victory"] .companion-arch .assistant-tool-dock {
+  animation:gestureMascotSuccess .52s cubic-bezier(.2,.8,.2,1) both!important;
+}
+
+@keyframes archGestureVictory {
+  0%,100% { box-shadow:0 0 0 rgba(217,168,61,0); }
+  45% {
+    box-shadow:
+      0 0 0 2px rgba(255,239,190,.28),
+      0 0 44px rgba(217,168,61,.18);
+  }
+}
+
+@media(max-width:900px) {
+  .arch-gesture-legend {
+    left:10px;
+  }
+  .arch-gesture-legend span {
+    padding:5px 7px;
+  }
+}
+@media(max-width:650px) {
+  .arch-gesture-legend {
+    display:none;
+  }
+}
