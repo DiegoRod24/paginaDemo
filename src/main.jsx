@@ -1019,6 +1019,13 @@ function GestureExperience({ t, setMode }) {
       cursor.style.left = visualX + "px";
       cursor.style.top = visualY + "px";
 
+      const relativeX = Math.max(-1, Math.min(1, (pointer.clientX - centerX) / Math.max(1, rect.width / 2)));
+      const relativeY = Math.max(-1, Math.min(1, (pointer.clientY - centerY) / Math.max(1, rect.height / 2)));
+      hit.node.style.setProperty("--gesture-tilt-y", (relativeX * 4.2).toFixed(2) + "deg");
+      hit.node.style.setProperty("--gesture-tilt-x", (-relativeY * 3.2).toFixed(2) + "deg");
+      hit.node.style.setProperty("--gesture-glow-x", ((relativeX + 1) * 50).toFixed(1) + "%");
+      hit.node.style.setProperty("--gesture-glow-y", ((relativeY + 1) * 50).toFixed(1) + "%");
+
       const lock = hoverLockRef.current;
       if (lock.key === nextId && !lock.locked && now - lock.since >= 180) {
         lock.locked = true;
