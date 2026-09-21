@@ -738,7 +738,66 @@ function loadGestureScript(id, src) {
 async function ensureGestureRuntime() {
   await loadGestureScript("Hands", "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js");
   await loadGestureScript("drawConnectors", "https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js");
-  await loadGestureScript("Camera", "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js");
+}
+
+async function startLowLatencyGestureCamera(video, onFrame) {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: {
+      width: { ideal: 640 },
+      height: { ideal: 360 },
+      frameRate: { ideal: 30, max: 30 },
+      facingMode: "user"
+    }
+  });
+
+  video.srcObject = stream;
+  await video.play();
+
+  let stopped = false;
+  let busy = false;
+  let handle = 0;
+  const useVideoCallback = typeof video.requestVideoFrameCallback === "function";
+
+  const schedule = () => {
+    if (stopped) return;
+    if (useVideoCallback) {
+      handle = video.requestVideoFrameCallback(() => tick());
+    } else {
+      handle = window.requestAnimationFrame(() => tick());
+    }
+  };
+
+  const tick = async () => {
+    if (stopped) return;
+
+    if (!busy && video.readyState >= 2) {
+      busy = true;
+      try {
+        await onFrame();
+      } finally {
+        busy = false;
+      }
+    }
+
+    schedule();
+  };
+
+  schedule();
+
+  return {
+    stop() {
+      stopped = true;
+      if (useVideoCallback && handle && typeof video.cancelVideoFrameCallback === "function") {
+        try { video.cancelVideoFrameCallback(handle); } catch {}
+      } else if (handle) {
+        window.cancelAnimationFrame(handle);
+      }
+      stream.getTracks().forEach(track => track.stop());
+      try { video.pause(); } catch {}
+      video.srcObject = null;
+    }
+  };
 }
 
 const gestureDistance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -1151,22 +1210,17 @@ function ArchitectureGestureMode({ t }) {
       hands.onResults(onResults);
       handsRef.current = hands;
 
-      const camera = new window.Camera(videoRef.current, {
-        onFrame: async () => {
-          if (!handsRef.current || videoRef.current?.readyState < 2 || frameSendRef.current) return;
-          frameSendRef.current = true;
-          try {
-            await handsRef.current.send({ image: videoRef.current });
-          } finally {
-            frameSendRef.current = false;
-          }
-        },
-        width: 640,
-        height: 360
+      const camera = await startLowLatencyGestureCamera(videoRef.current, async () => {
+        if (!handsRef.current || frameSendRef.current) return;
+        frameSendRef.current = true;
+        try {
+          await handsRef.current.send({ image: videoRef.current });
+        } finally {
+          frameSendRef.current = false;
+        }
       });
 
       cameraRef.current = camera;
-      await camera.start();
       setStatus("running");
       gestureStateRef.current = "";
       updateGestureLabel(content.waiting);
@@ -1936,21 +1990,16 @@ function GestureExperience({ t, setMode }) {
       hands.onResults(onResults);
       handsRef.current = hands;
 
-      const camera = new window.Camera(videoRef.current, {
-        onFrame: async () => {
-          if (!handsRef.current || videoRef.current?.readyState < 2 || frameSendRef.current) return;
-          frameSendRef.current = true;
-          try {
-            await handsRef.current.send({ image: videoRef.current });
-          } finally {
-            frameSendRef.current = false;
-          }
-        },
-        width: 640,
-        height: 360
+      const camera = await startLowLatencyGestureCamera(videoRef.current, async () => {
+        if (!handsRef.current || frameSendRef.current) return;
+        frameSendRef.current = true;
+        try {
+          await handsRef.current.send({ image: videoRef.current });
+        } finally {
+          frameSendRef.current = false;
+        }
       });
       cameraRef.current = camera;
-      await camera.start();
       setActivationPhase("tracking");
       setToast(content.bootTracking);
       tutorialDoneRef.current = false;
