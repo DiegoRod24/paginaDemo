@@ -1,31 +1,43 @@
-# JYM Experience V15 — JYM Companion System
+# JYM Experience
 
-## Concepto
-- Sin cuadros negros permanentes.
-- Los mensajes aparecen como globos y desaparecen automáticamente.
-- Los personajes flotan al costado sin tapar el hero.
-- Al ocultarse dejan un icono discreto: 👽 o 🔨.
-- El icono recupera al personaje.
+Sitio comercial interactivo de **JYM Diseño y Arquitectura S.A.C.** que reúne dos recorridos: tecnología y automatización, y arquitectura y ejecución de espacios. Incluye showroom multimedia, acompañantes animados, contacto y experiencias opcionales con cámara.
 
-## Tecnología
-- Inicio: OVNI flotante; al tocarlo sale volando.
-- Showroom: pantallas holográficas.
-- Servicios: marcianito programando con laptop, café y código.
-- Proceso: explica un flujo.
-- Proyectos: inspecciona y aprueba.
-- Automatización: opera máquina, engranajes y brazo robótico.
-- Contacto: llamada, maleta y salida.
+- Sitio público: https://jym-experience.pages.dev/
+- Código: https://github.com/DiegoRod24/paginaDemo
+- Base revisada: `13286db` (21/09/2026). La denominación V15 de `package.json` es histórica; los commits identifican los cambios actuales.
 
-## Arquitectura
-- Inicio: arquitecto flotando al costado; al tocarlo se oculta en 🔨.
-- Showroom: presenta materiales.
-- Servicios: dibuja planos en una mesa iluminada.
-- Proceso: mide una pared.
-- Proyectos: inspecciona una maqueta.
-- Diseño y obra: climatización, engranajes y corrientes de aire.
-- Contacto: recibe llamada, toma maletín y sale por una puerta.
+## Guía del proyecto
 
-## Correcciones
-- El acompañante no queda delante del texto central.
-- Los cuadros desaparecen cuando se oculta el personaje.
-- Se conserva el arreglo de pantalla negra al volver a Inicio.
+| Documento | Para qué sirve |
+| --- | --- |
+| [Proyecto y alcance](docs/PROYECTO.md) | Qué hace el sitio, para quién y qué incluye |
+| [Historias de usuario](docs/HISTORIAS_DE_USUARIO.md) | Necesidades, criterios de aceptación y trabajo pendiente |
+| [Arquitectura y mantenimiento](docs/ARQUITECTURA.md) | Dónde se encuentra cada función y cómo modificarla |
+| [Historial de cambios](CHANGELOG.md) | Cambios comprobados y límites de cada entrega |
+| [Pruebas de gestos](docs/PRUEBAS_GESTOS.md) | Validación automática y recorrido manual con cámara |
+| [Guía para colaboradores](AGENTS.md) | Reglas para mantener código y documentación sincronizados |
+
+## Ejecutar
+
+Usar una versión vigente de Node.js con `node:test` (recomendado Node 22 o posterior).
+
+```bash
+npm ci
+npm run dev
+npm test
+npm run build
+npm run preview
+```
+
+Vite genera el sitio estático en `dist/`. Para Cloudflare Pages: comando `npm run build`, salida `dist`. Revisar en Cloudflare qué rama está conectada: esa configuración no está declarada en este repositorio.
+
+## Desplazamiento con la mano derecha (Arquitectura)
+
+1. Entra en Arquitectura y pulsa **Controlar showroom con gestos**. Autoriza la cámara.
+2. Abre la mano derecha en una posición cómoda: el primer fotograma establece la referencia sin mover la página.
+3. Baja la mano para bajar por la página; súbela para subir. La página acompaña la distancia recorrida por tu mano.
+4. Deja quieta la mano para detenerte, incluso si está abajo o arriba. Cierra el puño para recolocar la mano sin desplazar la página; vuelve a abrirla para continuar.
+5. El movimiento horizontal cambia evidencias; dos manos controlan zoom y desplazamiento del visor. Ambos suspenden el scroll vertical.
+6. **Salir** apaga la cámara. El ratón y el desplazamiento táctil siguen disponibles.
+
+La cámara requiere HTTPS o localhost, permisos y un navegador compatible. MediaPipe se carga desde un CDN al activar la experiencia. La mejora del 30/10/2026 corresponde al control de Arquitectura; el laboratorio gestual de Tecnología tiene su propio controlador.

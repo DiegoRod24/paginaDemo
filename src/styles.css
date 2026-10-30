@@ -9768,3 +9768,27 @@ html[data-arch-gesture-special="victory"] .companion-arch .assistant-tool-dock {
     display:none;
   }
 }
+
+/* Relative right-hand scroll guidance, visible while architecture camera is on. */
+.arch-gesture-scroll-guide {
+  position: fixed;
+  bottom: 106px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 252;
+  width: max-content;
+  max-width: min(700px, calc(100vw - 28px));
+  margin: 0;
+  padding: 9px 14px;
+  border: 1px solid rgba(217,168,61,.25);
+  border-radius: 12px;
+  background: rgba(13,9,5,.94);
+  color: #f1d38b;
+  font-size: .75rem;
+  line-height: 1.5;
+  text-align: center;
+  pointer-events: none;
+}
+@media (max-width: 650px) {
+  .arch-gesture-scroll-guide { bottom: 154px; font-size: .67rem; }
+}
