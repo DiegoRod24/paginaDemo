@@ -6,7 +6,7 @@
 | --- | --- |
 | `index.html` | Entrada, metadatos y carga de capas CSS/JS públicas |
 | `src/main.jsx` | App, modos portal/tech/arch, navegación, showroom, contacto, acompañantes y controladores de cámara |
-| `src/architectureScroll.js` | Intención vertical relativa, lateralidad y bucle de desplazamiento de Arquitectura |
+| `src/architectureScroll.js` | Movimiento directo de palma, lateralidad y aplicación de desplazamientos de Arquitectura |
 | `src/i18n.js` | Textos en español e inglés, instrucciones y leyendas |
 | `src/catalog.js` | Catálogo de arquitectura, tecnología y proyectos |
 | `src/AnimatedTechAssistant.jsx` | Acompañante tecnológico animado |
@@ -14,7 +14,7 @@
 | `public/assets/` | Imágenes, videos, marca y personajes |
 | `public/jym-*.css` | Capas de presentación y correcciones sobre estilos principales |
 | `public/jym-*.js` | Mejoras de navegación, visor, transiciones, acompañantes y efectos |
-| `tests/architectureScroll.test.js` | Regresiones de dirección, neutral, lateralidad, velocidad, ejes y parada |
+| `tests/architectureScroll.test.js` | Regresiones de dirección, mano quieta, lateralidad, distancia, ejes y parada |
 | `vite.config.js` | Configuración de Vite y React |
 
 ## Estado de aplicación
@@ -28,20 +28,23 @@ Dos controladores de gestos separados: `ArchitectureGestureMode` (cámara opcion
 1. Solicitud de cámara al pulsar el botón; descarga del runtime MediaPipe Hands y utilidades desde jsDelivr.
 2. `startLowLatencyGestureCamera` envía fotogramas nativos de video; `onResults` recibe landmarks y lateralidad.
 3. Clasificación de gesto y estabilización. Pinza, puño, señalar, victoria y dos manos conservan sus acciones.
-4. La palma derecha abierta establece un origen relativo. Un cambio predominantemente vertical activa scroll; uno horizontal permite el swipe de evidencias.
-5. `createScrollDriver` convierte píxeles/segundo en desplazamiento por tiempo real, mediante `requestAnimationFrame` y `behavior: 'instant'`. El CSS global suave permanece para los demás controles.
-6. Neutral, otro gesto, mano perdida, dos manos, pestaña oculta o cierre detienen el bucle. El watchdog corta tras 220 ms sin actualización de velocidad. Se ignoran resultados tardíos tras detener/desmontar la cámara.
+4. La primera palma derecha abierta establece una referencia. El centro de palma promedia muñeca y cuatro nudillos para reducir variaciones de dedos. Se bloquea el eje dominante de movimiento durante el recorrido; una pausa libera el eje.
+5. `updatePalmScroll` devuelve distancia nueva de la mano, nunca velocidad por sostener una posición. `palmDeltaToPixels` convierte esa distancia con ganancia de tres alturas de pantalla por altura normalizada de cámara. `createScrollDriver.move` aplica una sola orden `behavior: 'instant'` por movimiento; no hay inercia ni animaciones de scroll pendientes. El CSS suave global permanece para otros controles.
+6. Mano quieta, otro gesto, mano perdida, dos manos, pestaña oculta o cierre detienen el desplazamiento. El temporizador de 120 ms solo limpia el indicador cuando dejan de llegar muestras; nunca ejecuta scroll. Resultados espaciados más de 220 ms o saltos de tracking establecen una referencia nueva, sin salto. Se ignoran resultados tardíos tras detener/desmontar la cámara.
 
 ## Parámetros de interacción
 
 | Parámetro | Valor inicial | Motivo |
 | --- | --- | --- |
-| Inicio vertical | >0.035 de alto de cámara | Ignorar pequeñas variaciones |
-| Retorno a neutral | <0.025 | Histéresis para evitar encendido/apagado repetido |
-| Movimiento dominante | Vertical > horizontal × 1.2 | Evitar cambios de evidencia al bajar la mano |
-| Velocidad | 180–1600 px/s | Respuesta progresiva con límite |
-| Muestras vencidas | 220 ms | Detener ante bloqueo del detector |
-| Delta máximo de animación | 50 ms | Evitar saltos tras una pausa larga |
+| Activación vertical | >0.018 de altura de cámara | Ignorar temblor antes de decidir intención |
+| Activación horizontal | >0.025 de ancho de cámara | Separar navegación de evidencias |
+| Movimiento dominante | Eje principal > otro eje × 1.3 | Evitar acciones diagonales ambiguas |
+| Margen por muestra | 0.004 normalizado | Ignorar pequeñas variaciones conservando distancia acumulada |
+| Liberación de eje | 160 ms quieto | Permitir cambiar entre vertical y horizontal |
+| Ganancia | Delta × altura de ventana × 3 | Recorrer contenido sin grandes movimientos del brazo |
+| Límite por muestra | 40% de altura de ventana | Evitar saltos excesivos |
+| Muestra vencida / salto de tracking | >220 ms / >0.16 normalizado | Reanclar sin desplazar |
+| Indicador sin muestras | 120 ms | Mostrar DETENIDO sin ninguna inercia |
 | Lateralidad válida | Confianza ≥0.60 | Evitar activar scroll con mano incierta |
 
 Estos valores son una base de ingeniería pendiente de ajustar con cámara real, no mediciones de comodidad del usuario.

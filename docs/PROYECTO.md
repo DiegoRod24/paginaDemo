@@ -32,7 +32,7 @@ La cámara se solicita al activar gestos. Los fotogramas se entregan al motor Me
 
 ## Prioridades de mantenimiento
 
-1. Resolver la lentitud del desplazamiento gestual de Arquitectura (HU-07).
+1. Sustituir el desplazamiento por posición por seguimiento directo del movimiento de la mano derecha (HU-07; implementado, validación física pendiente).
 2. Mantener propósito, historias, arquitectura, pruebas e historial junto al código (HU-10).
 3. Validar la interacción real con cámara y ajustar sensibilidad con resultados observados.
 4. Revisar las capas CSS/JS superpuestas y el tamaño del bundle antes de ampliar efectos.

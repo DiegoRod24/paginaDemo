@@ -13,7 +13,7 @@ import {
 import { archCatalog, techCatalog, techProjects } from "./catalog.js";
 import { translations } from "./i18n.js";
 import AnimatedTechAssistant from "./AnimatedTechAssistant.jsx";
-import { createPalmScrollState, updatePalmScroll, createScrollDriver, isPhysicalRightHand } from "./architectureScroll.js";
+import { createPalmScrollState, updatePalmScroll, createScrollDriver, isPhysicalRightHand, palmDeltaToPixels } from "./architectureScroll.js";
 import "./styles.css";
 
 const WHATSAPP = "51993212999";
@@ -878,16 +878,19 @@ function ArchitectureGestureMode({ t }) {
     delete document.documentElement.dataset.archGestureScroll;
   };
 
-  const setScrollVelocity = velocity => {
+  const movePage = delta => {
     if (!scrollDriverRef.current) {
       scrollDriverRef.current = createScrollDriver({
         onDirection: direction => {
           if (direction) document.documentElement.dataset.archGestureScroll = direction;
-          else delete document.documentElement.dataset.archGestureScroll;
+          else {
+            delete document.documentElement.dataset.archGestureScroll;
+            if (cameraActiveRef.current) updateGestureLabel(content.scrollStopped);
+          }
         }
       });
     }
-    scrollDriverRef.current.setVelocity(velocity);
+    scrollDriverRef.current.move(palmDeltaToPixels(delta, window.innerHeight));
   };
 
   const [status, setStatus] = useState("idle");
@@ -1160,19 +1163,20 @@ function ArchitectureGestureMode({ t }) {
     }
 
     if (kind === "open" && rawKind === "open") {
-      const palmX = 1 - lm[9].x;
-      const palmY = lm[9].y;
+      const palmPoints = [0, 5, 9, 13, 17].map(index => lm[index]);
+      const palmX = 1 - palmPoints.reduce((sum, point) => sum + point.x, 0) / palmPoints.length;
+      const palmY = palmPoints.reduce((sum, point) => sum + point.y, 0) / palmPoints.length;
       const swipe = swipeRef.current;
 
       const rightHand = isPhysicalRightHand(results.multiHandedness?.[0]);
       const motion = rightHand
-        ? updatePalmScroll(palmScrollRef.current, palmX, palmY)
-        : { velocity: 0, horizontal: true };
+        ? updatePalmScroll(palmScrollRef.current, palmX, palmY, now)
+        : { delta: 0, horizontal: true };
       if (!rightHand) stopScrolling();
-      setScrollVelocity(motion.velocity);
+      movePage(motion.delta);
 
-      if (motion.velocity) {
-        const up = motion.velocity < 0;
+      if (motion.delta) {
+        const up = motion.delta < 0;
         setMessage(up ? content.scrollUp : content.scrollDown);
         updateGestureLabel(up ? content.scrollUpGesture : content.scrollDownGesture);
         swipe.x = null;
@@ -1205,6 +1209,7 @@ function ArchitectureGestureMode({ t }) {
         swipe.y = palmY;
         swipe.at = now;
         setMessage(rightHand ? content.scrollReady : content.useRightHand);
+        if (rightHand) updateGestureLabel(content.scrollStopped);
       }
       if (!rightHand) setMessage(content.useRightHand);
     } else {

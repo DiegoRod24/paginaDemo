@@ -2,6 +2,16 @@
 
 Las entradas nuevas distinguen implementación y validación. Las anteriores son hitos recuperados del historial Git, no una reconstrucción completa de todas las conversaciones.
 
+## 2026-10-30 — Revisión: seguir el movimiento de la mano (HU-07)
+
+**Feedback:** el control por posición relativa se percibía como un acelerador: mantener la mano abajo seguía desplazando la página. El usuario eligió mejorar el seguimiento directo del movimiento.
+
+**Cambio:** cada nueva distancia de palma produce un único desplazamiento proporcional. Mano quieta significa página quieta, en cualquier posición. Subir desde abajo invierte inmediatamente la dirección. Puño para recolocar y reanclar. Centro de palma promediado, margen de temblor, eje dominante bloqueado durante movimiento, liberación por pausa y reanclaje ante pérdida/saltos de tracking. HUD SUBIENDO/DETENIDO/BAJANDO y guía ES/EN actualizados.
+
+**Validación:** 10 pruebas automáticas y build de producción. Cubren el caso de sostener la mano abajo, inversión sin volver al inicio, equivalencia de distancia a distintos FPS y ausencia de scroll diferido. Cámara física y validación visual pendientes por limitaciones de entorno. El estado de despliegue público debe verificarse por separado.
+
+La siguiente entrada conserva el diseño anterior como historial; sus parámetros de velocidad ya no describen el control vigente.
+
 ## 2026-10-30 — Mano derecha y documentación de continuidad
 
 **Problema:** desplazamiento de Arquitectura lento y dependiente de zonas extremas de cámara, llamadas por resultado del detector y desplazamiento suave global.

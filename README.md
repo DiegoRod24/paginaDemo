@@ -34,9 +34,9 @@ Vite genera el sitio estático en `dist/`. Para Cloudflare Pages: comando `npm r
 ## Desplazamiento con la mano derecha (Arquitectura)
 
 1. Entra en Arquitectura y pulsa **Controlar showroom con gestos**. Autoriza la cámara.
-2. Abre la mano derecha en una posición cómoda: esa posición será el centro.
-3. Baja la mano para bajar por la página; súbela para subir. Cuanto más te alejes del centro, mayor será la velocidad.
-4. Vuelve al centro o cierra el puño para detenerte. Si cambias de gesto y vuelves a abrir la mano, se toma un nuevo centro.
+2. Abre la mano derecha en una posición cómoda: el primer fotograma establece la referencia sin mover la página.
+3. Baja la mano para bajar por la página; súbela para subir. La página acompaña la distancia recorrida por tu mano.
+4. Deja quieta la mano para detenerte, incluso si está abajo o arriba. Cierra el puño para recolocar la mano sin desplazar la página; vuelve a abrirla para continuar.
 5. El movimiento horizontal cambia evidencias; dos manos controlan zoom y desplazamiento del visor. Ambos suspenden el scroll vertical.
 6. **Salir** apaga la cámara. El ratón y el desplazamiento táctil siguen disponibles.
 

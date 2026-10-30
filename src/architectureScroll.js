@@ -1,51 +1,75 @@
-// MediaPipe Hands assumes mirrored input; startLowLatencyGestureCamera sends
-// unmirrored video pixels. CSS mirroring only affects the displayed overlay.
+// MediaPipe Hands assumes mirrored input; our camera sends unmirrored pixels.
 export function isPhysicalRightHand(handedness) {
   return handedness?.label === 'Left' && handedness.score >= 0.6;
 }
 
 export function createPalmScrollState() {
-  return { origin: null, vertical: false };
+  return { origin: null, previous: null, axis: '', lastAt: null, stillAt: null };
 }
 
-// Relative to the first open palm: camera-normalized coordinates, not pixels.
-export function updatePalmScroll(state, x, y) {
-  if (!state.origin) {
-    state.origin = { x, y };
-    return { velocity: 0, horizontal: false };
+// Direct manipulation: return only distance actually travelled, never a velocity
+// derived from holding a position. A new gesture or stale sample starts at zero.
+export function updatePalmScroll(state, x, y, now) {
+  const neutral = { delta: 0, horizontal: false };
+  if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(now)) {
+    Object.assign(state, createPalmScrollState());
+    return neutral;
   }
-  const dx = x - state.origin.x;
-  const dy = y - state.origin.y;
-  const amount = Math.abs(dy);
-  if (state.vertical && amount < 0.025) {
-    state.vertical = false;
-    state.origin.x = x;
-    return { velocity: 0, horizontal: false };
+  if (!state.origin || now - state.lastAt > 220 || now < state.lastAt) {
+    Object.assign(state, createPalmScrollState(), {
+      origin: { x, y }, previous: { x, y }, lastAt: now,
+    });
+    return neutral;
   }
-  if (!state.vertical && amount > 0.035 && amount > Math.abs(dx) * 1.2) {
-    state.vertical = true;
+  state.lastAt = now;
+  const dx = x - state.previous.x;
+  const dy = y - state.previous.y;
+  // Ignore implausible tracking jumps; re-anchor instead of moving the page.
+  if (Math.hypot(dx, dy) > .16) {
+    Object.assign(state, createPalmScrollState(), {
+      origin: { x, y }, previous: { x, y }, lastAt: now,
+    });
+    return neutral;
   }
-  if (!state.vertical) {
-    return { velocity: 0, horizontal: Math.abs(dx) > 0.065 && Math.abs(dx) > amount * 1.2 };
+  if (!state.axis) {
+    const travelX = x - state.origin.x;
+    const travelY = y - state.origin.y;
+    if (Math.abs(travelY) > .018 && Math.abs(travelY) > Math.abs(travelX) * 1.3) state.axis = 'vertical';
+    else if (Math.abs(travelX) > .025 && Math.abs(travelX) > Math.abs(travelY) * 1.3) state.axis = 'horizontal';
+    else return neutral;
   }
-  // Small tremors remain neutral; moving farther increases speed up to 1600px/s.
-  const strength = Math.min(1, Math.max(0, (amount - 0.025) / 0.155));
-  return { velocity: Math.sign(dy) * (180 + strength * 1420), horizontal: false };
+  const travel = state.axis === 'vertical' ? Math.abs(dy) : Math.abs(dx);
+  if (travel < .004) {
+    if (state.stillAt === null) state.stillAt = now;
+    if (now - state.stillAt >= 160) {
+      state.axis = '';
+      state.origin = { x, y };
+      state.previous = { x, y };
+    }
+    return neutral;
+  }
+  state.stillAt = null;
+  state.previous = { x, y };
+  return state.axis === 'vertical'
+    ? { delta: dy, horizontal: false }
+    : { delta: 0, horizontal: true };
 }
 
-// Render-paced scrolling is independent of inference FPS. Never queue smooth
-// scroll animations, and stop if inference stalls or the hand disappears.
+export function palmDeltaToPixels(delta, viewportHeight) {
+  if (!Number.isFinite(delta) || !Number.isFinite(viewportHeight) || viewportHeight <= 0) return 0;
+  // A comfortable 20% of camera height moves about 60% of a screen.
+  return Math.sign(delta) * Math.min(Math.abs(delta) * viewportHeight * 3, viewportHeight * .4);
+}
+
+// One scroll per observed movement; no momentum or pending movement animation.
+// The timer only clears the HUD when tracking stops delivering samples.
 export function createScrollDriver({
-  requestFrame = callback => window.requestAnimationFrame(callback),
-  cancelFrame = id => window.cancelAnimationFrame(id),
-  now = () => performance.now(),
   scroll = top => window.scrollBy({ top, left: 0, behavior: 'instant' }),
+  schedule = callback => window.setTimeout(callback, 120),
+  cancel = id => window.clearTimeout(id),
   onDirection = () => {},
 } = {}) {
-  let frame = null;
-  let velocity = 0;
-  let updatedAt = 0;
-  let previous = 0;
+  let timer = null;
   let direction = '';
   const notify = next => {
     if (direction === next) return;
@@ -53,37 +77,18 @@ export function createScrollDriver({
     onDirection(next);
   };
   const stop = () => {
-    if (frame !== null) cancelFrame(frame);
-    frame = null;
-    velocity = 0;
+    if (timer !== null) cancel(timer);
+    timer = null;
     notify('');
-  };
-  const tick = () => {
-    frame = null;
-    const current = now();
-    if (!velocity || current - updatedAt > 220) {
-      stop();
-      return;
-    }
-    const elapsed = Math.min(50, Math.max(0, current - previous));
-    previous = current;
-    scroll(velocity * elapsed / 1000);
-    frame = requestFrame(tick);
   };
   return {
     stop,
-    setVelocity(next) {
-      if (!Number.isFinite(next) || !next) {
-        stop();
-        return;
-      }
-      velocity = Math.max(-1600, Math.min(1600, next));
-      updatedAt = now();
-      notify(velocity < 0 ? 'up' : 'down');
-      if (frame === null) {
-        previous = updatedAt;
-        frame = requestFrame(tick);
-      }
+    move(delta) {
+      if (!Number.isFinite(delta) || !delta) { stop(); return; }
+      if (timer !== null) cancel(timer);
+      scroll(delta);
+      notify(delta < 0 ? 'up' : 'down');
+      timer = schedule(stop);
     },
   };
 }

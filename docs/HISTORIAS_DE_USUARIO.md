@@ -21,20 +21,22 @@ Actualizado: 30/10/2026. «Existente» indica función localizada en la base `13
 
 Problema anterior: la palma debía superar las zonas absolutas 0.30/0.70 de la cámara y se enviaban pequeños desplazamientos por cada resultado del detector. Con `scroll-behavior: smooth`, las órdenes sucesivas podían reiniciar la animación; la velocidad dependía además del rendimiento de detección.
 
+Revisión de HU-07 tras feedback del usuario: el primer diseño actuaba como acelerador por posición. Se sustituye por seguimiento directo del movimiento (opción 1 elegida el 30/10/2026).
+
 Criterios de aceptación:
 
-1. La primera palma derecha abierta establece un centro cómodo sin desplazar la página.
-2. Bajar la palma respecto al centro genera scroll descendente; subirla genera scroll ascendente, sin tener que alcanzar los bordes de la cámara.
-3. La distancia al centro aumenta progresivamente la velocidad, con límite de 1600 píxeles/segundo.
-4. Pequeñas variaciones alrededor del centro no desplazan la página. Volver al centro o dejar de abrir la mano detiene el scroll.
+1. La primera palma derecha abierta establece una referencia cómoda sin desplazar la página.
+2. Cada nuevo movimiento hacia abajo/arriba desplaza la página en esa dirección, sin llegar a los bordes de la cámara.
+3. El recorrido de página es proporcional a la distancia recorrida por la mano, con ganancia basada en la altura de pantalla y límite por muestra.
+4. Dejar quieta la mano detiene la página en cualquier posición, sin volver al centro. Si se sube desde una posición inferior al inicio, la página sube inmediatamente.
 5. La mano izquierda y una clasificación de lateralidad insuficiente no activan scroll vertical.
-6. Un movimiento vertical no dispara la flecha de siguiente/anterior evidencia. El desplazamiento horizontal mantiene su función.
-7. Dos manos suspenden el scroll vertical para permitir zoom; al volver a una mano abierta se establece un nuevo centro.
-8. Pérdida de mano, salida de cámara, cambio de pestaña y desmontaje detienen el bucle. Si no llegan nuevos resultados durante más de 220 ms, se detiene.
-9. La integración usa tiempo transcurrido y un único bucle de animación. A igual velocidad solicitada, 15/30/60 resultados por segundo producen distancias equivalentes.
-10. La interfaz explica la dirección, la parada y la velocidad en ambos idiomas.
+6. Un movimiento vertical bloquea el cambio de evidencia hasta hacer una pausa. Los movimientos horizontales mantienen su función.
+7. Cerrar el puño permite recolocar la mano sin scroll. Dos manos suspenden scroll para zoom; reabrir una mano establece una nueva referencia.
+8. Pérdida de mano, salida, pestaña oculta y desmontaje detienen el control. No se programa desplazamiento futuro: no hay inercia.
+9. Muestras separadas más de 220 ms y saltos grandes del detector reanclan sin mover. A 15/30/60 resultados por segundo, un recorrido equivalente de mano produce distancia equivalente dentro del margen de temblor.
+10. La guía ES/EN explica movimiento directo, parada con mano quieta y puño para recolocar; el HUD muestra SUBIENDO, DETENIDO o BAJANDO.
 
-Verificación: pruebas unitarias de lógica y temporización + build; recorrido real con cámara y regresiones de visor aún pendientes. Véase [pruebas](PRUEBAS_GESTOS.md).
+Verificación: 10 pruebas unitarias de lógica y parada + build; recorrido real con cámara y regresiones de visor aún pendientes. Véase [pruebas](PRUEBAS_GESTOS.md).
 
 ## HU-10 — Documentación continua
 
