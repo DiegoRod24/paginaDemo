@@ -13,6 +13,7 @@ import {
 import { archCatalog, techCatalog, techProjects } from "./catalog.js";
 import { translations } from "./i18n.js";
 import AnimatedTechAssistant from "./AnimatedTechAssistant.jsx";
+import { createPalmScrollState, updatePalmScroll, createScrollDriver, isPhysicalRightHand } from "./architectureScroll.js";
 import "./styles.css";
 
 const WHATSAPP = "51993212999";
@@ -866,7 +867,28 @@ function ArchitectureGestureMode({ t }) {
   const gestureStableRef = useRef({ stable: "tracking", candidate: "", count: 0 });
   const victoryRef = useRef(0);
   const frameSendRef = useRef(false);
+  const cameraActiveRef = useRef(false);
   const hoveredRef = useRef(null);
+  const palmScrollRef = useRef(createPalmScrollState());
+  const scrollDriverRef = useRef(null);
+
+  const stopScrolling = () => {
+    scrollDriverRef.current?.stop();
+    palmScrollRef.current = createPalmScrollState();
+    delete document.documentElement.dataset.archGestureScroll;
+  };
+
+  const setScrollVelocity = velocity => {
+    if (!scrollDriverRef.current) {
+      scrollDriverRef.current = createScrollDriver({
+        onDirection: direction => {
+          if (direction) document.documentElement.dataset.archGestureScroll = direction;
+          else delete document.documentElement.dataset.archGestureScroll;
+        }
+      });
+    }
+    scrollDriverRef.current.setVelocity(velocity);
+  };
 
   const [status, setStatus] = useState("idle");
   const [gesture, setGesture] = useState(content.idle);
@@ -895,6 +917,7 @@ function ArchitectureGestureMode({ t }) {
   };
 
   const resetView = () => {
+    stopScrolling();
     twoHandRef.current = { active: false, baseDistance: 0, baseScale: 1, baseMid: null };
     zoomRef.current = 1;
     updateZoomHud(1);
@@ -910,6 +933,8 @@ function ArchitectureGestureMode({ t }) {
   };
 
   const stopCamera = () => {
+    cameraActiveRef.current = false;
+    stopScrolling();
     try { cameraRef.current?.stop?.(); } catch {}
     const stream = videoRef.current?.srcObject;
     if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
@@ -1053,10 +1078,19 @@ function ArchitectureGestureMode({ t }) {
   };
 
   const onResults = (results) => {
+    if (!cameraActiveRef.current) return;
     drawHands(results);
     const hands = results.multiHandLandmarks || [];
 
+    if (document.hidden) {
+      stopScrolling();
+      return;
+    }
+
     if (!hands.length) {
+      stopScrolling();
+      gestureStableRef.current = { stable: "tracking", candidate: "", count: 0 };
+      swipeRef.current = { x: null, y: null, at: 0, cooldown: 0 };
       pointerRef.current.ready = false;
       twoHandRef.current.active = false;
       clearHover();
@@ -1067,6 +1101,9 @@ function ArchitectureGestureMode({ t }) {
     }
 
     if (hands.length >= 2) {
+      stopScrolling();
+      gestureStableRef.current = { stable: "tracking", candidate: "", count: 0 };
+      swipeRef.current = { x: null, y: null, at: 0, cooldown: 0 };
       cursorRef.current?.classList.remove("visible", "pinching");
       handleTwoHands(hands[0], hands[1]);
       return;
@@ -1078,6 +1115,7 @@ function ArchitectureGestureMode({ t }) {
 
     const lm = hands[0];
     const rawKind = classifyHandGesture(lm);
+    if (rawKind !== "open") stopScrolling();
     const kind = stabilizeGesture(rawKind, gestureStableRef);
     const pointer = getPointer(lm[8]);
     const hit = updateHover(pointer);
@@ -1121,34 +1159,34 @@ function ArchitectureGestureMode({ t }) {
       pinchRef.current = { key: "", since: 0, fired: false };
     }
 
-    if (kind === "open") {
+    if (kind === "open" && rawKind === "open") {
       const palmX = 1 - lm[9].x;
       const palmY = lm[9].y;
       const swipe = swipeRef.current;
 
-      // Scroll continuo por zonas: no espera a completar un swipe.
-      if (palmY < .30) {
-        const speed = Math.round(18 + ((.30 - palmY) / .30) * 34);
-        window.scrollBy(0, -speed);
-        setMessage(content.scrollUp);
-        updateGestureLabel(content.scrollUpGesture);
-        document.documentElement.dataset.archGestureScroll = "up";
-      } else if (palmY > .70) {
-        const speed = Math.round(18 + ((palmY - .70) / .30) * 34);
-        window.scrollBy(0, speed);
-        setMessage(content.scrollDown);
-        updateGestureLabel(content.scrollDownGesture);
-        document.documentElement.dataset.archGestureScroll = "down";
-      } else {
-        delete document.documentElement.dataset.archGestureScroll;
+      const rightHand = isPhysicalRightHand(results.multiHandedness?.[0]);
+      const motion = rightHand
+        ? updatePalmScroll(palmScrollRef.current, palmX, palmY)
+        : { velocity: 0, horizontal: true };
+      if (!rightHand) stopScrolling();
+      setScrollVelocity(motion.velocity);
 
+      if (motion.velocity) {
+        const up = motion.velocity < 0;
+        setMessage(up ? content.scrollUp : content.scrollDown);
+        updateGestureLabel(up ? content.scrollUpGesture : content.scrollDownGesture);
+        swipe.x = null;
+        swipe.y = null;
+      } else if (motion.horizontal) {
         if (swipe.x == null || now - swipe.at > 360) {
           swipe.x = palmX;
           swipe.y = palmY;
           swipe.at = now;
         } else if (now > swipe.cooldown) {
           const dx = palmX - swipe.x;
-          if (Math.abs(dx) > .085) {
+          const dy = palmY - swipe.y;
+          if (Math.abs(dx) > .085 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            palmScrollRef.current = createPalmScrollState();
             const toRight = dx > 0;
             const arrow = document.querySelector(toRight ? ".app.arch .nav-arrow.right" : ".app.arch .nav-arrow.left");
             arrow?.click();
@@ -1162,9 +1200,15 @@ function ArchitectureGestureMode({ t }) {
             swipe.at = now;
           }
         }
+      } else {
+        swipe.x = palmX;
+        swipe.y = palmY;
+        swipe.at = now;
+        setMessage(rightHand ? content.scrollReady : content.useRightHand);
       }
+      if (!rightHand) setMessage(content.useRightHand);
     } else {
-      delete document.documentElement.dataset.archGestureScroll;
+      stopScrolling();
       if (now - swipeRef.current.at > 280) {
         swipeRef.current.x = null;
         swipeRef.current.y = null;
@@ -1210,6 +1254,7 @@ function ArchitectureGestureMode({ t }) {
       hands.onResults(onResults);
       handsRef.current = hands;
 
+      cameraActiveRef.current = true;
       const camera = await startLowLatencyGestureCamera(videoRef.current, async () => {
         if (!handsRef.current || frameSendRef.current) return;
         frameSendRef.current = true;
@@ -1234,7 +1279,19 @@ function ArchitectureGestureMode({ t }) {
     }
   };
 
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      stopScrolling();
+      swipeRef.current = { x: null, y: null, at: 0, cooldown: 0 };
+      gestureStableRef.current = { stable: "tracking", candidate: "", count: 0 };
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, []);
+
   useEffect(() => () => {
+    cameraActiveRef.current = false;
+    stopScrolling();
     try { cameraRef.current?.stop?.(); } catch {}
     const stream = videoRef.current?.srcObject;
     if (stream?.getTracks) stream.getTracks().forEach(track => track.stop());
@@ -1269,6 +1326,7 @@ function ArchitectureGestureMode({ t }) {
         <span className="up">↑ <b>{content.scrollUpShort}</b></span>
         <span className="down">↓ <b>{content.scrollDownShort}</b></span>
       </div>
+      <p className="arch-gesture-scroll-guide">{content.scrollGuide}</p>
       <div className="arch-gesture-legend">
         {content.legend.map(([icon,label]) => <span key={label}><i>{icon}</i>{label}</span>)}
       </div>

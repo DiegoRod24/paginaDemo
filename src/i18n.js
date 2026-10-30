@@ -387,7 +387,10 @@ export const translations = {
       "ready": "Activa la cámara para controlar el showroom",
       "idle": "INACTIVO",
       "waiting": "ESPERANDO MANO",
-      "showHand": "Muestra una mano para comenzar",
+      "showHand": "Abre la mano derecha en una posición cómoda para comenzar",
+      "scrollReady": "Baja la mano para bajar · súbela para subir · centro para detener",
+      "useRightHand": "Usa la mano derecha abierta para subir y bajar",
+      "scrollGuide": "✋ Mano derecha abierta: bájala ↓ / súbela ↑. Vuelve al centro o cierra el puño para parar. Más distancia = más velocidad.",
       "point": "Apunta a un proyecto, miniatura o flecha",
       "target": "OBJETIVO DETECTADO",
       "pinchAim": "Haz pinza sobre un objetivo iluminado",
@@ -415,7 +418,7 @@ export const translations = {
       "legend": [
         ["☝️", "Cursor"],
         ["🤏", "Seleccionar"],
-        ["✋", "Scroll / swipe"],
+        ["✋", "Derecha ↑↓ · lateral ↔"],
         ["✊", "Cancelar"],
         ["✌️", "Centrar vista"],
         ["👐", "Zoom / mover"]
@@ -1205,7 +1208,10 @@ export const translations = {
       "ready": "Enable the camera to control the showroom",
       "idle": "IDLE",
       "waiting": "WAITING FOR HAND",
-      "showHand": "Show one hand to begin",
+      "showHand": "Open your right hand in a comfortable position to begin",
+      "scrollReady": "Lower hand to scroll down · raise to scroll up · center to stop",
+      "useRightHand": "Use your open right hand to scroll up and down",
+      "scrollGuide": "✋ Open right hand: lower ↓ / raise ↑. Return to center or close your fist to stop. Move farther for more speed.",
       "point": "Point at a project, thumbnail or arrow",
       "target": "TARGET DETECTED",
       "pinchAim": "Pinch over a highlighted target",
@@ -1233,7 +1239,7 @@ export const translations = {
       "legend": [
         ["☝️", "Cursor"],
         ["🤏", "Select"],
-        ["✋", "Scroll / swipe"],
+        ["✋", "Right ↑↓ · sideways ↔"],
         ["✊", "Cancel"],
         ["✌️", "Center view"],
         ["👐", "Zoom / pan"]
